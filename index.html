@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LifeRhythm — AI自律支援</title>
+
+<!-- =====================================================
+  🔥 FIREBASE SDK
+===================================================== -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<style>
+/* ===================== RESET & VARS ===================== */
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0f0f1a;--card:#1a1a2e;--card2:#16213e;
+  --accent:#7c3aed;--accent2:#06b6d4;
+  --gold:#f59e0b;--red:#ef4444;--green:#10b981;
+  --text:#e2e8f0;--muted:#94a3b8;--border:#2d3748;
+}
+*{box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI','Hiragino Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
+button{cursor:pointer;border:none;font-family:inherit;}
+input{font-family:inherit;}
+
+/* ===================== AUTH SCREEN ===================== */
+#auth-screen{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#0f0f1a 0%,#1a0533 50%,#0c1445 100%);
+  padding:20px;
+}
+.auth-box{
+  background:var(--card);border:1px solid var(--border);border-radius:24px;
+  padding:36px 32px;width:100%;max-width:380px;
+}
+.auth-logo{font-size:32px;font-weight:900;background:linear-gradient(90deg,#a78bfa,#22d3ee);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px;}
+.auth-tagline{font-size:13px;color:var(--muted);margin-bottom:28px;}
+.auth-tabs{display:flex;gap:0;background:var(--card2);border-radius:12px;padding:4px;margin-bottom:24px;}
+.auth-tab{flex:1;padding:8px;border-radius:9px;background:none;color:var(--muted);font-size:13px;font-weight:600;transition:all .2s;}
+.auth-tab.active{background:var(--accent);color:#fff;}
+.auth-field{margin-bottom:14px;}
+.auth-field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600;}
+.auth-input{
+  width:100%;background:var(--card2);border:1px solid var(--border);border-radius:10px;
+  padding:11px 14px;color:var(--text);font-size:14px;transition:border .2s;
+}
+.auth-input:focus{outline:none;border-color:var(--accent);}
+.auth-submit{
+  width:100%;padding:13px;border-radius:12px;font-size:15px;font-weight:700;
+  background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;margin-top:6px;
+  transition:opacity .2s,transform .1s;
+}
+.auth-submit:hover{opacity:.9;}
+.auth-submit:active{transform:scale(.98);}
+.auth-error{font-size:12px;color:var(--red);margin-top:10px;text-align:center;min-height:18px;}
+.auth-name-field{display:none;}
+.auth-name-field.show{display:block;}
+
+/* ===================== LOADING ===================== */
+#loading{
+  position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;z-index:999;gap:16px;
+}
+.spin{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ===================== MAIN APP ===================== */
+#main-app{display:none;flex-direction:column;min-height:100vh;}
+#view{flex:1;padding-bottom:80px;}
+
+/* ===================== NAV ===================== */
+nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:#111827;border-top:1px solid var(--border);
+  display:flex;justify-content:space-around;align-items:center;
+  height:64px;z-index:100;
+}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;color:var(--muted);padding:8px 0;font-size:10px;transition:color .2s;}
+.nav-btn.active{color:var(--accent2);}
+.nav-btn .nav-icon{font-size:22px;}
+
+/* ===================== HEADER ===================== */
+.page-header{
+  background:linear-gradient(135deg,#1a0533 0%,#0c1445 100%);
+  border-bottom:1px solid var(--border);
+  padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.logo{font-size:17px;font-weight:800;background:linear-gradient(90deg,#a78bfa,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.logo-sub{font-size:10px;color:var(--muted);}
+.header-right{display:flex;align-items:center;gap:10px;}
+.clock-box{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:5px 12px;text-align:center;}
+.clock-time{font-size:17px;font-weight:700;letter-spacing:2px;}
+.clock-date{font-size:10px;color:var(--muted);}
+.user-chip{background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:5px 10px;font-size:12px;display:flex;align-items:center;gap:6px;}
+.logout-btn{background:none;color:var(--muted);font-size:11px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);}
+.logout-btn:hover{color:var(--red);border-color:var(--red);}
+
+/* ===================== MODE BANNER ===================== */
+#mode-banner{padding:9px 18px;font-size:12px;font-weight:600;text-align:center;transition:all .5s;}
+.mode-focus{background:linear-gradient(90deg,#7c3aed22,#3b076499);border-bottom:2px solid #7c3aed;color:#c4b5fd;}
+.mode-free{background:linear-gradient(90deg,#065f4622,#064e3b99);border-bottom:2px solid #10b981;color:#6ee7b7;}
+
+/* ===================== COMMON ===================== */
+.container{max-width:680px;margin:0 auto;padding:18px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;}
+.card+.card{margin-top:14px;}
+.card-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.btn{padding:9px 18px;border-radius:10px;font-size:13px;font-weight:700;transition:transform .1s,opacity .15s;border:none;}
+.btn:hover{transform:scale(1.03);}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;}
+.btn-green{background:#10b981;color:#fff;}
+.btn-red{background:#ef4444;color:#fff;}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text);}
+.progress-wrap{background:var(--card2);border-radius:999px;height:7px;overflow:hidden;}
+.progress-bar{height:100%;border-radius:999px;background:linear-gradient(90deg,#7c3aed,#06b6d4);transition:width .5s ease;}
+
+/* ===================== COIN STRIP ===================== */
+.coin-strip{background:linear-gradient(135deg,#1a0533,#0c1445);border:1px solid #7c3aed44;border-radius:16px;padding:14px 18px;display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+.coin-orb{width:54px;height:54px;flex-shrink:0;background:radial-gradient(circle at 35% 35%,#fde68a,#f59e0b,#b45309);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 0 18px #f59e0b44;}
+.coin-val{font-size:36px;font-weight:900;background:linear-gradient(90deg,#fde68a,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}
+.coin-label{font-size:12px;color:var(--muted);margin-top:2px;}
+.coin-today{font-size:11px;color:var(--green);margin-top:4px;}
+
+/* ===================== TODO ===================== */
+.todo-item{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity .3s;}
+.todo-item:last-child{border-bottom:none;}
+.todo-item.done{opacity:.45;}
+.todo-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;transition:all .2s;}
+.todo-item.done .todo-check{background:var(--green);border-color:var(--green);}
+.todo-text{flex:1;font-size:14px;}
+.todo-item.done .todo-text{text-decoration:line-through;color:var(--muted);}
+.todo-reward{font-size:12px;font-weight:700;color:var(--gold);background:#f59e0b15;padding:3px 8px;border-radius:20px;border:1px solid #f59e0b33;}
+
+/* ===================== ENTERTAINMENT ===================== */
+.ent-item{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--border);}
+.ent-item:last-child{border-bottom:none;}
+.ent-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.ent-name{font-size:14px;font-weight:600;}
+.ent-desc{font-size:11px;color:var(--muted);margin-top:1px;}
+.ent-price-area{text-align:right;flex-shrink:0;}
+.ent-price{font-size:17px;font-weight:800;}
+.ent-price-orig{font-size:10px;color:var(--muted);}
+.price-surge{color:var(--red);}.price-sale{color:var(--green);}
+.price-tag{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;display:inline-block;margin-top:2px;}
+.tag-surge{background:#ef444420;color:var(--red);border:1px solid #ef444440;}
+.tag-sale{background:#10b98120;color:var(--green);border:1px solid #10b98140;}
+.buy-btn{margin-top:4px;padding:5px 12px;border-radius:8px;font-size:12px;font-weight:700;border:none;transition:transform .1s;}
+.buy-btn:hover{transform:scale(1.05);}
+.buy-btn.surge{background:var(--red);color:#fff;}
+.buy-btn.sale{background:var(--green);color:#fff;}
+
+/* ===================== STATS ===================== */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.stat-box{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:13px;text-align:center;}
+.stat-val{font-size:24px;font-weight:800;}
+.stat-label{font-size:11px;color:var(--muted);margin-top:3px;}
+
+/* ===================== RANK ===================== */
+.rank-card{background:linear-gradient(135deg,#1a0533,#0c1445);border:1px solid #7c3aed44;border-radius:16px;padding:18px;text-align:center;}
+.rank-badge-big{font-size:52px;margin-bottom:6px;}
+.rank-name-big{font-size:22px;font-weight:800;}
+
+/* ===================== QUEST ===================== */
+.quest-card{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;}
+.member-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px solid var(--border);}
+.member-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+
+/* ===================== PROFILE ===================== */
+.profile-hero{background:linear-gradient(135deg,#1a0533,#0c1445);border:1px solid #7c3aed44;border-radius:16px;padding:20px;text-align:center;margin-bottom:14px;}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);}
+.setting-row:last-child{border-bottom:none;}
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;background:#374151;border-radius:999px;cursor:pointer;transition:.3s;}
+.toggle-slider:before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.3s;}
+.toggle input:checked+.toggle-slider{background:var(--accent);}
+.toggle input:checked+.toggle-slider:before{transform:translateX(20px);}
+
+/* ===================== WEEK CARD ===================== */
+.week-card{background:linear-gradient(135deg,#451a03,#0c1445);border:1px solid #f59e0b44;border-radius:16px;padding:14px;}
+.week-active-tag{background:#f59e0b;color:#000;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;display:inline-block;margin-bottom:8px;}
+
+/* ===================== MODAL ===================== */
+.modal-overlay{position:fixed;inset:0;background:#00000088;z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal-box{background:#1a1a2e;border:1px solid var(--border);border-radius:20px 20px 0 0;padding:22px;width:100%;max-width:500px;transform:translateY(40px);transition:transform .3s;}
+.modal-overlay.open .modal-box{transform:translateY(0);}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:14px;}
+.modal-actions{display:flex;gap:10px;margin-top:16px;}
+.modal-input{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 13px;color:var(--text);font-size:14px;margin-bottom:10px;}
+.modal-input:focus{outline:none;border-color:var(--accent);}
+.num-input{width:90px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:8px 12px;color:var(--text);font-size:14px;text-align:center;}
+.num-input:focus{outline:none;border-color:var(--accent);}
+
+/* ===================== HISTORY ===================== */
+.history-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
+.history-item:last-child{border-bottom:none;}
+.history-sign{font-size:16px;font-weight:800;}
+.history-sign.plus{color:var(--green);}
+.history-sign.minus{color:var(--red);}
+.history-desc{flex:1;font-size:13px;}
+.history-time{font-size:11px;color:var(--muted);}
+
+/* ===================== TOAST ===================== */
+#toast{position:fixed;bottom:76px;left:50%;transform:translateX(-50%) translateY(60px);background:#1e293b;border:1px solid var(--border);border-radius:12px;padding:10px 20px;font-size:13px;font-weight:600;transition:transform .4s cubic-bezier(.34,1.56,.64,1);z-index:500;pointer-events:none;white-space:nowrap;}
+#toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ===================== ACCESS SYSTEM ===================== */
+.ent-item.locked{opacity:.75;}
+.lock-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--muted);background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:2px 7px;margin-top:2px;}
+.access-active-box{background:#10b98115;border:1px solid #10b98133;border-radius:10px;padding:7px 10px;margin-top:4px;text-align:right;}
+.access-timer{font-size:20px;font-weight:800;color:var(--green);letter-spacing:1px;}
+.access-timer-label{font-size:10px;color:var(--muted);margin-top:1px;}
+.open-btn{display:block;margin-top:6px;padding:6px 14px;border-radius:8px;background:var(--green);color:#fff;font-size:12px;font-weight:700;border:none;width:100%;transition:transform .1s;}
+.open-btn:hover{transform:scale(1.04);}
+.buy-btn-locked{margin-top:5px;padding:5px 12px;border-radius:8px;font-size:12px;font-weight:700;border:none;transition:transform .1s;}
+.buy-btn-locked:hover{transform:scale(1.05);}
+.buy-btn-locked.surge{background:var(--red);color:#fff;}
+.buy-btn-locked.sale{background:var(--green);color:#fff;}
+</style>
+</head>
+<body>
+
+<!-- ===================== LOADING ===================== -->
+<div id="loading">
+  <div style="font-size:28px;">⚡</div>
+  <div class="spin"></div>
+  <div style="font-size:13px;color:var(--muted);">読み込み中...</div>
+</div>
+
+<!-- ===================== AUTH SCREEN ===================== -->
+<div id="auth-screen" style="display:none;">
+  <div class="auth-box">
+    <div class="auth-logo">⚡ LifeRhythm</div>
+    <div class="auth-tagline">AI価格調整による自律支援システム</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login')">ログイン</button>
+      <button class="auth-tab" onclick="switchTab('signup')">新規登録</button>
+    </div>
+    <div class="auth-name-field" id="name-field">
+      <div class="auth-field">
+        <label>ニックネーム</label>
+        <input class="auth-input" id="auth-name" type="text" placeholder="例: さくら"/>
+      </div>
+    </div>
+    <div class="auth-field">
+      <label>メールアドレス</label>
+      <input class="auth-input" id="auth-email" type="email" placeholder="you@example.com"/>
+    </div>
+    <div class="auth-field">
+      <label>パスワード（6文字以上）</label>
+      <input class="auth-input" id="auth-pass" type="password" placeholder="••••••••"/>
+    </div>
+    <button class="auth-submit" id="auth-btn" onclick="doAuth()">ログイン</button>
+    <div class="auth-error" id="auth-error"></div>
+  </div>
+</div>
+
+<!-- ===================== MAIN APP ===================== -->
+<div id="main-app">
+  <header class="page-header">
+    <div>
+      <div class="logo">⚡ LifeRhythm</div>
+      <div class="logo-sub">AI価格調整による自律支援システム</div>
+    </div>
+    <div class="header-right">
+      <div class="clock-box">
+        <div class="clock-time" id="clock">--:--</div>
+        <div class="clock-date" id="clock-date">---</div>
+      </div>
+      <div>
+        <div class="user-chip">👤 <span id="user-name-disp">---</span></div>
+        <button class="logout-btn" style="margin-top:4px;width:100%;" onclick="doLogout()">ログアウト</button>
+      </div>
+    </div>
+  </header>
+  <div id="mode-banner" class="mode-focus">🔴 集中タイム</div>
+  <div id="view"></div>
+
+  <nav>
+    <button class="nav-btn active" onclick="goto('home')"    id="nav-home">    <span class="nav-icon">🏠</span>ホーム</button>
+    <button class="nav-btn"        onclick="goto('shop')"    id="nav-shop">    <span class="nav-icon">🎮</span>娯楽</button>
+    <button class="nav-btn"        onclick="goto('quest')"   id="nav-quest">   <span class="nav-icon">⚔️</span>クエスト</button>
+    <button class="nav-btn"        onclick="goto('rank')"    id="nav-rank">    <span class="nav-icon">🏆</span>ランク</button>
+    <button class="nav-btn"        onclick="goto('profile')" id="nav-profile"> <span class="nav-icon">👤</span>プロフィール</button>
+  </nav>
+</div>
+
+<!-- ===================== MODALS ===================== -->
+<div class="modal-overlay" id="borrow-modal">
+  <div class="modal-box">
+    <div class="modal-title">💳 コインを前借りする</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">前借りしたコインは翌日の獲得分から自動返済。未返済は娯楽価格<b style="color:var(--red)">×2</b>ペナルティ。</p>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <input class="num-input" type="number" id="borrow-amount" value="50" min="10" max="200" step="10"/>
+      <span style="font-size:13px;color:var(--muted)">🪙 を前借り</span>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-red" style="flex:1" onclick="executeBorrow()">前借りする</button>
+      <button class="btn btn-outline" style="flex:1" onclick="closeModal('borrow-modal')">キャンセル</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="addtodo-modal">
+  <div class="modal-box">
+    <div class="modal-title">✏️ ToDoを追加</div>
+    <input class="modal-input" id="new-todo-text" type="text" placeholder="タスク名を入力..."/>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+      <span style="font-size:13px;color:var(--muted);">報酬:</span>
+      <input class="num-input" type="number" id="new-todo-reward" value="20" min="5" max="100" step="5"/>
+      <span style="font-size:13px;color:var(--muted)">🪙</span>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" style="flex:1" onclick="addTodo()">追加</button>
+      <button class="btn btn-outline" style="flex:1" onclick="closeModal('addtodo-modal')">キャンセル</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- =====================================================
+  🔥 FIREBASE CONFIG
+  👇 ここにFirebaseの設定を貼り付けてください！
+===================================================== -->
+<script>
+// ⬇️⬇️⬇️ ここを自分のFirebaseの設定に書き換えてください ⬇️⬇️⬇️
+const firebaseConfig = {
+  apiKey:            "AIzaSyAch5QXGqpzu2ZzR4LGVuxiGmV8Y_BBt-I",
+  authDomain:        "liferhythm-cb0e2.firebaseapp.com",
+  projectId:         "liferhythm-cb0e2",
+  storageBucket:     "liferhythm-cb0e2.firebasestorage.app",
+  messagingSenderId: "549059630729",
+  appId:             "1:549059630729:web:36fb8d5440644caab01858",
+  measurementId:     "G-F4K6WHLRF6"
+};
+// ⬆️⬆️⬆️ ここまで ⬆️⬆️⬆️
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db   = firebase.firestore();
+
+/* ============================================================
+   デフォルトデータ（新規ユーザー用）
+============================================================ */
+function defaultState(name){
+  return {
+    displayName: name || 'ユーザー',
+    coins: 100,
+    todayEarned: 0,
+    loan: 0,
+    loanPenalty: false,
+    focusWeekActive: true,
+    focusWeekMultiplier: 2,
+    focusWeekDaysLeft: 3,
+    totalEarned: 100,
+    streak: 0,
+    lastDate: today(),
+    todos: [
+      {id:1,text:'朝8時に起きる',      reward:30,done:false},
+      {id:2,text:'30分読書する',        reward:20,done:false},
+      {id:3,text:'課題を1つ終わらせる', reward:50,done:false},
+      {id:4,text:'10分間ストレッチ',    reward:15,done:false},
+    ],
+    history:[],
+    settings:{notify:true,weeklyBoost:true},
+    access:{},
+    nextId: 10,
+  };
+}
+
+/* ============================================================
+   STATE
+============================================================ */
+let state = null;
+let currentUser = null;
+let saveTimer = null;
+
+function today(){
+  const n=new Date();
+  return `${n.getFullYear()}-${n.getMonth()+1}-${n.getDate()}`;
+}
+
+/* ============================================================
+   FIREBASE AUTH
+============================================================ */
+let authMode = 'login';
+
+function switchTab(mode){
+  authMode = mode;
+  document.querySelectorAll('.auth-tab').forEach((t,i)=>{
+    t.classList.toggle('active', (i===0&&mode==='login')||(i===1&&mode==='signup'));
+  });
+  document.getElementById('auth-btn').textContent = mode==='login'?'ログイン':'アカウント作成';
+  const nf = document.getElementById('name-field');
+  nf.classList.toggle('show', mode==='signup');
+  document.getElementById('auth-error').textContent='';
+}
+
+function doAuth(){
+  const email = document.getElementById('auth-email').value.trim();
+  const pass  = document.getElementById('auth-pass').value;
+  const name  = document.getElementById('auth-name').value.trim()||'ユーザー';
+  const errEl = document.getElementById('auth-error');
+  errEl.textContent='';
+
+  if(!email||!pass){ errEl.textContent='メールとパスワードを入力してください'; return; }
+
+  document.getElementById('auth-btn').textContent='処理中...';
+
+  if(authMode==='login'){
+    auth.signInWithEmailAndPassword(email,pass)
+      .catch(e=>{ errEl.textContent=authErrMsg(e.code); document.getElementById('auth-btn').textContent='ログイン'; });
+  } else {
+    if(pass.length<6){ errEl.textContent='パスワードは6文字以上にしてください'; document.getElementById('auth-btn').textContent='アカウント作成'; return; }
+    auth.createUserWithEmailAndPassword(email,pass)
+      .then(cred=> cred.user.updateProfile({displayName:name}))
+      .catch(e=>{ errEl.textContent=authErrMsg(e.code); document.getElementById('auth-btn').textContent='アカウント作成'; });
+  }
+}
+
+function authErrMsg(code){
+  const map={
+    'auth/user-not-found':'メールアドレスが見つかりません',
+    'auth/wrong-password':'パスワードが間違っています',
+    'auth/email-already-in-use':'このメールはすでに使われています',
+    'auth/invalid-email':'メールアドレスの形式が正しくありません',
+    'auth/weak-password':'パスワードが短すぎます（6文字以上）',
+    'auth/invalid-credential':'メールまたはパスワードが間違っています',
+  };
+  return map[code]||`エラーが発生しました（${code}）`;
+}
+
+function doLogout(){
+  auth.signOut();
+}
+
+/* ============================================================
+   FIRESTORE — 読み書き
+============================================================ */
+async function loadUserData(user){
+  const ref = db.collection('users').doc(user.uid);
+  const snap = await ref.get();
+  const name = user.displayName || 'ユーザー';
+
+  if(snap.exists){
+    state = snap.data();
+    // 日付リセット
+    if(state.lastDate !== today()){
+      state.todayEarned = 0;
+      state.lastDate = today();
+      if(state.loan > 0) state.loanPenalty = true;
+      await saveNow();
+    }
+  } else {
+    state = defaultState(name);
+    await saveNow();
+  }
+  document.getElementById('user-name-disp').textContent = state.displayName;
+}
+
+function scheduleSave(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveNow, 1000);
+}
+
+async function saveNow(){
+  if(!currentUser||!state) return;
+  await db.collection('users').doc(currentUser.uid).set(state);
+}
+
+/* ============================================================
+   AUTH STATE LISTENER
+============================================================ */
+auth.onAuthStateChanged(async user=>{
+  document.getElementById('loading').style.display='none';
+  if(user){
+    currentUser = user;
+    await loadUserData(user);
+    document.getElementById('auth-screen').style.display='none';
+    const app = document.getElementById('main-app');
+    app.style.display='flex';
+    updateClock();
+    startAccessTimer();
+    goto('home');
+  } else {
+    currentUser = null;
+    state = null;
+    document.getElementById('main-app').style.display='none';
+    document.getElementById('auth-screen').style.display='flex';
+  }
+});
+
+// Enter キーでログイン
+document.addEventListener('keydown',e=>{ if(e.key==='Enter'&&document.getElementById('auth-screen').style.display!=='none') doAuth(); });
+
+/* ============================================================
+   TIME / MODE
+============================================================ */
+function getMode(h){
+  if(h>=6&&h<12)  return 'focus';
+  if(h>=12&&h<14) return 'free';
+  if(h>=14&&h<18) return 'focus';
+  if(h>=18&&h<22) return 'free';
+  return 'focus';
+}
+function getMultiplier(mode){
+  let m = mode==='focus'?5:0.5;
+  if(state&&state.loanPenalty) m*=2;
+  return m;
+}
+function currentMode(){ return getMode(new Date().getHours()); }
+
+function updateClock(){
+  const now=new Date();
+  const h=String(now.getHours()).padStart(2,'0');
+  const mi=String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('clock').textContent=`${h}:${mi}`;
+  const days=['日','月','火','水','木','金','土'];
+  document.getElementById('clock-date').textContent=`${now.getMonth()+1}/${now.getDate()}（${days[now.getDay()]}）`;
+  const mode=currentMode();
+  const banner=document.getElementById('mode-banner');
+  if(mode==='focus'){
+    banner.className='mode-focus';
+    banner.textContent=state&&state.loanPenalty?'⚠️ 集中タイム + 前借りペナルティ中 — 娯楽価格×10！':'🔴 集中タイム — 娯楽の価格が高騰しています（通常の5倍）';
+  } else {
+    banner.className='mode-free';
+    banner.textContent='🟢 自由タイム — 娯楽がセール価格！ゆっくり休もう 🎉';
+  }
+  if(state&&document.getElementById('main-app').style.display!=='none') renderPage();
+}
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+function goto(page){
+  state.currentPage = page;
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const nb=document.getElementById('nav-'+page);
+  if(nb) nb.classList.add('active');
+  renderPage();
+}
+
+function renderPage(){
+  if(!state) return;
+  const v=document.getElementById('view');
+  const page=state.currentPage||'home';
+  switch(page){
+    case 'home':    v.innerHTML=pageHome();    bindHome();    break;
+    case 'shop':    v.innerHTML=pageShop();    bindShop();    break;
+    case 'quest':   v.innerHTML=pageQuest();                  break;
+    case 'rank':    v.innerHTML=pageRank();                   break;
+    case 'profile': v.innerHTML=pageProfile(); bindProfile(); break;
+  }
+}
+
+/* ============================================================
+   PAGE: HOME
+============================================================ */
+function pageHome(){
+  const done=state.todos.filter(t=>t.done).length;
+  const total=state.todos.length;
+  const pct=Math.round(done/total*100);
+  const todoRows=state.todos.map(t=>`
+    <div class="todo-item${t.done?' done':''}" data-id="${t.id}">
+      <div class="todo-check">${t.done?'✓':''}</div>
+      <div class="todo-text">${t.text}</div>
+      <div class="todo-reward">+${t.reward}${state.focusWeekActive?` <span style="color:#f59e0b">×${state.focusWeekMultiplier}</span>`:''}🪙</div>
+    </div>`).join('');
+
+  const recentHistory=(state.history||[]).slice(-5).reverse().map(h=>`
+    <div class="history-item">
+      <div class="history-sign ${h.type}">${h.type==='plus'?'+':'-'}${h.amount}</div>
+      <div class="history-desc">${h.desc}</div>
+      <div class="history-time">${h.time}</div>
+    </div>`).join('') || '<div style="font-size:13px;color:var(--muted);">まだ履歴がありません</div>';
+
+  return `<div class="container">
+    <div class="coin-strip">
+      <div class="coin-orb">🪙</div>
+      <div>
+        <div class="coin-val">${(state.coins||0).toLocaleString()}</div>
+        <div class="coin-label">LifeCoins 残高</div>
+        <div class="coin-today">今日 +${state.todayEarned||0} コイン獲得済み</div>
+      </div>
+      <div style="margin-left:auto;text-align:right;">
+        ${state.loan>0?`<div style="font-size:11px;color:var(--red);margin-bottom:5px;">⚠️ 前借り: ${state.loan}🪙</div>`:''}
+        <button class="btn btn-outline" style="font-size:12px;padding:5px 10px;" onclick="openModal('borrow-modal')">💳 前借り</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✅ 今日のToDo
+        <span style="margin-left:auto;">
+          <button class="btn btn-outline" style="font-size:11px;padding:3px 9px;" onclick="openModal('addtodo-modal')">＋ 追加</button>
+        </span>
+      </div>
+      ${todoRows}
+      <div style="margin-top:11px;">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;">
+          <span>進捗</span><span>${done} / ${total} 完了</span>
+        </div>
+        <div class="progress-wrap"><div class="progress-bar" style="width:${pct}%"></div></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:5px;">全タスク完了でボーナス +50 🪙</div>
+      </div>
+    </div>
+
+    ${state.focusWeekActive?`
+    <div class="week-card" style="margin-top:14px;">
+      <div class="week-active-tag">🔥 集中強化ウィーク 開催中！</div>
+      <div style="font-size:13px;">獲得コインが <b style="color:var(--gold)">×${state.focusWeekMultiplier} 倍</b>！</div>
+      <div style="font-size:26px;font-weight:800;color:var(--gold);margin:6px 0;">残り ${state.focusWeekDaysLeft} 日</div>
+    </div>`:''}
+
+    <div class="card" style="margin-top:14px;">
+      <div class="card-title">📜 コイン履歴</div>
+      ${recentHistory}
+    </div>
+  </div>`;
+}
+
+function bindHome(){
+  document.querySelectorAll('.todo-item').forEach(el=>{
+    const id=parseInt(el.dataset.id);
+    const todo=state.todos.find(t=>t.id===id);
+    if(todo&&!todo.done) el.addEventListener('click',()=>completeTodo(todo));
+  });
+}
+
+function completeTodo(todo){
+  todo.done=true;
+  let earned=todo.reward;
+  if(state.focusWeekActive) earned*=state.focusWeekMultiplier;
+  state.coins=(state.coins||0)+earned;
+  state.todayEarned=(state.todayEarned||0)+earned;
+  state.totalEarned=(state.totalEarned||0)+earned;
+  addHistory('plus',earned,`${todo.text} — 達成`);
+  // ローン返済
+  if(state.loan>0){
+    const repay=Math.min(state.loan,earned);
+    state.loan-=repay;
+    if(state.loan<=0){state.loan=0;state.loanPenalty=false;}
+    showToast(`✅ +${earned}🪙 獲得！ローン返済 -${repay}🪙`);
+  } else {
+    showToast(`✅ +${earned}🪙 獲得！`);
+  }
+  if(state.todos.every(t=>t.done)){
+    setTimeout(()=>{
+      state.coins+=50;state.todayEarned+=50;state.totalEarned+=50;
+      addHistory('plus',50,'全タスク完了ボーナス');
+      showToast('🎊 全タスク完了ボーナス +50🪙！');
+      scheduleSave(); renderPage();
+    },600);
+  }
+  scheduleSave(); renderPage();
+}
+
+/* ============================================================
+   PAGE: SHOP
+============================================================ */
+const ENTERTAINMENTS=[
+  {id:'yt',icon:'📺',name:'YouTube',   bg:'#ff000022',br:'#ff000044',basePrice:30,desc:'動画視聴',    duration:30, url:'https://youtube.com'},
+  {id:'tt',icon:'🎵',name:'TikTok',    bg:'#ffffff11',br:'#ffffff22',basePrice:20,desc:'ショート動画',duration:15, url:'https://tiktok.com'},
+  {id:'tw',icon:'🐦',name:'X',         bg:'#1d9bf022',br:'#1d9bf044',basePrice:15,desc:'タイムライン',duration:15, url:'https://x.com'},
+  {id:'ig',icon:'📸',name:'Instagram', bg:'#e1306c22',br:'#e1306c44',basePrice:15,desc:'フィード',    duration:15, url:'https://instagram.com'},
+  {id:'nt',icon:'🎬',name:'Netflix',   bg:'#e5000022',br:'#e5000044',basePrice:50,desc:'動画視聴',    duration:60, url:'https://netflix.com'},
+  {id:'gm',icon:'🎮',name:'ゲーム',    bg:'#7c3aed22',br:'#7c3aed44',basePrice:40,desc:'ゲームプレイ',duration:30, url:''},
+];
+
+function isAccessActive(id){
+  const until = state.access && state.access[id];
+  return until && until > Date.now();
+}
+
+function remainingSec(id){
+  const until = state.access && state.access[id];
+  if(!until) return 0;
+  return Math.max(0, Math.ceil((until - Date.now()) / 1000));
+}
+
+function fmtTime(sec){
+  const m = Math.floor(sec/60);
+  const s = sec % 60;
+  return `${m}:${String(s).padStart(2,'0')}`;
+}
+
+function pageShop(){
+  const mode=currentMode();
+  const mult=getMultiplier(mode);
+  const isSurge=mode==='focus';
+
+  const rows=ENTERTAINMENTS.map(e=>{
+    const price=Math.round(e.basePrice*mult);
+    const active=isAccessActive(e.id);
+    const sec=remainingSec(e.id);
+
+    if(active){
+      // ✅ アクセス解放中
+      return `<div class="ent-item">
+        <div class="ent-icon" style="background:${e.bg};border:1px solid ${e.br};">${e.icon}</div>
+        <div style="flex:1">
+          <div class="ent-name">${e.name}</div>
+          <div class="ent-desc">${e.desc}（${e.duration}分）</div>
+          <div style="font-size:11px;color:var(--green);margin-top:3px;">✅ アクセス解放中</div>
+        </div>
+        <div class="access-active-box">
+          <div class="access-timer" id="timer-${e.id}">${fmtTime(sec)}</div>
+          <div class="access-timer-label">残り時間</div>
+          ${e.url?`<button class="open-btn" data-url="${e.url}">▶ 開く</button>`:'<div style="font-size:11px;color:var(--muted);margin-top:6px;">デバイスで開く</div>'}
+        </div>
+      </div>`;
+    } else {
+      // 🔒 ロック中
+      return `<div class="ent-item locked">
+        <div class="ent-icon" style="background:${e.bg};border:1px solid ${e.br};filter:grayscale(.4);">${e.icon}</div>
+        <div style="flex:1">
+          <div class="ent-name">${e.name}</div>
+          <div class="ent-desc">${e.desc}（${e.duration}分）</div>
+          <div class="lock-badge">🔒 ロック中</div>
+        </div>
+        <div class="ent-price-area">
+          <div class="ent-price ${isSurge?'price-surge':'price-sale'}">${price}🪙</div>
+          <div class="ent-price-orig">通常 ${e.basePrice}🪙</div>
+          <div class="price-tag ${isSurge?'tag-surge':'tag-sale'}">${isSurge?'🔴 高騰中':'🟢 セール'}</div><br>
+          <button class="buy-btn-locked ${isSurge?'surge':'sale'}" data-id="${e.id}" data-price="${price}" data-name="${e.name}" data-duration="${e.duration}">解除する</button>
+        </div>
+      </div>`;
+    }
+  }).join('');
+
+  return `<div class="container">
+    <div class="card">
+      <div class="card-title">🎮 娯楽アクセス権 <span style="margin-left:auto;font-size:11px;color:var(--muted);">残高: <b style="color:var(--gold)">${state.coins}🪙</b></span></div>
+      ${rows}
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <div class="card-title">ℹ️ しくみ</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.9;">
+        🔒 購入するまでアクセス不可<br>
+        ✅ 購入後、制限時間内だけ解放<br>
+        ⏰ 時間切れで自動ロック<br>
+        ・ <b style="color:#c4b5fd">集中タイム</b>（午前・午後）→ 価格×5<br>
+        ・ <b style="color:#6ee7b7">自由タイム</b>（昼・夜）→ 価格×0.5
+      </div>
+    </div>
+  </div>`;
+}
+
+function bindShop(){
+  // 解除ボタン
+  document.querySelectorAll('.buy-btn-locked').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const price    = parseInt(b.dataset.price);
+      const name     = b.dataset.name;
+      const id       = b.dataset.id;
+      const duration = parseInt(b.dataset.duration);
+      if((state.coins||0) >= price){
+        state.coins -= price;
+        if(!state.access) state.access={};
+        state.access[id] = Date.now() + duration * 60 * 1000;
+        addHistory('minus', price, `${name} アクセス解除（${duration}分）`);
+        showToast(`🔓 ${name} を解除！${duration}分間アクセスできます`);
+        scheduleSave(); renderPage();
+      } else {
+        showToast(`❌ コイン不足（必要: ${price}🪙）`);
+      }
+    });
+  });
+  // 開くボタン
+  document.querySelectorAll('.open-btn').forEach(b=>{
+    b.addEventListener('click',()=>{
+      window.open(b.dataset.url,'_blank');
+    });
+  });
+}
+
+/* ============================================================
+   PAGE: QUEST（将来の共有機能用のデモ表示）
+============================================================ */
+function pageQuest(){
+  return `<div class="container">
+    <div class="card" style="text-align:center;padding:30px 20px;">
+      <div style="font-size:48px;margin-bottom:12px;">⚔️</div>
+      <div style="font-size:17px;font-weight:700;margin-bottom:8px;">協力クエスト</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;">
+        友人と通貨を賭けて共通目標に挑む機能です。<br>全員達成でボーナスコインが配布されます。
+      </div>
+      <div style="margin-top:20px;background:var(--card2);border-radius:12px;padding:14px;">
+        <div style="font-size:12px;color:var(--gold);font-weight:700;">🚧 近日公開予定</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">4人のアカウントが揃ったら実装します！</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   PAGE: RANK
+============================================================ */
+const RANKS=[
+  {name:'Bronze',  icon:'🥉',min:0,    max:999},
+  {name:'Silver',  icon:'🥈',min:1000, max:2999},
+  {name:'Gold',    icon:'🥇',min:3000, max:5999},
+  {name:'Platinum',icon:'💎',min:6000, max:9999},
+  {name:'Diamond', icon:'💠',min:10000,max:Infinity},
+];
+
+function pageRank(){
+  const total=state.totalEarned||0;
+  const idx=RANKS.findIndex(r=>total>=r.min&&total<=r.max);
+  const rank=RANKS[idx];
+  const next=RANKS[idx+1];
+  const pct=next?Math.min(100,Math.round((total-rank.min)/(next.min-rank.min)*100)):100;
+  const rankList=RANKS.map((r,i)=>{
+    const active=i===idx;const passed=i<idx;
+    return `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);opacity:${passed||active?1:.4};">
+      <span style="font-size:22px;">${r.icon}</span>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:${active?700:400};">${r.name}${active?' ← 現在':''}</div>
+        <div style="font-size:11px;color:var(--muted);">${r.min.toLocaleString()} 〜 ${r.max===Infinity?'∞':r.max.toLocaleString()}</div>
+      </div>
+      ${passed?'<span style="color:var(--green);">✓</span>':''}
+    </div>`;
+  }).join('');
+  return `<div class="container">
+    <div class="rank-card">
+      <div class="rank-badge-big">${rank.icon}</div>
+      <div class="rank-name-big">${rank.name}</div>
+      <div style="font-size:12px;color:var(--muted);">全期間 ${total.toLocaleString()} コイン獲得</div>
+      ${next?`
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin:12px 0 4px;">
+          <span>${total.toLocaleString()}</span><span>次: ${next.name}（${next.min.toLocaleString()}）</span>
+        </div>
+        <div class="progress-wrap"><div class="progress-bar" style="width:${pct}%;"></div></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:5px;">あと ${(next.min-total).toLocaleString()} コインで昇格！</div>
+      `:'<div style="font-size:13px;color:var(--gold);margin-top:10px;">🏆 最高ランク達成！</div>'}
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <div class="card-title">📊 統計</div>
+      <div class="stats-grid">
+        <div class="stat-box"><div class="stat-val" style="color:#a78bfa;">${total.toLocaleString()}</div><div class="stat-label">全期間獲得コイン</div></div>
+        <div class="stat-box"><div class="stat-val" style="color:#22d3ee;">${state.todayEarned||0}</div><div class="stat-label">本日獲得</div></div>
+        <div class="stat-box"><div class="stat-val" style="color:#f59e0b;">🔥 ${state.streak||0}</div><div class="stat-label">連続達成日数</div></div>
+        <div class="stat-box"><div class="stat-val" style="color:#10b981;">${state.coins||0}</div><div class="stat-label">現在の残高</div></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <div class="card-title">🏅 ランク一覧</div>${rankList}
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   PAGE: PROFILE
+============================================================ */
+function pageProfile(){
+  const rank=RANKS.find(r=>(state.totalEarned||0)>=r.min&&(state.totalEarned||0)<=r.max);
+  const allHistory=(state.history||[]).slice().reverse().map(h=>`
+    <div class="history-item">
+      <div class="history-sign ${h.type}">${h.type==='plus'?'+':'-'}${h.amount}</div>
+      <div class="history-desc">${h.desc}</div>
+      <div class="history-time">${h.time}</div>
+    </div>`).join('') || '<div style="font-size:13px;color:var(--muted);">まだ履歴がありません</div>';
+
+  return `<div class="container">
+    <div class="profile-hero">
+      <div style="font-size:52px;margin-bottom:8px;">😎</div>
+      <div style="font-size:20px;font-weight:800;">${state.displayName||'ユーザー'}</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px;">${currentUser?.email||''}</div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px;">
+        <span style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:4px 11px;font-size:12px;">${rank.icon} ${rank.name}</span>
+        <span style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:4px 11px;font-size:12px;">🔥 ${state.streak||0}日連続</span>
+        ${state.focusWeekActive?'<span style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:4px 11px;font-size:12px;">⚡ 集中強化中</span>':''}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚙️ 設定</div>
+      <div class="setting-row">
+        <div>
+          <div style="font-size:14px;">集中強化ウィーク参加</div>
+          <div style="font-size:11px;color:var(--muted);">コイン獲得を×${state.focusWeekMultiplier}倍にする</div>
+        </div>
+        <label class="toggle"><input type="checkbox" id="toggle-week" ${state.focusWeekActive?'checked':''}/><span class="toggle-slider"></span></label>
+      </div>
+      <div class="setting-row">
+        <div>
+          <div style="font-size:14px;">ニックネーム変更</div>
+        </div>
+        <button class="btn btn-outline" style="font-size:12px;padding:5px 10px;" onclick="changeName()">変更</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div class="card-title">💳 前借り状況</div>
+      ${state.loan>0?`
+        <div style="font-size:14px;color:var(--red);font-weight:700;margin-bottom:8px;">前借り残高: ${state.loan}🪙</div>
+        ${state.loanPenalty?'<div style="font-size:11px;color:var(--red);">⚠️ ペナルティ中：娯楽価格×2</div>':''}
+      `:'<div style="font-size:13px;color:var(--green);">✅ 前借りなし</div>'}
+      <button class="btn btn-outline" style="margin-top:10px;width:100%;font-size:13px;" onclick="openModal('borrow-modal')">💳 前借りする</button>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div class="card-title">📜 コイン履歴（全件）</div>${allHistory}
+    </div>
+  </div>`;
+}
+
+function bindProfile(){
+  const tw=document.getElementById('toggle-week');
+  if(tw) tw.addEventListener('change',()=>{
+    state.focusWeekActive=tw.checked;
+    showToast(tw.checked?'🔥 集中強化ウィーク参加！':'集中強化ウィーク 離脱');
+    scheduleSave();
+  });
+}
+
+function changeName(){
+  const n=prompt('新しいニックネームを入力してください:',state.displayName||'');
+  if(n&&n.trim()){
+    state.displayName=n.trim();
+    document.getElementById('user-name-disp').textContent=state.displayName;
+    showToast(`✅ ニックネームを「${state.displayName}」に変更しました`);
+    scheduleSave(); renderPage();
+  }
+}
+
+/* ============================================================
+   前借り
+============================================================ */
+function executeBorrow(){
+  const amt=parseInt(document.getElementById('borrow-amount').value)||0;
+  if(amt<10||amt>200){showToast('❌ 10〜200の範囲で入力してください');return;}
+  state.loan=(state.loan||0)+amt;
+  state.coins=(state.coins||0)+amt;
+  state.loanPenalty=true;
+  addHistory('plus',amt,`前借り（残高 ${state.loan}🪙）`);
+  closeModal('borrow-modal');
+  showToast(`💳 ${amt}🪙 を前借りしました！`);
+  scheduleSave(); renderPage();
+}
+
+/* ============================================================
+   ToDo 追加
+============================================================ */
+function addTodo(){
+  const text=document.getElementById('new-todo-text').value.trim();
+  const reward=parseInt(document.getElementById('new-todo-reward').value)||20;
+  if(!text){showToast('❌ タスク名を入力してください');return;}
+  state.todos.push({id:state.nextId++,text,reward,done:false});
+  closeModal('addtodo-modal');
+  showToast(`✏️「${text}」を追加しました`);
+  scheduleSave();
+  if(state.currentPage==='home') renderPage();
+}
+
+/* ============================================================
+   ユーティリティ
+============================================================ */
+function addHistory(type,amount,desc){
+  if(!state.history) state.history=[];
+  const now=new Date();
+  const t=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  state.history.push({type,amount,desc,time:t});
+  if(state.history.length>100) state.history=state.history.slice(-100);
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o) o.classList.remove('open');});
+});
+
+let toastTimer;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+setInterval(updateClock,30000);
+
+/* ============================================================
+   アクセスタイマー（毎秒チェック）
+============================================================ */
+let accessTimerInterval = null;
+
+function startAccessTimer(){
+  if(accessTimerInterval) clearInterval(accessTimerInterval);
+  accessTimerInterval = setInterval(()=>{
+    if(!state||!state.access) return;
+    const now = Date.now();
+    let expired = false;
+
+    Object.keys(state.access).forEach(id=>{
+      const until = state.access[id];
+      if(!until) return;
+
+      if(until <= now){
+        // 時間切れ → ロック
+        state.access[id] = null;
+        expired = true;
+        const ent = ENTERTAINMENTS.find(e=>e.id===id);
+        showToast(`⏰ ${ent?.name||id} のアクセス時間が終了しました`);
+      } else {
+        // カウントダウン表示を更新（ページ再描画なしで）
+        const el = document.getElementById(`timer-${id}`);
+        if(el){
+          const sec = Math.max(0, Math.ceil((until - now) / 1000));
+          el.textContent = fmtTime(sec);
+        }
+      }
+    });
+
+    if(expired){
+      scheduleSave();
+      if(state.currentPage==='shop') renderPage();
+    }
+  }, 1000);
+}
+</script>
+</body>
+</html>
