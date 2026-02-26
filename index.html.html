@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>生活リズム最適化 - ダッシュボード</title>
+  <style>
+    :root {
+      --bg: #0f0f1a;
+      --card: #1a1a2e;
+      --card2: #16213e;
+      --accent: #7c3aed;
+      --accent2: #06b6d4;
+      --gold: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --border: #2d3748;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', 'Hiragino Sans', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: linear-gradient(135deg, #1a0533 0%, #0c1445 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-left h1 {
+      font-size: 18px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #a78bfa, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-left .subtitle {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .time-badge {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 8px 16px;
+      text-align: center;
+    }
+
+    .time-badge .time-text {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .time-badge .time-label {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ===== MODE BANNER ===== */
+    #mode-banner {
+      padding: 10px 24px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      letter-spacing: 0.5px;
+      transition: all 0.5s;
+    }
+
+    .mode-focus {
+      background: linear-gradient(90deg, #7c3aed33, #3b0764aa);
+      border-bottom: 2px solid #7c3aed;
+      color: #c4b5fd;
+    }
+
+    .mode-free {
+      background: linear-gradient(90deg, #065f4633, #064e3baa);
+      border-bottom: 2px solid #10b981;
+      color: #6ee7b7;
+    }
+
+    /* ===== MAIN GRID ===== */
+    .main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 640px) {
+      .main { grid-template-columns: 1fr; }
+    }
+
+    /* ===== CARD ===== */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ===== COIN SECTION ===== */
+    .coin-card {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, #1a0533, #0c1445);
+      border-color: #7c3aed55;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .coin-icon {
+      width: 72px;
+      height: 72px;
+      background: radial-gradient(circle at 35% 35%, #fde68a, #f59e0b, #b45309);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      box-shadow: 0 0 24px #f59e0b55;
+      flex-shrink: 0;
+    }
+
+    .coin-info h2 {
+      font-size: 42px;
+      font-weight: 800;
+      background: linear-gradient(90deg, #fde68a, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+    }
+
+    .coin-info .coin-label {
+      font-size: 14px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .coin-info .coin-today {
+      font-size: 12px;
+      color: var(--green);
+      margin-top: 6px;
+    }
+
+    /* ===== TODO ===== */
+    .todo-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: opacity 0.3s;
+    }
+
+    .todo-item:last-child { border-bottom: none; }
+
+    .todo-item.done { opacity: 0.5; }
+
+    .todo-check {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .todo-item.done .todo-check {
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    .todo-text {
+      flex: 1;
+      font-size: 14px;
+    }
+
+    .todo-item.done .todo-text {
+      text-decoration: line-through;
+      color: var(--muted);
+    }
+
+    .todo-reward {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold);
+      background: #f59e0b15;
+      padding: 3px 8px;
+      border-radius: 20px;
+      border: 1px solid #f59e0b33;
+    }
+
+    /* ===== ENTERTAINMENT ===== */
+    .ent-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ent-item:last-child { border-bottom: none; }
+
+    .ent-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .ent-info { flex: 1; }
+
+    .ent-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .ent-desc {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .ent-price-area { text-align: right; }
+
+    .ent-price {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .ent-price-label {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .price-surge { color: var(--red); }
+    .price-sale  { color: var(--green); }
+    .price-normal { color: var(--gold); }
+
+    .price-tag {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-top: 3px;
+    }
+
+    .tag-surge  { background: #ef444420; color: var(--red); border: 1px solid #ef444440; }
+    .tag-sale   { background: #10b98120; color: var(--green); border: 1px solid #10b98140; }
+    .tag-normal { background: #f59e0b15; color: var(--gold); border: 1px solid #f59e0b33; }
+
+    .buy-btn {
+      margin-top: 6px;
+      padding: 5px 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.1s, opacity 0.2s;
+    }
+
+    .buy-btn:hover { transform: scale(1.05); }
+    .buy-btn:active { transform: scale(0.97); }
+
+    .buy-btn.surge  { background: #ef4444; color: #fff; }
+    .buy-btn.sale   { background: #10b981; color: #fff; }
+    .buy-btn.normal { background: #f59e0b; color: #000; }
+
+    /* ===== STATS ===== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .stat-box {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-size: 26px;
+      font-weight: 800;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ===== TOAST ===== */
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #1e293b;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ===== PROGRESS BAR ===== */
+    .progress-wrap {
+      margin-top: 14px;
+      background: var(--card2);
+      border-radius: 999px;
+      height: 8px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #7c3aed, #06b6d4);
+      transition: width 0.5s ease;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-left">
+    <h1>⚡ LifeRhythm</h1>
+    <div class="subtitle">AI価格調整による自律支援システム</div>
+  </div>
+  <div class="time-badge">
+    <div class="time-text" id="clock">--:--</div>
+    <div class="time-label" id="date-label">読み込み中...</div>
+  </div>
+</header>
+
+<!-- MODE BANNER -->
+<div id="mode-banner" class="mode-focus">
+  🔴 集中タイム — 娯楽の価格が高騰しています
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- COIN CARD -->
+  <div class="card coin-card">
+    <div class="coin-icon">🪙</div>
+    <div class="coin-info">
+      <h2 id="coin-display">240</h2>
+      <div class="coin-label">LifeCoins 残高</div>
+      <div class="coin-today" id="today-earned">今日 +80 コイン獲得済み</div>
+    </div>
+    <div style="margin-left:auto; text-align:right;">
+      <div class="progress-label">
+        <span>本日の進捗</span>
+        <span id="todo-progress-label">2 / 4 完了</span>
+      </div>
+      <div class="progress-wrap" style="width:200px;">
+        <div class="progress-bar" id="todo-progress-bar" style="width:50%"></div>
+      </div>
+      <div style="font-size:11px; color:var(--muted); margin-top:8px;">全タスク完了でボーナス +50 コイン</div>
+    </div>
+  </div>
+
+  <!-- TODO LIST -->
+  <div class="card">
+    <div class="card-title">✅ 今日のToDo</div>
+    <div id="todo-list"></div>
+  </div>
+
+  <!-- ENTERTAINMENT -->
+  <div class="card">
+    <div class="card-title">🎮 娯楽アクセス権</div>
+    <div id="ent-list"></div>
+  </div>
+
+  <!-- STATS -->
+  <div class="card" style="grid-column: 1 / -1;">
+    <div class="card-title">📊 今週の統計</div>
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-val" style="color:#a78bfa;">1,240</div>
+        <div class="stat-label">今週獲得コイン</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" style="color:#22d3ee;">87%</div>
+        <div class="stat-label">タスク達成率</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" style="color:#f59e0b;">🔥 5</div>
+        <div class="stat-label">連続達成日数</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" style="color:#10b981;">Silver</div>
+        <div class="stat-label">現在のランク</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- TOAST -->
+<div id="toast">🪙 +30 コイン獲得！</div>
+
+<script>
+  // ===== STATE =====
+  let coins = 240;
+  let todayEarned = 80;
+
+  const todos = [
+    { id: 1, text: '朝8時に起きる',      reward: 30, done: true  },
+    { id: 2, text: '30分読書する',        reward: 20, done: true  },
+    { id: 3, text: '課題を1つ終わらせる', reward: 50, done: false },
+    { id: 4, text: '10分間ストレッチ',    reward: 15, done: false },
+  ];
+
+  // base prices
+  const entertainments = [
+    { id: 'yt',  icon: '📺', name: 'YouTube',  color: '#ff0000', basePrice: 30, desc: '動画視聴（30分）' },
+    { id: 'tt',  icon: '🎵', name: 'TikTok',   color: '#000000', basePrice: 20, desc: 'ショート動画（15分）' },
+    { id: 'tw',  icon: '🐦', name: 'X (Twitter)', color: '#1d9bf0', basePrice: 15, desc: 'タイムライン閲覧（15分）' },
+    { id: 'ig',  icon: '📸', name: 'Instagram', color: '#e1306c', basePrice: 15, desc: 'フィード閲覧（15分）' },
+  ];
+
+  // ===== TIME & MODE =====
+  function getMode(hour) {
+    if (hour >= 6 && hour < 12)  return 'focus'; // 午前
+    if (hour >= 12 && hour < 14) return 'free';  // 昼休み
+    if (hour >= 14 && hour < 18) return 'focus'; // 午後
+    if (hour >= 18 && hour < 22) return 'free';  // 夜自由
+    return 'focus'; // 深夜 → 就寝推奨
+  }
+
+  function getMultiplier(mode) {
+    return mode === 'focus' ? 5 : 0.5;
+  }
+
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById('clock').textContent = `${h}:${m}`;
+
+    const days = ['日', '月', '火', '水', '木', '金', '土'];
+    const d = `${now.getMonth()+1}/${now.getDate()}（${days[now.getDay()]}）`;
+    document.getElementById('date-label').textContent = d;
+
+    const mode = getMode(now.getHours());
+    updateModeBanner(mode);
+    renderEntertainment(mode);
+  }
+
+  function updateModeBanner(mode) {
+    const banner = document.getElementById('mode-banner');
+    if (mode === 'focus') {
+      banner.className = 'mode-focus';
+      banner.textContent = '🔴 集中タイム — 娯楽の価格が高騰しています（通常の5倍）';
+    } else {
+      banner.className = 'mode-free';
+      banner.textContent = '🟢 自由タイム — 娯楽がセール価格！ゆっくり休もう 🎉';
+    }
+  }
+
+  // ===== RENDER TODO =====
+  function renderTodos() {
+    const list = document.getElementById('todo-list');
+    list.innerHTML = '';
+    const done = todos.filter(t => t.done).length;
+    todos.forEach(todo => {
+      const div = document.createElement('div');
+      div.className = 'todo-item' + (todo.done ? ' done' : '');
+      div.innerHTML = `
+        <div class="todo-check">${todo.done ? '✓' : ''}</div>
+        <div class="todo-text">${todo.text}</div>
+        <div class="todo-reward">+${todo.reward} 🪙</div>
+      `;
+      if (!todo.done) {
+        div.addEventListener('click', () => completeTodo(todo));
+      }
+      list.appendChild(div);
+    });
+
+    // progress
+    const total = todos.length;
+    const pct = Math.round(done / total * 100);
+    document.getElementById('todo-progress-bar').style.width = pct + '%';
+    document.getElementById('todo-progress-label').textContent = `${done} / ${total} 完了`;
+    document.getElementById('today-earned').textContent = `今日 +${todayEarned} コイン獲得済み`;
+  }
+
+  function completeTodo(todo) {
+    todo.done = true;
+    coins += todo.reward;
+    todayEarned += todo.reward;
+    updateCoinDisplay();
+    renderTodos();
+
+    // bonus check
+    if (todos.every(t => t.done)) {
+      setTimeout(() => {
+        coins += 50;
+        todayEarned += 50;
+        updateCoinDisplay();
+        showToast('🎊 全タスク完了ボーナス +50 コイン！');
+      }, 600);
+      showToast(`✅ +${todo.reward} コイン獲得！`);
+    } else {
+      showToast(`✅ +${todo.reward} コイン獲得！`);
+    }
+  }
+
+  // ===== RENDER ENTERTAINMENT =====
+  function renderEntertainment(mode) {
+    const list = document.getElementById('ent-list');
+    const mult = getMultiplier(mode);
+    list.innerHTML = '';
+    entertainments.forEach(ent => {
+      const price = Math.round(ent.basePrice * mult);
+      const isSurge = mode === 'focus';
+      const priceClass = isSurge ? 'price-surge' : 'price-sale';
+      const tagClass   = isSurge ? 'tag-surge'   : 'tag-sale';
+      const tagText    = isSurge ? '🔴 高騰中 ×5' : '🟢 セール ×0.5';
+      const btnClass   = isSurge ? 'surge'        : 'sale';
+
+      const div = document.createElement('div');
+      div.className = 'ent-item';
+      div.innerHTML = `
+        <div class="ent-icon" style="background:${ent.color}22; border:1px solid ${ent.color}44;">
+          ${ent.icon}
+        </div>
+        <div class="ent-info">
+          <div class="ent-name">${ent.name}</div>
+          <div class="ent-desc">${ent.desc}</div>
+        </div>
+        <div class="ent-price-area">
+          <div class="ent-price ${priceClass}">${price} 🪙</div>
+          <div class="ent-price-label">通常 ${ent.basePrice} 🪙</div>
+          <div class="price-tag ${tagClass}">${tagText}</div><br>
+          <button class="buy-btn ${btnClass}" data-id="${ent.id}" data-price="${price}" data-name="${ent.name}">
+            購入する
+          </button>
+        </div>
+      `;
+      list.appendChild(div);
+    });
+
+    document.querySelectorAll('.buy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const price = parseInt(btn.dataset.price);
+        const name  = btn.dataset.name;
+        if (coins >= price) {
+          coins -= price;
+          updateCoinDisplay();
+          showToast(`🎮 ${name} のアクセス権を購入しました！ -${price} 🪙`);
+        } else {
+          showToast(`❌ コインが足りません（必要: ${price} 🪙）`);
+        }
+      });
+    });
+  }
+
+  function updateCoinDisplay() {
+    document.getElementById('coin-display').textContent = coins.toLocaleString();
+    document.getElementById('today-earned').textContent = `今日 +${todayEarned} コイン獲得済み`;
+  }
+
+  // ===== TOAST =====
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  // ===== INIT =====
+  updateClock();
+  renderTodos();
+  setInterval(updateClock, 30000); // 30秒ごとに更新
+</script>
+</body>
+</html>
