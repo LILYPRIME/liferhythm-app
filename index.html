@@ -4,16 +4,11 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>LifeRhythm — AI自律支援</title>
-
-<!-- =====================================================
-  🔥 FIREBASE SDK
-===================================================== -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <style>
-/* ===================== RESET & VARS ===================== */
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --bg:#0f0f1a;--card:#1a1a2e;--card2:#16213e;
@@ -21,74 +16,45 @@
   --gold:#f59e0b;--red:#ef4444;--green:#10b981;
   --text:#e2e8f0;--muted:#94a3b8;--border:#2d3748;
 }
-*{box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:'Segoe UI','Hiragino Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
 button{cursor:pointer;border:none;font-family:inherit;}
 input{font-family:inherit;}
 
-/* ===================== AUTH SCREEN ===================== */
-#auth-screen{
-  min-height:100vh;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,#0f0f1a 0%,#1a0533 50%,#0c1445 100%);
-  padding:20px;
-}
-.auth-box{
-  background:var(--card);border:1px solid var(--border);border-radius:24px;
-  padding:36px 32px;width:100%;max-width:380px;
-}
-.auth-logo{font-size:32px;font-weight:900;background:linear-gradient(90deg,#a78bfa,#22d3ee);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px;}
+/* AUTH */
+#auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0f0f1a 0%,#1a0533 50%,#0c1445 100%);padding:20px;}
+.auth-box{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:36px 32px;width:100%;max-width:380px;}
+.auth-logo{font-size:32px;font-weight:900;background:linear-gradient(90deg,#a78bfa,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px;}
 .auth-tagline{font-size:13px;color:var(--muted);margin-bottom:28px;}
-.auth-tabs{display:flex;gap:0;background:var(--card2);border-radius:12px;padding:4px;margin-bottom:24px;}
+.auth-tabs{display:flex;background:var(--card2);border-radius:12px;padding:4px;margin-bottom:24px;}
 .auth-tab{flex:1;padding:8px;border-radius:9px;background:none;color:var(--muted);font-size:13px;font-weight:600;transition:all .2s;}
 .auth-tab.active{background:var(--accent);color:#fff;}
 .auth-field{margin-bottom:14px;}
 .auth-field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600;}
-.auth-input{
-  width:100%;background:var(--card2);border:1px solid var(--border);border-radius:10px;
-  padding:11px 14px;color:var(--text);font-size:14px;transition:border .2s;
-}
+.auth-input{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;transition:border .2s;}
 .auth-input:focus{outline:none;border-color:var(--accent);}
-.auth-submit{
-  width:100%;padding:13px;border-radius:12px;font-size:15px;font-weight:700;
-  background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;margin-top:6px;
-  transition:opacity .2s,transform .1s;
-}
+.auth-submit{width:100%;padding:13px;border-radius:12px;font-size:15px;font-weight:700;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;margin-top:6px;transition:opacity .2s,transform .1s;}
 .auth-submit:hover{opacity:.9;}
-.auth-submit:active{transform:scale(.98);}
 .auth-error{font-size:12px;color:var(--red);margin-top:10px;text-align:center;min-height:18px;}
 .auth-name-field{display:none;}
 .auth-name-field.show{display:block;}
 
-/* ===================== LOADING ===================== */
-#loading{
-  position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;
-  align-items:center;justify-content:center;z-index:999;gap:16px;
-}
+/* LOADING */
+#loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:16px;}
 .spin{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 
-/* ===================== MAIN APP ===================== */
+/* LAYOUT */
 #main-app{display:none;flex-direction:column;min-height:100vh;}
 #view{flex:1;padding-bottom:80px;}
 
-/* ===================== NAV ===================== */
-nav{
-  position:fixed;bottom:0;left:0;right:0;
-  background:#111827;border-top:1px solid var(--border);
-  display:flex;justify-content:space-around;align-items:center;
-  height:64px;z-index:100;
-}
+/* NAV */
+nav{position:fixed;bottom:0;left:0;right:0;background:#111827;border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;height:64px;z-index:100;}
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;color:var(--muted);padding:8px 0;font-size:10px;transition:color .2s;}
 .nav-btn.active{color:var(--accent2);}
 .nav-btn .nav-icon{font-size:22px;}
 
-/* ===================== HEADER ===================== */
-.page-header{
-  background:linear-gradient(135deg,#1a0533 0%,#0c1445 100%);
-  border-bottom:1px solid var(--border);
-  padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;
-}
+/* HEADER */
+.page-header{background:linear-gradient(135deg,#1a0533 0%,#0c1445 100%);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .logo{font-size:17px;font-weight:800;background:linear-gradient(90deg,#a78bfa,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .logo-sub{font-size:10px;color:var(--muted);}
 .header-right{display:flex;align-items:center;gap:10px;}
@@ -99,12 +65,12 @@ nav{
 .logout-btn{background:none;color:var(--muted);font-size:11px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);}
 .logout-btn:hover{color:var(--red);border-color:var(--red);}
 
-/* ===================== MODE BANNER ===================== */
+/* MODE BANNER */
 #mode-banner{padding:9px 18px;font-size:12px;font-weight:600;text-align:center;transition:all .5s;}
 .mode-focus{background:linear-gradient(90deg,#7c3aed22,#3b076499);border-bottom:2px solid #7c3aed;color:#c4b5fd;}
 .mode-free{background:linear-gradient(90deg,#065f4622,#064e3b99);border-bottom:2px solid #10b981;color:#6ee7b7;}
 
-/* ===================== COMMON ===================== */
+/* COMMON */
 .container{max-width:680px;margin:0 auto;padding:18px;}
 .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;}
 .card+.card{margin-top:14px;}
@@ -119,24 +85,48 @@ nav{
 .progress-wrap{background:var(--card2);border-radius:999px;height:7px;overflow:hidden;}
 .progress-bar{height:100%;border-radius:999px;background:linear-gradient(90deg,#7c3aed,#06b6d4);transition:width .5s ease;}
 
-/* ===================== COIN STRIP ===================== */
+/* COIN STRIP */
 .coin-strip{background:linear-gradient(135deg,#1a0533,#0c1445);border:1px solid #7c3aed44;border-radius:16px;padding:14px 18px;display:flex;align-items:center;gap:14px;margin-bottom:14px;}
 .coin-orb{width:54px;height:54px;flex-shrink:0;background:radial-gradient(circle at 35% 35%,#fde68a,#f59e0b,#b45309);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 0 18px #f59e0b44;}
 .coin-val{font-size:36px;font-weight:900;background:linear-gradient(90deg,#fde68a,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}
 .coin-label{font-size:12px;color:var(--muted);margin-top:2px;}
 .coin-today{font-size:11px;color:var(--green);margin-top:4px;}
 
-/* ===================== TODO ===================== */
-.todo-item{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity .3s;}
+/* TODO — 改善版 */
+.todo-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
 .todo-item:last-child{border-bottom:none;}
-.todo-item.done{opacity:.45;}
-.todo-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;transition:all .2s;}
-.todo-item.done .todo-check{background:var(--green);border-color:var(--green);}
-.todo-text{flex:1;font-size:14px;}
+.todo-item.done{opacity:.5;}
+.todo-check{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;cursor:pointer;transition:all .2s;}
+.todo-item.done .todo-check{background:var(--green);border-color:var(--green);color:#fff;}
+.todo-text{flex:1;font-size:14px;line-height:1.3;}
 .todo-item.done .todo-text{text-decoration:line-through;color:var(--muted);}
-.todo-reward{font-size:12px;font-weight:700;color:var(--gold);background:#f59e0b15;padding:3px 8px;border-radius:20px;border:1px solid #f59e0b33;}
+.todo-reward{font-size:11px;font-weight:700;color:var(--gold);background:#f59e0b15;padding:3px 7px;border-radius:20px;border:1px solid #f59e0b33;white-space:nowrap;}
+.todo-del{width:26px;height:26px;border-radius:6px;background:none;color:#4a5568;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
+.todo-del:hover{background:#ef444420;color:var(--red);}
+.todo-empty{text-align:center;padding:24px 0;color:var(--muted);font-size:13px;}
 
-/* ===================== ENTERTAINMENT ===================== */
+/* ADD TODO INLINE */
+.add-todo-row{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.add-todo-input{flex:1;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:9px 12px;color:var(--text);font-size:13px;}
+.add-todo-input:focus{outline:none;border-color:var(--accent);}
+.add-todo-btn{padding:9px 14px;border-radius:10px;background:var(--accent);color:#fff;font-size:13px;font-weight:700;white-space:nowrap;}
+
+/* COMBO CARDS */
+.combo-card{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px;position:relative;}
+.combo-card:last-child{margin-bottom:0;}
+.combo-card.done-today{border-color:#f59e0b55;background:linear-gradient(135deg,#451a0320,#0c144520);}
+.combo-name{font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.combo-tasks{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
+.combo-task-chip{font-size:11px;padding:3px 9px;border-radius:20px;border:1px solid var(--border);background:var(--card);display:flex;align-items:center;gap:4px;}
+.combo-task-chip.done{border-color:var(--green);background:#10b98115;color:var(--green);}
+.combo-task-chip.missing{opacity:.45;}
+.combo-footer{display:flex;align-items:center;justify-content:space-between;}
+.combo-bonus{font-size:12px;font-weight:700;color:var(--gold);}
+.combo-status{font-size:11px;color:var(--muted);}
+.combo-del{position:absolute;top:10px;right:10px;background:none;color:#4a5568;font-size:13px;width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;}
+.combo-del:hover{background:#ef444420;color:var(--red);}
+
+/* ENTERTAINMENT */
 .ent-item{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--border);}
 .ent-item:last-child{border-bottom:none;}
 .ent-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
@@ -149,28 +139,29 @@ nav{
 .price-tag{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;display:inline-block;margin-top:2px;}
 .tag-surge{background:#ef444420;color:var(--red);border:1px solid #ef444440;}
 .tag-sale{background:#10b98120;color:var(--green);border:1px solid #10b98140;}
-.buy-btn{margin-top:4px;padding:5px 12px;border-radius:8px;font-size:12px;font-weight:700;border:none;transition:transform .1s;}
-.buy-btn:hover{transform:scale(1.05);}
-.buy-btn.surge{background:var(--red);color:#fff;}
-.buy-btn.sale{background:var(--green);color:#fff;}
+.locked-url-btn{display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:10px;color:#4a5568;background:#ffffff08;border:1px solid #ffffff15;border-radius:6px;padding:3px 8px;cursor:pointer;transition:background .15s;}
+.locked-url-btn:hover{background:#ffffff14;color:#718096;}
+.buy-btn-locked{margin-top:5px;padding:5px 12px;border-radius:8px;font-size:12px;font-weight:700;border:none;transition:transform .1s;}
+.buy-btn-locked:hover{transform:scale(1.05);}
+.buy-btn-locked.surge{background:var(--red);color:#fff;}
+.buy-btn-locked.sale{background:var(--green);color:#fff;}
+.access-timer{font-size:20px;font-weight:800;color:var(--green);letter-spacing:1px;}
+.access-timer-label{font-size:10px;color:var(--muted);margin-top:1px;}
+.open-btn{display:block;margin-top:6px;padding:6px 14px;border-radius:8px;background:var(--green);color:#fff;font-size:12px;font-weight:700;border:none;width:100%;transition:transform .1s;}
+.open-btn:hover{transform:scale(1.04);}
 
-/* ===================== STATS ===================== */
+/* STATS */
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .stat-box{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:13px;text-align:center;}
 .stat-val{font-size:24px;font-weight:800;}
 .stat-label{font-size:11px;color:var(--muted);margin-top:3px;}
 
-/* ===================== RANK ===================== */
+/* RANK */
 .rank-card{background:linear-gradient(135deg,#1a0533,#0c1445);border:1px solid #7c3aed44;border-radius:16px;padding:18px;text-align:center;}
 .rank-badge-big{font-size:52px;margin-bottom:6px;}
 .rank-name-big{font-size:22px;font-weight:800;}
 
-/* ===================== QUEST ===================== */
-.quest-card{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;}
-.member-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px solid var(--border);}
-.member-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
-
-/* ===================== PROFILE ===================== */
+/* PROFILE */
 .profile-hero{background:linear-gradient(135deg,#1a0533,#0c1445);border:1px solid #7c3aed44;border-radius:16px;padding:20px;text-align:center;margin-bottom:14px;}
 .setting-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);}
 .setting-row:last-child{border-bottom:none;}
@@ -181,14 +172,14 @@ nav{
 .toggle input:checked+.toggle-slider{background:var(--accent);}
 .toggle input:checked+.toggle-slider:before{transform:translateX(20px);}
 
-/* ===================== WEEK CARD ===================== */
+/* WEEK CARD */
 .week-card{background:linear-gradient(135deg,#451a03,#0c1445);border:1px solid #f59e0b44;border-radius:16px;padding:14px;}
 .week-active-tag{background:#f59e0b;color:#000;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;display:inline-block;margin-bottom:8px;}
 
-/* ===================== MODAL ===================== */
+/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:#00000088;z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
 .modal-overlay.open{opacity:1;pointer-events:all;}
-.modal-box{background:#1a1a2e;border:1px solid var(--border);border-radius:20px 20px 0 0;padding:22px;width:100%;max-width:500px;transform:translateY(40px);transition:transform .3s;}
+.modal-box{background:#1a1a2e;border:1px solid var(--border);border-radius:20px 20px 0 0;padding:22px;width:100%;max-width:500px;transform:translateY(40px);transition:transform .3s;max-height:80vh;overflow-y:auto;}
 .modal-overlay.open .modal-box{transform:translateY(0);}
 .modal-title{font-size:16px;font-weight:700;margin-bottom:14px;}
 .modal-actions{display:flex;gap:10px;margin-top:16px;}
@@ -197,7 +188,14 @@ nav{
 .num-input{width:90px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:8px 12px;color:var(--text);font-size:14px;text-align:center;}
 .num-input:focus{outline:none;border-color:var(--accent);}
 
-/* ===================== HISTORY ===================== */
+/* コンボモーダル タスク選択 */
+.combo-task-pick{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;background:var(--card2);margin-bottom:6px;cursor:pointer;transition:background .15s;}
+.combo-task-pick:hover{background:#2d3748;}
+.combo-task-pick input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);}
+.combo-task-pick label{flex:1;font-size:13px;cursor:pointer;}
+.combo-task-pick .reward-hint{font-size:11px;color:var(--muted);}
+
+/* HISTORY */
 .history-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
 .history-item:last-child{border-bottom:none;}
 .history-sign{font-size:16px;font-weight:800;}
@@ -206,34 +204,28 @@ nav{
 .history-desc{flex:1;font-size:13px;}
 .history-time{font-size:11px;color:var(--muted);}
 
-/* ===================== TOAST ===================== */
-#toast{position:fixed;bottom:76px;left:50%;transform:translateX(-50%) translateY(60px);background:#1e293b;border:1px solid var(--border);border-radius:12px;padding:10px 20px;font-size:13px;font-weight:600;transition:transform .4s cubic-bezier(.34,1.56,.64,1);z-index:500;pointer-events:none;white-space:nowrap;}
+/* TOAST — 位置とサイズ修正 */
+#toast{
+  position:fixed;bottom:74px;left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:#1e293b;border:1px solid var(--border);border-radius:12px;
+  padding:10px 18px;font-size:13px;font-weight:600;
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+  z-index:500;pointer-events:none;
+  max-width:calc(100% - 32px);text-align:center;
+  white-space:normal;word-break:break-word;
+}
 #toast.show{transform:translateX(-50%) translateY(0);}
-
-/* ===================== ACCESS SYSTEM ===================== */
-.ent-item.locked{opacity:.75;}
-.lock-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--muted);background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:2px 7px;margin-top:2px;}
-.access-active-box{background:#10b98115;border:1px solid #10b98133;border-radius:10px;padding:7px 10px;margin-top:4px;text-align:right;}
-.access-timer{font-size:20px;font-weight:800;color:var(--green);letter-spacing:1px;}
-.access-timer-label{font-size:10px;color:var(--muted);margin-top:1px;}
-.open-btn{display:block;margin-top:6px;padding:6px 14px;border-radius:8px;background:var(--green);color:#fff;font-size:12px;font-weight:700;border:none;width:100%;transition:transform .1s;}
-.open-btn:hover{transform:scale(1.04);}
-.buy-btn-locked{margin-top:5px;padding:5px 12px;border-radius:8px;font-size:12px;font-weight:700;border:none;transition:transform .1s;}
-.buy-btn-locked:hover{transform:scale(1.05);}
-.buy-btn-locked.surge{background:var(--red);color:#fff;}
-.buy-btn-locked.sale{background:var(--green);color:#fff;}
 </style>
 </head>
 <body>
 
-<!-- ===================== LOADING ===================== -->
 <div id="loading">
   <div style="font-size:28px;">⚡</div>
   <div class="spin"></div>
   <div style="font-size:13px;color:var(--muted);">読み込み中...</div>
 </div>
 
-<!-- ===================== AUTH SCREEN ===================== -->
 <div id="auth-screen" style="display:none;">
   <div class="auth-box">
     <div class="auth-logo">⚡ LifeRhythm</div>
@@ -261,7 +253,6 @@ nav{
   </div>
 </div>
 
-<!-- ===================== MAIN APP ===================== -->
 <div id="main-app">
   <header class="page-header">
     <div>
@@ -281,57 +272,36 @@ nav{
   </header>
   <div id="mode-banner" class="mode-focus">🔴 集中タイム</div>
   <div id="view"></div>
-
   <nav>
-    <button class="nav-btn active" onclick="goto('home')"    id="nav-home">    <span class="nav-icon">🏠</span>ホーム</button>
-    <button class="nav-btn"        onclick="goto('shop')"    id="nav-shop">    <span class="nav-icon">🎮</span>娯楽</button>
-    <button class="nav-btn"        onclick="goto('quest')"   id="nav-quest">   <span class="nav-icon">⚔️</span>クエスト</button>
-    <button class="nav-btn"        onclick="goto('rank')"    id="nav-rank">    <span class="nav-icon">🏆</span>ランク</button>
-    <button class="nav-btn"        onclick="goto('profile')" id="nav-profile"> <span class="nav-icon">👤</span>プロフィール</button>
+    <button class="nav-btn active" onclick="goto('home')"    id="nav-home">   <span class="nav-icon">🏠</span>ホーム</button>
+    <button class="nav-btn"        onclick="goto('shop')"    id="nav-shop">   <span class="nav-icon">🎮</span>娯楽</button>
+    <button class="nav-btn"        onclick="goto('rank')"    id="nav-rank">   <span class="nav-icon">🏆</span>ランク</button>
+    <button class="nav-btn"        onclick="goto('profile')" id="nav-profile"><span class="nav-icon">👤</span>プロフィール</button>
   </nav>
 </div>
 
-<!-- ===================== MODALS ===================== -->
-<div class="modal-overlay" id="borrow-modal">
+<!-- コンボ追加モーダル -->
+<div class="modal-overlay" id="addcombo-modal">
   <div class="modal-box">
-    <div class="modal-title">💳 コインを前借りする</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">前借りしたコインは翌日の獲得分から自動返済。未返済は娯楽価格<b style="color:var(--red)">×2</b>ペナルティ。</p>
-    <div style="display:flex;align-items:center;gap:10px;">
-      <input class="num-input" type="number" id="borrow-amount" value="50" min="10" max="200" step="10"/>
-      <span style="font-size:13px;color:var(--muted)">🪙 を前借り</span>
+    <div class="modal-title">🔥 コンボを追加</div>
+    <input class="modal-input" id="combo-name" type="text" placeholder="コンボ名（例: モーニングルーティン）"/>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">達成するタスクを選択：</div>
+    <div id="combo-task-list" style="max-height:200px;overflow-y:auto;"></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:12px;">
+      <span style="font-size:13px;color:var(--muted);">ボーナス:</span>
+      <input class="num-input" type="number" id="combo-bonus" value="50" min="10" max="500" step="10"/>
+      <span style="font-size:13px;color:var(--muted);">🪙</span>
     </div>
     <div class="modal-actions">
-      <button class="btn btn-red" style="flex:1" onclick="executeBorrow()">前借りする</button>
-      <button class="btn btn-outline" style="flex:1" onclick="closeModal('borrow-modal')">キャンセル</button>
+      <button class="btn btn-primary" style="flex:1" onclick="saveCombo()">追加</button>
+      <button class="btn btn-outline" style="flex:1" onclick="closeModal('addcombo-modal')">キャンセル</button>
     </div>
   </div>
 </div>
 
-<div class="modal-overlay" id="addtodo-modal">
-  <div class="modal-box">
-    <div class="modal-title">✏️ ToDoを追加</div>
-    <input class="modal-input" id="new-todo-text" type="text" placeholder="タスク名を入力..."/>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
-      <span style="font-size:13px;color:var(--muted);">報酬:</span>
-      <input class="num-input" type="number" id="new-todo-reward" value="20" min="5" max="100" step="5"/>
-      <span style="font-size:13px;color:var(--muted)">🪙</span>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-primary" style="flex:1" onclick="addTodo()">追加</button>
-      <button class="btn btn-outline" style="flex:1" onclick="closeModal('addtodo-modal')">キャンセル</button>
-    </div>
-  </div>
-</div>
-
-<!-- TOAST -->
 <div id="toast"></div>
 
-<!-- =====================================================
-  🔥 FIREBASE CONFIG
-  👇 ここにFirebaseの設定を貼り付けてください！
-===================================================== -->
 <script>
-// ⬇️⬇️⬇️ ここを自分のFirebaseの設定に書き換えてください ⬇️⬇️⬇️
 const firebaseConfig = {
   apiKey:            "AIzaSyAch5QXGqpzu2ZzR4LGVuxiGmV8Y_BBt-I",
   authDomain:        "liferhythm-cb0e2.firebaseapp.com",
@@ -341,93 +311,76 @@ const firebaseConfig = {
   appId:             "1:549059630729:web:36fb8d5440644caab01858",
   measurementId:     "G-F4K6WHLRF6"
 };
-// ⬆️⬆️⬆️ ここまで ⬆️⬆️⬆️
-
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db   = firebase.firestore();
 
 /* ============================================================
-   デフォルトデータ（新規ユーザー用）
+   DEFAULT STATE
 ============================================================ */
 function defaultState(name){
   return {
-    displayName: name || 'ユーザー',
-    coins: 100,
-    todayEarned: 0,
-    loan: 0,
-    loanPenalty: false,
-    focusWeekActive: true,
+    displayName:         name || 'ユーザー',
+    coins:               100,
+    todayEarned:         0,
+    totalEarned:         100,
+    focusWeekActive:     true,
     focusWeekMultiplier: 2,
-    focusWeekDaysLeft: 3,
-    totalEarned: 100,
-    streak: 0,
-    lastDate: today(),
-    todos: [
-      {id:1,text:'朝8時に起きる',      reward:30,done:false},
-      {id:2,text:'30分読書する',        reward:20,done:false},
-      {id:3,text:'課題を1つ終わらせる', reward:50,done:false},
-      {id:4,text:'10分間ストレッチ',    reward:15,done:false},
-    ],
-    history:[],
-    settings:{notify:true,weeklyBoost:true},
-    access:{},
-    nextId: 10,
+    focusWeekDaysLeft:   3,
+    streak:              0,
+    lastDate:            today(),
+    todos:               [],   // ← 空スタート
+    combos:              [],   // { id, name, taskIds:[], bonus, lastCompletedDate }
+    history:             [],
+    settings:            { weeklyBoost: true },
+    nextId:              1,
+    access:              {},
   };
 }
 
-/* ============================================================
-   STATE
-============================================================ */
 let state = null;
 let currentUser = null;
 let saveTimer = null;
 
 function today(){
-  const n=new Date();
+  const n = new Date();
   return `${n.getFullYear()}-${n.getMonth()+1}-${n.getDate()}`;
 }
 
 /* ============================================================
-   FIREBASE AUTH
+   AUTH
 ============================================================ */
 let authMode = 'login';
-
 function switchTab(mode){
   authMode = mode;
   document.querySelectorAll('.auth-tab').forEach((t,i)=>{
-    t.classList.toggle('active', (i===0&&mode==='login')||(i===1&&mode==='signup'));
+    t.classList.toggle('active',(i===0&&mode==='login')||(i===1&&mode==='signup'));
   });
   document.getElementById('auth-btn').textContent = mode==='login'?'ログイン':'アカウント作成';
-  const nf = document.getElementById('name-field');
-  nf.classList.toggle('show', mode==='signup');
-  document.getElementById('auth-error').textContent='';
+  document.getElementById('name-field').classList.toggle('show', mode==='signup');
+  document.getElementById('auth-error').textContent = '';
 }
 
 function doAuth(){
   const email = document.getElementById('auth-email').value.trim();
   const pass  = document.getElementById('auth-pass').value;
-  const name  = document.getElementById('auth-name').value.trim()||'ユーザー';
+  const name  = document.getElementById('auth-name').value.trim() || 'ユーザー';
   const errEl = document.getElementById('auth-error');
-  errEl.textContent='';
-
+  errEl.textContent = '';
   if(!email||!pass){ errEl.textContent='メールとパスワードを入力してください'; return; }
-
-  document.getElementById('auth-btn').textContent='処理中...';
-
+  document.getElementById('auth-btn').textContent = '処理中...';
   if(authMode==='login'){
     auth.signInWithEmailAndPassword(email,pass)
       .catch(e=>{ errEl.textContent=authErrMsg(e.code); document.getElementById('auth-btn').textContent='ログイン'; });
   } else {
-    if(pass.length<6){ errEl.textContent='パスワードは6文字以上にしてください'; document.getElementById('auth-btn').textContent='アカウント作成'; return; }
+    if(pass.length<6){ errEl.textContent='パスワードは6文字以上'; document.getElementById('auth-btn').textContent='アカウント作成'; return; }
     auth.createUserWithEmailAndPassword(email,pass)
-      .then(cred=> cred.user.updateProfile({displayName:name}))
+      .then(cred=>cred.user.updateProfile({displayName:name}))
       .catch(e=>{ errEl.textContent=authErrMsg(e.code); document.getElementById('auth-btn').textContent='アカウント作成'; });
   }
 }
-
 function authErrMsg(code){
-  const map={
+  const map = {
     'auth/user-not-found':'メールアドレスが見つかりません',
     'auth/wrong-password':'パスワードが間違っています',
     'auth/email-already-in-use':'このメールはすでに使われています',
@@ -435,28 +388,27 @@ function authErrMsg(code){
     'auth/weak-password':'パスワードが短すぎます（6文字以上）',
     'auth/invalid-credential':'メールまたはパスワードが間違っています',
   };
-  return map[code]||`エラーが発生しました（${code}）`;
+  return map[code]||`エラー（${code}）`;
 }
-
-function doLogout(){
-  auth.signOut();
-}
+function doLogout(){ auth.signOut(); }
 
 /* ============================================================
-   FIRESTORE — 読み書き
+   FIRESTORE
 ============================================================ */
 async function loadUserData(user){
-  const ref = db.collection('users').doc(user.uid);
+  const ref  = db.collection('users').doc(user.uid);
   const snap = await ref.get();
   const name = user.displayName || 'ユーザー';
-
   if(snap.exists){
     state = snap.data();
-    // 日付リセット
+    if(!state.access)  state.access  = {};
+    if(!state.combos)  state.combos  = [];
+    if(!state.todos)   state.todos   = [];
+    // 日付が変わったら ToDo リセット
     if(state.lastDate !== today()){
       state.todayEarned = 0;
-      state.lastDate = today();
-      if(state.loan > 0) state.loanPenalty = true;
+      state.lastDate    = today();
+      state.todos.forEach(t => t.done = false);
       await saveNow();
     }
   } else {
@@ -465,12 +417,10 @@ async function loadUserData(user){
   }
   document.getElementById('user-name-disp').textContent = state.displayName;
 }
-
 function scheduleSave(){
   clearTimeout(saveTimer);
   saveTimer = setTimeout(saveNow, 1000);
 }
-
 async function saveNow(){
   if(!currentUser||!state) return;
   await db.collection('users').doc(currentUser.uid).set(state);
@@ -480,26 +430,25 @@ async function saveNow(){
    AUTH STATE LISTENER
 ============================================================ */
 auth.onAuthStateChanged(async user=>{
-  document.getElementById('loading').style.display='none';
+  document.getElementById('loading').style.display = 'none';
   if(user){
     currentUser = user;
     await loadUserData(user);
-    document.getElementById('auth-screen').style.display='none';
-    const app = document.getElementById('main-app');
-    app.style.display='flex';
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('main-app').style.display    = 'flex';
     updateClock();
     startAccessTimer();
     goto('home');
   } else {
     currentUser = null;
     state = null;
-    document.getElementById('main-app').style.display='none';
-    document.getElementById('auth-screen').style.display='flex';
+    document.getElementById('main-app').style.display    = 'none';
+    document.getElementById('auth-screen').style.display = 'flex';
   }
 });
-
-// Enter キーでログイン
-document.addEventListener('keydown',e=>{ if(e.key==='Enter'&&document.getElementById('auth-screen').style.display!=='none') doAuth(); });
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&document.getElementById('auth-screen').style.display!=='none') doAuth();
+});
 
 /* ============================================================
    TIME / MODE
@@ -511,28 +460,24 @@ function getMode(h){
   if(h>=18&&h<22) return 'free';
   return 'focus';
 }
-function getMultiplier(mode){
-  let m = mode==='focus'?5:0.5;
-  if(state&&state.loanPenalty) m*=2;
-  return m;
-}
+function getMultiplier(mode){ return mode==='focus' ? 5 : 0.5; }
 function currentMode(){ return getMode(new Date().getHours()); }
 
 function updateClock(){
-  const now=new Date();
-  const h=String(now.getHours()).padStart(2,'0');
-  const mi=String(now.getMinutes()).padStart(2,'0');
-  document.getElementById('clock').textContent=`${h}:${mi}`;
-  const days=['日','月','火','水','木','金','土'];
-  document.getElementById('clock-date').textContent=`${now.getMonth()+1}/${now.getDate()}（${days[now.getDay()]}）`;
-  const mode=currentMode();
-  const banner=document.getElementById('mode-banner');
+  const now  = new Date();
+  const h    = String(now.getHours()).padStart(2,'0');
+  const mi   = String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('clock').textContent = `${h}:${mi}`;
+  const days = ['日','月','火','水','木','金','土'];
+  document.getElementById('clock-date').textContent = `${now.getMonth()+1}/${now.getDate()}（${days[now.getDay()]}）`;
+  const mode   = currentMode();
+  const banner = document.getElementById('mode-banner');
   if(mode==='focus'){
-    banner.className='mode-focus';
-    banner.textContent=state&&state.loanPenalty?'⚠️ 集中タイム + 前借りペナルティ中 — 娯楽価格×10！':'🔴 集中タイム — 娯楽の価格が高騰しています（通常の5倍）';
+    banner.className   = 'mode-focus';
+    banner.textContent = '🔴 集中タイム — 娯楽の価格が高騰しています（通常の5倍）';
   } else {
-    banner.className='mode-free';
-    banner.textContent='🟢 自由タイム — 娯楽がセール価格！ゆっくり休もう 🎉';
+    banner.className   = 'mode-free';
+    banner.textContent = '🟢 自由タイム — 娯楽がセール価格！ゆっくり休もう 🎉';
   }
   if(state&&document.getElementById('main-app').style.display!=='none') renderPage();
 }
@@ -543,19 +488,17 @@ function updateClock(){
 function goto(page){
   state.currentPage = page;
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  const nb=document.getElementById('nav-'+page);
+  const nb = document.getElementById('nav-'+page);
   if(nb) nb.classList.add('active');
   renderPage();
 }
-
 function renderPage(){
   if(!state) return;
-  const v=document.getElementById('view');
-  const page=state.currentPage||'home';
+  const v    = document.getElementById('view');
+  const page = state.currentPage || 'home';
   switch(page){
     case 'home':    v.innerHTML=pageHome();    bindHome();    break;
     case 'shop':    v.innerHTML=pageShop();    bindShop();    break;
-    case 'quest':   v.innerHTML=pageQuest();                  break;
     case 'rank':    v.innerHTML=pageRank();                   break;
     case 'profile': v.innerHTML=pageProfile(); bindProfile(); break;
   }
@@ -565,17 +508,33 @@ function renderPage(){
    PAGE: HOME
 ============================================================ */
 function pageHome(){
-  const done=state.todos.filter(t=>t.done).length;
-  const total=state.todos.length;
-  const pct=Math.round(done/total*100);
-  const todoRows=state.todos.map(t=>`
-    <div class="todo-item${t.done?' done':''}" data-id="${t.id}">
-      <div class="todo-check">${t.done?'✓':''}</div>
-      <div class="todo-text">${t.text}</div>
-      <div class="todo-reward">+${t.reward}${state.focusWeekActive?` <span style="color:#f59e0b">×${state.focusWeekMultiplier}</span>`:''}🪙</div>
-    </div>`).join('');
+  const todos = state.todos || [];
+  const done  = todos.filter(t=>t.done).length;
+  const total = todos.length;
+  const pct   = total ? Math.round(done/total*100) : 0;
 
-  const recentHistory=(state.history||[]).slice(-5).reverse().map(h=>`
+  const todoRows = todos.length === 0
+    ? `<div class="todo-empty">タスクがありません<br><span style="font-size:12px;">下の入力欄から追加してください</span></div>`
+    : todos.map(t=>`
+      <div class="todo-item${t.done?' done':''}" data-id="${t.id}">
+        <div class="todo-check todo-check-btn" data-id="${t.id}">${t.done?'✓':''}</div>
+        <div class="todo-text">${escHtml(t.text)}</div>
+        <div class="todo-reward">+${t.reward}${state.focusWeekActive?`<span style="color:#f59e0b;">×${state.focusWeekMultiplier}</span>`:''}🪙</div>
+        <button class="todo-del" data-id="${t.id}" title="削除">×</button>
+      </div>`).join('');
+
+  const combos = (state.combos||[]);
+  const comboSection = combos.length === 0 ? '' : `
+    <div class="card" style="margin-top:14px;">
+      <div class="card-title">🔥 コンボボーナス
+        <span style="margin-left:auto;">
+          <button class="btn btn-outline" style="font-size:11px;padding:3px 9px;" onclick="openAddCombo()">＋ 追加</button>
+        </span>
+      </div>
+      ${combos.map(c=>renderComboCard(c)).join('')}
+    </div>`;
+
+  const recentHistory = (state.history||[]).slice(-5).reverse().map(h=>`
     <div class="history-item">
       <div class="history-sign ${h.type}">${h.type==='plus'?'+':'-'}${h.amount}</div>
       <div class="history-desc">${h.desc}</div>
@@ -590,27 +549,32 @@ function pageHome(){
         <div class="coin-label">LifeCoins 残高</div>
         <div class="coin-today">今日 +${state.todayEarned||0} コイン獲得済み</div>
       </div>
-      <div style="margin-left:auto;text-align:right;">
-        ${state.loan>0?`<div style="font-size:11px;color:var(--red);margin-bottom:5px;">⚠️ 前借り: ${state.loan}🪙</div>`:''}
-        <button class="btn btn-outline" style="font-size:12px;padding:5px 10px;" onclick="openModal('borrow-modal')">💳 前借り</button>
-      </div>
     </div>
 
     <div class="card">
-      <div class="card-title">✅ 今日のToDo
-        <span style="margin-left:auto;">
-          <button class="btn btn-outline" style="font-size:11px;padding:3px 9px;" onclick="openModal('addtodo-modal')">＋ 追加</button>
+      <div class="card-title">✅ 今日のタスク
+        <span style="margin-left:auto;display:flex;gap:6px;">
+          ${combos.length>0?'':'<button class="btn btn-outline" style="font-size:11px;padding:3px 9px;" onclick="openAddCombo()">🔥 コンボ追加</button>'}
         </span>
       </div>
       ${todoRows}
-      <div style="margin-top:11px;">
+      <div class="add-todo-row">
+        <input class="add-todo-input" id="quick-todo-text" type="text" placeholder="タスクを入力..." maxlength="50"/>
+        <input class="num-input" id="quick-todo-reward" type="number" value="20" min="5" max="200" step="5" style="width:64px;"/>
+        <span style="font-size:12px;color:var(--muted);align-self:center;">🪙</span>
+        <button class="add-todo-btn" onclick="quickAddTodo()">追加</button>
+      </div>
+      ${total>0?`
+      <div style="margin-top:12px;">
         <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;">
           <span>進捗</span><span>${done} / ${total} 完了</span>
         </div>
         <div class="progress-wrap"><div class="progress-bar" style="width:${pct}%"></div></div>
-        <div style="font-size:11px;color:var(--muted);margin-top:5px;">全タスク完了でボーナス +50 🪙</div>
-      </div>
+        ${done===total&&total>0?'<div style="font-size:11px;color:var(--gold);margin-top:5px;font-weight:700;">🎉 全タスク完了！</div>':'<div style="font-size:11px;color:var(--muted);margin-top:5px;">全タスク完了でボーナス +50 🪙</div>'}
+      </div>`:''}
     </div>
+
+    ${comboSection}
 
     ${state.focusWeekActive?`
     <div class="week-card" style="margin-top:14px;">
@@ -626,44 +590,166 @@ function pageHome(){
   </div>`;
 }
 
+function renderComboCard(combo){
+  const tasks    = combo.taskIds.map(id=>state.todos.find(t=>t.id===id)).filter(Boolean);
+  const allDone  = tasks.length > 0 && tasks.every(t=>t.done);
+  const doneToday= combo.lastCompletedDate === today();
+  const doneCnt  = tasks.filter(t=>t.done).length;
+
+  const chips = combo.taskIds.map(id=>{
+    const t = state.todos.find(x=>x.id===id);
+    if(!t) return `<span class="combo-task-chip missing">（削除済み）</span>`;
+    return `<span class="combo-task-chip${t.done?' done':''}">${t.done?'✅':'⬜'} ${escHtml(t.text)}</span>`;
+  }).join('');
+
+  let statusText = '';
+  if(doneToday)           statusText = '✨ 本日達成済み！';
+  else if(tasks.length===0) statusText = 'タスクが削除されました';
+  else if(allDone)        statusText = '達成条件クリア！';
+  else                    statusText = `あと ${tasks.length - doneCnt} 個で達成`;
+
+  return `<div class="combo-card${doneToday?' done-today':''}" data-cid="${combo.id}">
+    <button class="combo-del" data-cid="${combo.id}" title="コンボ削除">×</button>
+    <div class="combo-name">🔗 ${escHtml(combo.name)}</div>
+    <div class="combo-tasks">${chips}</div>
+    <div class="combo-footer">
+      <div class="combo-bonus">+${combo.bonus}🪙 ボーナス</div>
+      <div class="combo-status">${statusText}</div>
+    </div>
+  </div>`;
+}
+
 function bindHome(){
-  document.querySelectorAll('.todo-item').forEach(el=>{
-    const id=parseInt(el.dataset.id);
-    const todo=state.todos.find(t=>t.id===id);
-    if(todo&&!todo.done) el.addEventListener('click',()=>completeTodo(todo));
+  // タスク完了（チェックボタン）
+  document.querySelectorAll('.todo-check-btn').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      e.stopPropagation();
+      const id   = parseInt(btn.dataset.id);
+      const todo = state.todos.find(t=>t.id===id);
+      if(todo && !todo.done) completeTodo(todo);
+    });
   });
+  // タスク削除
+  document.querySelectorAll('.todo-del').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      e.stopPropagation();
+      const id = parseInt(btn.dataset.id);
+      state.todos = state.todos.filter(t=>t.id!==id);
+      showToast('🗑️ タスクを削除しました');
+      scheduleSave(); renderPage();
+    });
+  });
+  // コンボ削除
+  document.querySelectorAll('.combo-del').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      e.stopPropagation();
+      const cid = parseInt(btn.dataset.cid);
+      state.combos = state.combos.filter(c=>c.id!==cid);
+      showToast('🗑️ コンボを削除しました');
+      scheduleSave(); renderPage();
+    });
+  });
+  // クイック追加 Enter
+  const inp = document.getElementById('quick-todo-text');
+  if(inp) inp.addEventListener('keydown', e=>{ if(e.key==='Enter') quickAddTodo(); });
 }
 
 function completeTodo(todo){
-  todo.done=true;
-  let earned=todo.reward;
-  if(state.focusWeekActive) earned*=state.focusWeekMultiplier;
-  state.coins=(state.coins||0)+earned;
-  state.todayEarned=(state.todayEarned||0)+earned;
-  state.totalEarned=(state.totalEarned||0)+earned;
-  addHistory('plus',earned,`${todo.text} — 達成`);
-  // ローン返済
-  if(state.loan>0){
-    const repay=Math.min(state.loan,earned);
-    state.loan-=repay;
-    if(state.loan<=0){state.loan=0;state.loanPenalty=false;}
-    showToast(`✅ +${earned}🪙 獲得！ローン返済 -${repay}🪙`);
-  } else {
-    showToast(`✅ +${earned}🪙 獲得！`);
-  }
-  if(state.todos.every(t=>t.done)){
+  todo.done = true;
+  let earned = todo.reward;
+  if(state.focusWeekActive) earned *= state.focusWeekMultiplier;
+  state.coins       = (state.coins||0) + earned;
+  state.todayEarned = (state.todayEarned||0) + earned;
+  state.totalEarned = (state.totalEarned||0) + earned;
+  addHistory('plus', earned, `${todo.text} — 達成`);
+  showToast(`✅ +${earned}🪙 獲得！`);
+
+  // 全タスク完了ボーナス
+  if(state.todos.every(t=>t.done) && state.todos.length > 0){
     setTimeout(()=>{
-      state.coins+=50;state.todayEarned+=50;state.totalEarned+=50;
-      addHistory('plus',50,'全タスク完了ボーナス');
+      state.coins       += 50;
+      state.todayEarned += 50;
+      state.totalEarned += 50;
+      addHistory('plus', 50, '全タスク完了ボーナス');
       showToast('🎊 全タスク完了ボーナス +50🪙！');
       scheduleSave(); renderPage();
-    },600);
+    }, 600);
   }
+
+  // コンボチェック
+  checkCombos();
+  scheduleSave(); renderPage();
+}
+
+function checkCombos(){
+  (state.combos||[]).forEach(combo=>{
+    if(combo.lastCompletedDate === today()) return;
+    const tasks   = combo.taskIds.map(id=>state.todos.find(t=>t.id===id)).filter(Boolean);
+    if(tasks.length === 0) return;
+    const allDone = tasks.every(t=>t.done);
+    if(allDone){
+      combo.lastCompletedDate = today();
+      state.coins       += combo.bonus;
+      state.todayEarned += combo.bonus;
+      state.totalEarned += combo.bonus;
+      addHistory('plus', combo.bonus, `🔥 コンボ達成: ${combo.name}`);
+      setTimeout(()=>{
+        showToast(`🔥 コンボ「${combo.name}」達成！ +${combo.bonus}🪙`);
+      }, 1000);
+    }
+  });
+}
+
+function quickAddTodo(){
+  const textEl   = document.getElementById('quick-todo-text');
+  const rewardEl = document.getElementById('quick-todo-reward');
+  if(!textEl) return;
+  const text   = textEl.value.trim();
+  const reward = parseInt(rewardEl.value) || 20;
+  if(!text){ showToast('❌ タスク名を入力してください'); return; }
+  state.todos.push({ id: state.nextId++, text, reward, done: false });
+  textEl.value = '';
+  scheduleSave(); renderPage();
+  // フォーカスを入力欄に戻す
+  setTimeout(()=>{ const el=document.getElementById('quick-todo-text'); if(el) el.focus(); }, 50);
+}
+
+/* ============================================================
+   COMBO MODAL
+============================================================ */
+function openAddCombo(){
+  const todos = state.todos || [];
+  if(todos.length < 2){
+    showToast('❌ コンボを作るにはタスクが2つ以上必要です');
+    return;
+  }
+  const listEl = document.getElementById('combo-task-list');
+  listEl.innerHTML = todos.map(t=>`
+    <div class="combo-task-pick">
+      <input type="checkbox" id="cpick-${t.id}" value="${t.id}"/>
+      <label for="cpick-${t.id}">${escHtml(t.text)}</label>
+      <span class="reward-hint">+${t.reward}🪙</span>
+    </div>`).join('');
+  document.getElementById('combo-name').value  = '';
+  document.getElementById('combo-bonus').value = '50';
+  openModal('addcombo-modal');
+}
+
+function saveCombo(){
+  const name  = document.getElementById('combo-name').value.trim();
+  const bonus = parseInt(document.getElementById('combo-bonus').value) || 50;
+  const checked = [...document.querySelectorAll('#combo-task-list input:checked')].map(cb=>parseInt(cb.value));
+  if(!name)          { showToast('❌ コンボ名を入力してください'); return; }
+  if(checked.length < 2){ showToast('❌ 2つ以上のタスクを選択してください'); return; }
+  if(!state.combos) state.combos = [];
+  state.combos.push({ id: state.nextId++, name, taskIds: checked, bonus, lastCompletedDate: null });
+  closeModal('addcombo-modal');
+  showToast(`🔥 コンボ「${name}」を追加しました！`);
   scheduleSave(); renderPage();
 }
 
 /* ============================================================
-   PAGE: SHOP
+   PAGE: SHOP — アクセス制限
 ============================================================ */
 const ENTERTAINMENTS=[
   {id:'yt',icon:'📺',name:'YouTube',   bg:'#ff000022',br:'#ff000044',basePrice:30,desc:'動画視聴',    duration:30, url:'https://youtube.com'},
@@ -678,52 +764,44 @@ function isAccessActive(id){
   const until = state.access && state.access[id];
   return until && until > Date.now();
 }
-
 function remainingSec(id){
   const until = state.access && state.access[id];
   if(!until) return 0;
   return Math.max(0, Math.ceil((until - Date.now()) / 1000));
 }
-
 function fmtTime(sec){
-  const m = Math.floor(sec/60);
-  const s = sec % 60;
-  return `${m}:${String(s).padStart(2,'0')}`;
+  return `${String(Math.floor(sec/60)).padStart(2,'0')}:${String(sec%60).padStart(2,'0')}`;
 }
 
 function pageShop(){
-  const mode=currentMode();
-  const mult=getMultiplier(mode);
-  const isSurge=mode==='focus';
-
-  const rows=ENTERTAINMENTS.map(e=>{
-    const price=Math.round(e.basePrice*mult);
-    const active=isAccessActive(e.id);
-    const sec=remainingSec(e.id);
-
+  const mode    = currentMode();
+  const mult    = getMultiplier(mode);
+  const isSurge = mode === 'focus';
+  const rows    = ENTERTAINMENTS.map(e=>{
+    const price  = Math.round(e.basePrice * mult);
+    const active = isAccessActive(e.id);
+    const sec    = remainingSec(e.id);
     if(active){
-      // ✅ アクセス解放中
       return `<div class="ent-item">
-        <div class="ent-icon" style="background:${e.bg};border:1px solid ${e.br};">${e.icon}</div>
+        <div class="ent-icon" style="background:${e.bg};border:2px solid var(--green);">${e.icon}</div>
         <div style="flex:1">
           <div class="ent-name">${e.name}</div>
-          <div class="ent-desc">${e.desc}（${e.duration}分）</div>
-          <div style="font-size:11px;color:var(--green);margin-top:3px;">✅ アクセス解放中</div>
+          <div class="ent-desc" style="color:var(--green);">✅ アクセス中</div>
         </div>
-        <div class="access-active-box">
+        <div class="ent-price-area" style="text-align:center;">
           <div class="access-timer" id="timer-${e.id}">${fmtTime(sec)}</div>
           <div class="access-timer-label">残り時間</div>
           ${e.url?`<button class="open-btn" data-url="${e.url}">▶ 開く</button>`:'<div style="font-size:11px;color:var(--muted);margin-top:6px;">デバイスで開く</div>'}
         </div>
       </div>`;
     } else {
-      // 🔒 ロック中
-      return `<div class="ent-item locked">
-        <div class="ent-icon" style="background:${e.bg};border:1px solid ${e.br};filter:grayscale(.4);">${e.icon}</div>
+      const urlLabel = e.url ? e.url.replace('https://','') : '';
+      return `<div class="ent-item">
+        <div class="ent-icon" style="background:${e.bg};border:1px solid ${e.br};filter:grayscale(60%);">🔒</div>
         <div style="flex:1">
-          <div class="ent-name">${e.name}</div>
+          <div class="ent-name" style="color:var(--muted);">${e.name}</div>
           <div class="ent-desc">${e.desc}（${e.duration}分）</div>
-          <div class="lock-badge">🔒 ロック中</div>
+          ${urlLabel?`<div class="locked-url-btn" data-id="${e.id}">🔗 ${urlLabel}</div>`:''}
         </div>
         <div class="ent-price-area">
           <div class="ent-price ${isSurge?'price-surge':'price-sale'}">${price}🪙</div>
@@ -741,63 +819,66 @@ function pageShop(){
       ${rows}
     </div>
     <div class="card" style="margin-top:14px;">
-      <div class="card-title">ℹ️ しくみ</div>
-      <div style="font-size:12px;color:var(--muted);line-height:1.9;">
-        🔒 購入するまでアクセス不可<br>
-        ✅ 購入後、制限時間内だけ解放<br>
-        ⏰ 時間切れで自動ロック<br>
-        ・ <b style="color:#c4b5fd">集中タイム</b>（午前・午後）→ 価格×5<br>
-        ・ <b style="color:#6ee7b7">自由タイム</b>（昼・夜）→ 価格×0.5
+      <div class="card-title">ℹ️ 価格変動のしくみ</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.8;">
+        ・ <b style="color:#c4b5fd">集中タイム</b>（午前・午後）→ ×5<br>
+        ・ <b style="color:#6ee7b7">自由タイム</b>（昼・夜）→ ×0.5
       </div>
     </div>
   </div>`;
 }
 
 function bindShop(){
-  // 解除ボタン
-  document.querySelectorAll('.buy-btn-locked').forEach(b=>{
+  document.querySelectorAll('.locked-url-btn').forEach(b=>{
     b.addEventListener('click',()=>{
-      const price    = parseInt(b.dataset.price);
-      const name     = b.dataset.name;
-      const id       = b.dataset.id;
-      const duration = parseInt(b.dataset.duration);
-      if((state.coins||0) >= price){
-        state.coins -= price;
-        if(!state.access) state.access={};
-        state.access[id] = Date.now() + duration * 60 * 1000;
-        addHistory('minus', price, `${name} アクセス解除（${duration}分）`);
-        showToast(`🔓 ${name} を解除！${duration}分間アクセスできます`);
-        scheduleSave(); renderPage();
-      } else {
-        showToast(`❌ コイン不足（必要: ${price}🪙）`);
-      }
+      const name = ENTERTAINMENTS.find(e=>e.id===b.dataset.id)?.name||'';
+      showToast(`🔒 ${name} はロック中！コインで解除してください`);
     });
   });
-  // 開くボタン
-  document.querySelectorAll('.open-btn').forEach(b=>{
+  document.querySelectorAll('.buy-btn-locked').forEach(b=>{
     b.addEventListener('click',()=>{
-      window.open(b.dataset.url,'_blank');
+      const id=b.dataset.id, price=parseInt(b.dataset.price);
+      const name=b.dataset.name, duration=parseInt(b.dataset.duration);
+      if((state.coins||0)>=price){
+        state.coins -= price;
+        if(!state.access) state.access={};
+        state.access[id] = Date.now() + duration*60*1000;
+        addHistory('minus',price,`${name} アクセス解除（${duration}分）`);
+        showToast(`🔓 ${name} を解除！${duration}分間アクセスできます`);
+        scheduleSave(); renderPage();
+      } else { showToast(`❌ コイン不足（必要: ${price}🪙）`); }
     });
+  });
+  document.querySelectorAll('.open-btn').forEach(b=>{
+    b.addEventListener('click',()=>{ window.open(b.dataset.url,'_blank'); });
   });
 }
 
 /* ============================================================
-   PAGE: QUEST（将来の共有機能用のデモ表示）
+   ACCESS TIMER
 ============================================================ */
-function pageQuest(){
-  return `<div class="container">
-    <div class="card" style="text-align:center;padding:30px 20px;">
-      <div style="font-size:48px;margin-bottom:12px;">⚔️</div>
-      <div style="font-size:17px;font-weight:700;margin-bottom:8px;">協力クエスト</div>
-      <div style="font-size:13px;color:var(--muted);line-height:1.7;">
-        友人と通貨を賭けて共通目標に挑む機能です。<br>全員達成でボーナスコインが配布されます。
-      </div>
-      <div style="margin-top:20px;background:var(--card2);border-radius:12px;padding:14px;">
-        <div style="font-size:12px;color:var(--gold);font-weight:700;">🚧 近日公開予定</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px;">4人のアカウントが揃ったら実装します！</div>
-      </div>
-    </div>
-  </div>`;
+let accessTimerInterval = null;
+function startAccessTimer(){
+  if(accessTimerInterval) clearInterval(accessTimerInterval);
+  accessTimerInterval = setInterval(()=>{
+    if(!state||!state.access) return;
+    const now = Date.now();
+    let expired = false;
+    Object.keys(state.access).forEach(id=>{
+      const until = state.access[id];
+      if(!until) return;
+      if(until <= now){
+        state.access[id] = null;
+        expired = true;
+        const ent = ENTERTAINMENTS.find(e=>e.id===id);
+        showToast(`⏰ ${ent?.name||id} のアクセス時間が終了しました`);
+      } else {
+        const el = document.getElementById('timer-'+id);
+        if(el) el.textContent = fmtTime(Math.max(0,Math.ceil((until-now)/1000)));
+      }
+    });
+    if(expired){ scheduleSave(); if(state.currentPage==='shop') renderPage(); }
+  }, 1000);
 }
 
 /* ============================================================
@@ -810,15 +891,14 @@ const RANKS=[
   {name:'Platinum',icon:'💎',min:6000, max:9999},
   {name:'Diamond', icon:'💠',min:10000,max:Infinity},
 ];
-
 function pageRank(){
-  const total=state.totalEarned||0;
-  const idx=RANKS.findIndex(r=>total>=r.min&&total<=r.max);
-  const rank=RANKS[idx];
-  const next=RANKS[idx+1];
-  const pct=next?Math.min(100,Math.round((total-rank.min)/(next.min-rank.min)*100)):100;
-  const rankList=RANKS.map((r,i)=>{
-    const active=i===idx;const passed=i<idx;
+  const total = state.totalEarned||0;
+  const idx   = RANKS.findIndex(r=>total>=r.min&&total<=r.max);
+  const rank  = RANKS[idx];
+  const next  = RANKS[idx+1];
+  const pct   = next ? Math.min(100,Math.round((total-rank.min)/(next.min-rank.min)*100)) : 100;
+  const rankList = RANKS.map((r,i)=>{
+    const active=i===idx, passed=i<idx;
     return `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);opacity:${passed||active?1:.4};">
       <span style="font-size:22px;">${r.icon}</span>
       <div style="flex:1">
@@ -860,8 +940,8 @@ function pageRank(){
    PAGE: PROFILE
 ============================================================ */
 function pageProfile(){
-  const rank=RANKS.find(r=>(state.totalEarned||0)>=r.min&&(state.totalEarned||0)<=r.max);
-  const allHistory=(state.history||[]).slice().reverse().map(h=>`
+  const rank = RANKS.find(r=>(state.totalEarned||0)>=r.min&&(state.totalEarned||0)<=r.max);
+  const allHistory = (state.history||[]).slice().reverse().map(h=>`
     <div class="history-item">
       <div class="history-sign ${h.type}">${h.type==='plus'?'+':'-'}${h.amount}</div>
       <div class="history-desc">${h.desc}</div>
@@ -879,7 +959,6 @@ function pageProfile(){
         ${state.focusWeekActive?'<span style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:4px 11px;font-size:12px;">⚡ 集中強化中</span>':''}
       </div>
     </div>
-
     <div class="card">
       <div class="card-title">⚙️ 設定</div>
       <div class="setting-row">
@@ -890,142 +969,61 @@ function pageProfile(){
         <label class="toggle"><input type="checkbox" id="toggle-week" ${state.focusWeekActive?'checked':''}/><span class="toggle-slider"></span></label>
       </div>
       <div class="setting-row">
-        <div>
-          <div style="font-size:14px;">ニックネーム変更</div>
-        </div>
+        <div><div style="font-size:14px;">ニックネーム変更</div></div>
         <button class="btn btn-outline" style="font-size:12px;padding:5px 10px;" onclick="changeName()">変更</button>
       </div>
     </div>
-
-    <div class="card" style="margin-top:14px;">
-      <div class="card-title">💳 前借り状況</div>
-      ${state.loan>0?`
-        <div style="font-size:14px;color:var(--red);font-weight:700;margin-bottom:8px;">前借り残高: ${state.loan}🪙</div>
-        ${state.loanPenalty?'<div style="font-size:11px;color:var(--red);">⚠️ ペナルティ中：娯楽価格×2</div>':''}
-      `:'<div style="font-size:13px;color:var(--green);">✅ 前借りなし</div>'}
-      <button class="btn btn-outline" style="margin-top:10px;width:100%;font-size:13px;" onclick="openModal('borrow-modal')">💳 前借りする</button>
-    </div>
-
     <div class="card" style="margin-top:14px;">
       <div class="card-title">📜 コイン履歴（全件）</div>${allHistory}
     </div>
   </div>`;
 }
-
 function bindProfile(){
-  const tw=document.getElementById('toggle-week');
+  const tw = document.getElementById('toggle-week');
   if(tw) tw.addEventListener('change',()=>{
-    state.focusWeekActive=tw.checked;
+    state.focusWeekActive = tw.checked;
     showToast(tw.checked?'🔥 集中強化ウィーク参加！':'集中強化ウィーク 離脱');
     scheduleSave();
   });
 }
-
 function changeName(){
-  const n=prompt('新しいニックネームを入力してください:',state.displayName||'');
+  const n = prompt('新しいニックネームを入力してください:',state.displayName||'');
   if(n&&n.trim()){
-    state.displayName=n.trim();
-    document.getElementById('user-name-disp').textContent=state.displayName;
-    showToast(`✅ ニックネームを「${state.displayName}」に変更しました`);
+    state.displayName = n.trim();
+    document.getElementById('user-name-disp').textContent = state.displayName;
+    showToast(`✅ 「${state.displayName}」に変更しました`);
     scheduleSave(); renderPage();
   }
 }
 
 /* ============================================================
-   前借り
-============================================================ */
-function executeBorrow(){
-  const amt=parseInt(document.getElementById('borrow-amount').value)||0;
-  if(amt<10||amt>200){showToast('❌ 10〜200の範囲で入力してください');return;}
-  state.loan=(state.loan||0)+amt;
-  state.coins=(state.coins||0)+amt;
-  state.loanPenalty=true;
-  addHistory('plus',amt,`前借り（残高 ${state.loan}🪙）`);
-  closeModal('borrow-modal');
-  showToast(`💳 ${amt}🪙 を前借りしました！`);
-  scheduleSave(); renderPage();
-}
-
-/* ============================================================
-   ToDo 追加
-============================================================ */
-function addTodo(){
-  const text=document.getElementById('new-todo-text').value.trim();
-  const reward=parseInt(document.getElementById('new-todo-reward').value)||20;
-  if(!text){showToast('❌ タスク名を入力してください');return;}
-  state.todos.push({id:state.nextId++,text,reward,done:false});
-  closeModal('addtodo-modal');
-  showToast(`✏️「${text}」を追加しました`);
-  scheduleSave();
-  if(state.currentPage==='home') renderPage();
-}
-
-/* ============================================================
-   ユーティリティ
+   UTILITIES
 ============================================================ */
 function addHistory(type,amount,desc){
   if(!state.history) state.history=[];
-  const now=new Date();
-  const t=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  const now = new Date();
+  const t = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
   state.history.push({type,amount,desc,time:t});
   if(state.history.length>100) state.history=state.history.slice(-100);
 }
-
-function openModal(id){document.getElementById(id).classList.add('open');}
-function closeModal(id){document.getElementById(id).classList.remove('open');}
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 document.querySelectorAll('.modal-overlay').forEach(o=>{
-  o.addEventListener('click',e=>{if(e.target===o) o.classList.remove('open');});
+  o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); });
 });
-
 let toastTimer;
 function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;
+  const t = document.getElementById('toast');
+  t.textContent = msg;
   t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 3000);
+}
+function escHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-setInterval(updateClock,30000);
-
-/* ============================================================
-   アクセスタイマー（毎秒チェック）
-============================================================ */
-let accessTimerInterval = null;
-
-function startAccessTimer(){
-  if(accessTimerInterval) clearInterval(accessTimerInterval);
-  accessTimerInterval = setInterval(()=>{
-    if(!state||!state.access) return;
-    const now = Date.now();
-    let expired = false;
-
-    Object.keys(state.access).forEach(id=>{
-      const until = state.access[id];
-      if(!until) return;
-
-      if(until <= now){
-        // 時間切れ → ロック
-        state.access[id] = null;
-        expired = true;
-        const ent = ENTERTAINMENTS.find(e=>e.id===id);
-        showToast(`⏰ ${ent?.name||id} のアクセス時間が終了しました`);
-      } else {
-        // カウントダウン表示を更新（ページ再描画なしで）
-        const el = document.getElementById(`timer-${id}`);
-        if(el){
-          const sec = Math.max(0, Math.ceil((until - now) / 1000));
-          el.textContent = fmtTime(sec);
-        }
-      }
-    });
-
-    if(expired){
-      scheduleSave();
-      if(state.currentPage==='shop') renderPage();
-    }
-  }, 1000);
-}
+setInterval(updateClock, 30000);
 </script>
 </body>
 </html>
