@@ -7,20 +7,12 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-:root{
-  --bg:#0f0f1a;--card:#1a1a2e;--card2:#16213e;
-  --accent:#7c3aed;--accent2:#06b6d4;
-  --gold:#f59e0b;--red:#ef4444;--green:#10b981;
-  --text:#e2e8f0;--muted:#94a3b8;--border:#2d3748;
-}
+:root{--bg:#0f0f1a;--card:#1a1a2e;--card2:#16213e;--accent:#7c3aed;--accent2:#06b6d4;--gold:#f59e0b;--red:#ef4444;--green:#10b981;--text:#e2e8f0;--muted:#94a3b8;--border:#2d3748;}
 body{background:var(--bg);color:var(--text);font-family:'Segoe UI','Hiragino Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
 button{cursor:pointer;border:none;font-family:inherit;}
 input{font-family:inherit;}
-
-/* AUTH */
 #auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0f0f1a 0%,#1a0533 50%,#0c1445 100%);padding:20px;}
 .auth-box{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:36px 32px;width:100%;max-width:380px;}
 .auth-logo{font-size:32px;font-weight:900;background:linear-gradient(90deg,#a78bfa,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px;}
@@ -32,28 +24,19 @@ input{font-family:inherit;}
 .auth-field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600;}
 .auth-input{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;transition:border .2s;}
 .auth-input:focus{outline:none;border-color:var(--accent);}
-.auth-submit{width:100%;padding:13px;border-radius:12px;font-size:15px;font-weight:700;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;margin-top:6px;transition:opacity .2s,transform .1s;}
-.auth-submit:hover{opacity:.9;}
+.auth-submit{width:100%;padding:13px;border-radius:12px;font-size:15px;font-weight:700;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;margin-top:6px;}
 .auth-error{font-size:12px;color:var(--red);margin-top:10px;text-align:center;min-height:18px;}
 .auth-name-field{display:none;}
 .auth-name-field.show{display:block;}
-
-/* LOADING */
 #loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:16px;}
 .spin{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
-
-/* LAYOUT */
 #main-app{display:none;flex-direction:column;min-height:100vh;}
 #view{flex:1;padding-bottom:80px;}
-
-/* NAV */
 nav{position:fixed;bottom:0;left:0;right:0;background:#111827;border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;height:64px;z-index:100;}
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;color:var(--muted);padding:8px 0;font-size:10px;transition:color .2s;}
 .nav-btn.active{color:var(--accent2);}
 .nav-btn .nav-icon{font-size:22px;}
-
-/* HEADER */
 .page-header{background:linear-gradient(135deg,#1a0533 0%,#0c1445 100%);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .logo{font-size:17px;font-weight:800;background:linear-gradient(90deg,#a78bfa,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .logo-sub{font-size:10px;color:var(--muted);}
@@ -64,35 +47,24 @@ nav{position:fixed;bottom:0;left:0;right:0;background:#111827;border-top:1px sol
 .user-chip{background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:5px 10px;font-size:12px;display:flex;align-items:center;gap:6px;}
 .logout-btn{background:none;color:var(--muted);font-size:11px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);}
 .logout-btn:hover{color:var(--red);border-color:var(--red);}
-
-/* MODE BANNER */
 #mode-banner{padding:9px 18px;font-size:12px;font-weight:600;text-align:center;transition:all .5s;}
 .mode-focus{background:linear-gradient(90deg,#7c3aed22,#3b076499);border-bottom:2px solid #7c3aed;color:#c4b5fd;}
 .mode-free{background:linear-gradient(90deg,#065f4622,#064e3b99);border-bottom:2px solid #10b981;color:#6ee7b7;}
-
-/* COMMON */
 .container{max-width:680px;margin:0 auto;padding:18px;}
 .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;}
 .card+.card{margin-top:14px;}
 .card-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
 .btn{padding:9px 18px;border-radius:10px;font-size:13px;font-weight:700;transition:transform .1s,opacity .15s;border:none;}
 .btn:hover{transform:scale(1.03);}
-.btn:active{transform:scale(.97);}
 .btn-primary{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;}
-.btn-green{background:#10b981;color:#fff;}
-.btn-red{background:#ef4444;color:#fff;}
 .btn-outline{background:transparent;border:1px solid var(--border);color:var(--text);}
 .progress-wrap{background:var(--card2);border-radius:999px;height:7px;overflow:hidden;}
 .progress-bar{height:100%;border-radius:999px;background:linear-gradient(90deg,#7c3aed,#06b6d4);transition:width .5s ease;}
-
-/* COIN STRIP */
 .coin-strip{background:linear-gradient(135deg,#1a0533,#0c1445);border:1px solid #7c3aed44;border-radius:16px;padding:14px 18px;display:flex;align-items:center;gap:14px;margin-bottom:14px;}
 .coin-orb{width:54px;height:54px;flex-shrink:0;background:radial-gradient(circle at 35% 35%,#fde68a,#f59e0b,#b45309);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 0 18px #f59e0b44;}
 .coin-val{font-size:36px;font-weight:900;background:linear-gradient(90deg,#fde68a,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}
 .coin-label{font-size:12px;color:var(--muted);margin-top:2px;}
 .coin-today{font-size:11px;color:var(--green);margin-top:4px;}
-
-/* TODO — 改善版 */
 .todo-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
 .todo-item:last-child{border-bottom:none;}
 .todo-item.done{opacity:.5;}
@@ -104,18 +76,14 @@ nav{position:fixed;bottom:0;left:0;right:0;background:#111827;border-top:1px sol
 .todo-del{width:26px;height:26px;border-radius:6px;background:none;color:#4a5568;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
 .todo-del:hover{background:#ef444420;color:var(--red);}
 .todo-empty{text-align:center;padding:24px 0;color:var(--muted);font-size:13px;}
-
-/* ADD TODO INLINE */
 .add-todo-row{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
 .add-todo-input{flex:1;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:9px 12px;color:var(--text);font-size:13px;}
 .add-todo-input:focus{outline:none;border-color:var(--accent);}
 .add-todo-btn{padding:9px 14px;border-radius:10px;background:var(--accent);color:#fff;font-size:13px;font-weight:700;white-space:nowrap;}
-
-/* COMBO CARDS */
 .combo-card{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px;position:relative;}
 .combo-card:last-child{margin-bottom:0;}
 .combo-card.done-today{border-color:#f59e0b55;background:linear-gradient(135deg,#451a0320,#0c144520);}
-.combo-name{font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.combo-name{font-size:13px;font-weight:700;margin-bottom:8px;}
 .combo-tasks{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
 .combo-task-chip{font-size:11px;padding:3px 9px;border-radius:20px;border:1px solid var(--border);background:var(--card);display:flex;align-items:center;gap:4px;}
 .combo-task-chip.done{border-color:var(--green);background:#10b98115;color:var(--green);}
@@ -125,8 +93,6 @@ nav{position:fixed;bottom:0;left:0;right:0;background:#111827;border-top:1px sol
 .combo-status{font-size:11px;color:var(--muted);}
 .combo-del{position:absolute;top:10px;right:10px;background:none;color:#4a5568;font-size:13px;width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;}
 .combo-del:hover{background:#ef444420;color:var(--red);}
-
-/* ENTERTAINMENT */
 .ent-item{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--border);}
 .ent-item:last-child{border-bottom:none;}
 .ent-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
@@ -139,7 +105,7 @@ nav{position:fixed;bottom:0;left:0;right:0;background:#111827;border-top:1px sol
 .price-tag{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;display:inline-block;margin-top:2px;}
 .tag-surge{background:#ef444420;color:var(--red);border:1px solid #ef444440;}
 .tag-sale{background:#10b98120;color:var(--green);border:1px solid #10b98140;}
-.locked-url-btn{display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:10px;color:#4a5568;background:#ffffff08;border:1px solid #ffffff15;border-radius:6px;padding:3px 8px;cursor:pointer;transition:background .15s;}
+.locked-url-btn{display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:10px;color:#4a5568;background:#ffffff08;border:1px solid #ffffff15;border-radius:6px;padding:3px 8px;cursor:pointer;}
 .locked-url-btn:hover{background:#ffffff14;color:#718096;}
 .buy-btn-locked{margin-top:5px;padding:5px 12px;border-radius:8px;font-size:12px;font-weight:700;border:none;transition:transform .1s;}
 .buy-btn-locked:hover{transform:scale(1.05);}
@@ -147,21 +113,14 @@ nav{position:fixed;bottom:0;left:0;right:0;background:#111827;border-top:1px sol
 .buy-btn-locked.sale{background:var(--green);color:#fff;}
 .access-timer{font-size:20px;font-weight:800;color:var(--green);letter-spacing:1px;}
 .access-timer-label{font-size:10px;color:var(--muted);margin-top:1px;}
-.open-btn{display:block;margin-top:6px;padding:6px 14px;border-radius:8px;background:var(--green);color:#fff;font-size:12px;font-weight:700;border:none;width:100%;transition:transform .1s;}
-.open-btn:hover{transform:scale(1.04);}
-
-/* STATS */
+.open-btn{display:block;margin-top:6px;padding:6px 14px;border-radius:8px;background:var(--green);color:#fff;font-size:12px;font-weight:700;border:none;width:100%;}
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .stat-box{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:13px;text-align:center;}
 .stat-val{font-size:24px;font-weight:800;}
 .stat-label{font-size:11px;color:var(--muted);margin-top:3px;}
-
-/* RANK */
 .rank-card{background:linear-gradient(135deg,#1a0533,#0c1445);border:1px solid #7c3aed44;border-radius:16px;padding:18px;text-align:center;}
 .rank-badge-big{font-size:52px;margin-bottom:6px;}
 .rank-name-big{font-size:22px;font-weight:800;}
-
-/* PROFILE */
 .profile-hero{background:linear-gradient(135deg,#1a0533,#0c1445);border:1px solid #7c3aed44;border-radius:16px;padding:20px;text-align:center;margin-bottom:14px;}
 .setting-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);}
 .setting-row:last-child{border-bottom:none;}
@@ -171,12 +130,8 @@ nav{position:fixed;bottom:0;left:0;right:0;background:#111827;border-top:1px sol
 .toggle-slider:before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.3s;}
 .toggle input:checked+.toggle-slider{background:var(--accent);}
 .toggle input:checked+.toggle-slider:before{transform:translateX(20px);}
-
-/* WEEK CARD */
 .week-card{background:linear-gradient(135deg,#451a03,#0c1445);border:1px solid #f59e0b44;border-radius:16px;padding:14px;}
 .week-active-tag{background:#f59e0b;color:#000;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;display:inline-block;margin-bottom:8px;}
-
-/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:#00000088;z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
 .modal-overlay.open{opacity:1;pointer-events:all;}
 .modal-box{background:#1a1a2e;border:1px solid var(--border);border-radius:20px 20px 0 0;padding:22px;width:100%;max-width:500px;transform:translateY(40px);transition:transform .3s;max-height:80vh;overflow-y:auto;}
@@ -187,15 +142,10 @@ nav{position:fixed;bottom:0;left:0;right:0;background:#111827;border-top:1px sol
 .modal-input:focus{outline:none;border-color:var(--accent);}
 .num-input{width:90px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:8px 12px;color:var(--text);font-size:14px;text-align:center;}
 .num-input:focus{outline:none;border-color:var(--accent);}
-
-/* コンボモーダル タスク選択 */
-.combo-task-pick{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;background:var(--card2);margin-bottom:6px;cursor:pointer;transition:background .15s;}
-.combo-task-pick:hover{background:#2d3748;}
+.combo-task-pick{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;background:var(--card2);margin-bottom:6px;cursor:pointer;}
 .combo-task-pick input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);}
 .combo-task-pick label{flex:1;font-size:13px;cursor:pointer;}
 .combo-task-pick .reward-hint{font-size:11px;color:var(--muted);}
-
-/* HISTORY */
 .history-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
 .history-item:last-child{border-bottom:none;}
 .history-sign{font-size:16px;font-weight:800;}
@@ -203,827 +153,144 @@ nav{position:fixed;bottom:0;left:0;right:0;background:#111827;border-top:1px sol
 .history-sign.minus{color:var(--red);}
 .history-desc{flex:1;font-size:13px;}
 .history-time{font-size:11px;color:var(--muted);}
-
-/* TOAST — 位置とサイズ修正 */
-#toast{
-  position:fixed;bottom:74px;left:50%;
-  transform:translateX(-50%) translateY(80px);
-  background:#1e293b;border:1px solid var(--border);border-radius:12px;
-  padding:10px 18px;font-size:13px;font-weight:600;
-  transition:transform .4s cubic-bezier(.34,1.56,.64,1);
-  z-index:500;pointer-events:none;
-  max-width:calc(100% - 32px);text-align:center;
-  white-space:normal;word-break:break-word;
-}
+#toast{position:fixed;bottom:74px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e293b;border:1px solid var(--border);border-radius:12px;padding:10px 18px;font-size:13px;font-weight:600;transition:transform .4s cubic-bezier(.34,1.56,.64,1);z-index:500;pointer-events:none;max-width:calc(100% - 32px);text-align:center;white-space:normal;word-break:break-word;}
 #toast.show{transform:translateX(-50%) translateY(0);}
+#notif-banner{display:none;background:linear-gradient(90deg,#7c3aed22,#06b6d422);border:1px solid #7c3aed44;border-radius:12px;padding:10px 14px;margin:10px 18px 0;font-size:12px;align-items:center;gap:10px;}
+#notif-banner.show{display:flex;}
 </style>
 </head>
 <body>
-
-<div id="loading">
-  <div style="font-size:28px;">⚡</div>
-  <div class="spin"></div>
-  <div style="font-size:13px;color:var(--muted);">読み込み中...</div>
-</div>
-
+<div id="loading"><div style="font-size:28px;">&#9889;</div><div class="spin"></div><div style="font-size:13px;color:var(--muted);">&#35501;&#12415;&#36796;&#12415;&#20013;...</div></div>
 <div id="auth-screen" style="display:none;">
   <div class="auth-box">
-    <div class="auth-logo">⚡ LifeRhythm</div>
-    <div class="auth-tagline">AI価格調整による自律支援システム</div>
+    <div class="auth-logo">&#9889; LifeRhythm</div>
+    <div class="auth-tagline">AI&#20385;&#26684;&#35519;&#25972;&#12395;&#12424;&#12427;&#33258;&#24lawyer;&#25�;&#20013;&#12471;&#12473;&#12486;&#12512;</div>
     <div class="auth-tabs">
-      <button class="auth-tab active" onclick="switchTab('login')">ログイン</button>
-      <button class="auth-tab" onclick="switchTab('signup')">新規登録</button>
+      <button class="auth-tab active" onclick="switchTab('login')">&#12525;&#12464;&#12452;&#12531;</button>
+      <button class="auth-tab" onclick="switchTab('signup')">&#26032;&#35215;&#30331;&#37682;</button>
     </div>
     <div class="auth-name-field" id="name-field">
-      <div class="auth-field">
-        <label>ニックネーム</label>
-        <input class="auth-input" id="auth-name" type="text" placeholder="例: さくら"/>
-      </div>
+      <div class="auth-field"><label>&#12491;&#12483;&#12463;&#12493;&#12540;&#12512;</label><input class="auth-input" id="auth-name" type="text" placeholder="&#20363;: &#12373;&#12367;&#12425;"/></div>
     </div>
-    <div class="auth-field">
-      <label>メールアドレス</label>
-      <input class="auth-input" id="auth-email" type="email" placeholder="you@example.com"/>
-    </div>
-    <div class="auth-field">
-      <label>パスワード（6文字以上）</label>
-      <input class="auth-input" id="auth-pass" type="password" placeholder="••••••••"/>
-    </div>
-    <button class="auth-submit" id="auth-btn" onclick="doAuth()">ログイン</button>
+    <div class="auth-field"><label>&#12513;&#12540;&#12523;&#12450;&#12489;&#12524;&#12473;</label><input class="auth-input" id="auth-email" type="email" placeholder="you@example.com"/></div>
+    <div class="auth-field"><label>&#12497;&#12473;&#12527;&#12540;&#12489;&#65288;6&#25991;&#23383;&#20197;&#19978;&#65289;</label><input class="auth-input" id="auth-pass" type="password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"/></div>
+    <button class="auth-submit" id="auth-btn" onclick="doAuth()">&#12525;&#12464;&#12452;&#12531;</button>
     <div class="auth-error" id="auth-error"></div>
   </div>
 </div>
-
 <div id="main-app">
   <header class="page-header">
-    <div>
-      <div class="logo">⚡ LifeRhythm</div>
-      <div class="logo-sub">AI価格調整による自律支援システム</div>
-    </div>
+    <div><div class="logo">&#9889; LifeRhythm</div><div class="logo-sub">AI&#20385;&#26684;&#35519;&#25972;&#12395;&#12424;&#12427;&#33258;&#24律;&#25�;&#20013;&#12471;&#12473;&#12486;&#12512;</div></div>
     <div class="header-right">
-      <div class="clock-box">
-        <div class="clock-time" id="clock">--:--</div>
-        <div class="clock-date" id="clock-date">---</div>
-      </div>
-      <div>
-        <div class="user-chip">👤 <span id="user-name-disp">---</span></div>
-        <button class="logout-btn" style="margin-top:4px;width:100%;" onclick="doLogout()">ログアウト</button>
-      </div>
+      <div class="clock-box"><div class="clock-time" id="clock">--:--</div><div class="clock-date" id="clock-date">---</div></div>
+      <div><div class="user-chip">&#128100; <span id="user-name-disp">---</span></div><button class="logout-btn" style="margin-top:4px;width:100%;" onclick="doLogout()">&#12525;&#12464;&#12450;&#12454;&#12488;</button></div>
     </div>
   </header>
-  <div id="mode-banner" class="mode-focus">🔴 集中タイム</div>
+  <div id="mode-banner" class="mode-focus">&#128308; &#38598;&#20013;&#12479;&#12452;&#12512;</div>
+  <div id="notif-banner">
+    <span>&#128276; &#27243;&#12426;5&#20998;&#36890;&#30693;&#12434;&#21463;&#12369;&#21462;&#12426;&#12414;&#12377;&#12363;&#65311;</span>
+    <button style="padding:5px 12px;border-radius:8px;background:var(--accent);color:#fff;font-size:12px;font-weight:700;flex-shrink:0;" onclick="requestNotifPermission()">&#35377;&#21487;&#12377;&#12427;</button>
+    <button onclick="document.getElementById('notif-banner').classList.remove('show')" style="background:none;color:var(--muted);font-size:18px;padding:0 4px;">&times;</button>
+  </div>
   <div id="view"></div>
   <nav>
-    <button class="nav-btn active" onclick="goto('home')"    id="nav-home">   <span class="nav-icon">🏠</span>ホーム</button>
-    <button class="nav-btn"        onclick="goto('shop')"    id="nav-shop">   <span class="nav-icon">🎮</span>娯楽</button>
-    <button class="nav-btn"        onclick="goto('rank')"    id="nav-rank">   <span class="nav-icon">🏆</span>ランク</button>
-    <button class="nav-btn"        onclick="goto('profile')" id="nav-profile"><span class="nav-icon">👤</span>プロフィール</button>
+    <button class="nav-btn active" onclick="goto('home')" id="nav-home"><span class="nav-icon">&#127968;</span>&#12507;&#12540;&#12512;</button>
+    <button class="nav-btn" onclick="goto('shop')" id="nav-shop"><span class="nav-icon">&#127918;</span>&#23516;&#27005;</button>
+    <button class="nav-btn" onclick="goto('rank')" id="nav-rank"><span class="nav-icon">&#127942;</span>&#12521;&#12531;&#12463;</button>
+    <button class="nav-btn" onclick="goto('profile')" id="nav-profile"><span class="nav-icon">&#128100;</span>&#12503;&#12525;&#12501;&#12451;&#12540;&#12523;</button>
   </nav>
 </div>
-
-<!-- コンボ追加モーダル -->
 <div class="modal-overlay" id="addcombo-modal">
   <div class="modal-box">
-    <div class="modal-title">🔥 コンボを追加</div>
-    <input class="modal-input" id="combo-name" type="text" placeholder="コンボ名（例: モーニングルーティン）"/>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">達成するタスクを選択：</div>
+    <div class="modal-title">&#128293; &#12467;&#12531;&#12508;&#12434;&#36861;&#21152;</div>
+    <input class="modal-input" id="combo-name" type="text" placeholder="&#12467;&#12531;&#12508;&#21517;&#65288;&#20363;: &#12514;&#12540;&#12491;&#12531;&#12464;&#12523;&#12540;&#12486;&#12451;&#12531;&#65289;"/>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">&#36948;&#25104;&#12377;&#12427;&#12479;&#12473;&#12463;&#12434;&#36984;&#25246;&#65306;</div>
     <div id="combo-task-list" style="max-height:200px;overflow-y:auto;"></div>
     <div style="display:flex;align-items:center;gap:10px;margin-top:12px;">
-      <span style="font-size:13px;color:var(--muted);">ボーナス:</span>
+      <span style="font-size:13px;color:var(--muted);">&#12508;&#12540;&#12490;&#12473;:</span>
       <input class="num-input" type="number" id="combo-bonus" value="50" min="10" max="500" step="10"/>
-      <span style="font-size:13px;color:var(--muted);">🪙</span>
+      <span style="font-size:13px;color:var(--muted);">&#129689;</span>
     </div>
     <div class="modal-actions">
-      <button class="btn btn-primary" style="flex:1" onclick="saveCombo()">追加</button>
-      <button class="btn btn-outline" style="flex:1" onclick="closeModal('addcombo-modal')">キャンセル</button>
+      <button class="btn btn-primary" style="flex:1" onclick="saveCombo()">&#36861;&#21152;</button>
+      <button class="btn btn-outline" style="flex:1" onclick="closeModal('addcombo-modal')">&#12461;&#12515;&#12531;&#12475;&#12523;</button>
     </div>
   </div>
 </div>
-
 <div id="toast"></div>
-
 <script>
-const firebaseConfig = {
-  apiKey:            "AIzaSyAch5QXGqpzu2ZzR4LGVuxiGmV8Y_BBt-I",
-  authDomain:        "liferhythm-cb0e2.firebaseapp.com",
-  projectId:         "liferhythm-cb0e2",
-  storageBucket:     "liferhythm-cb0e2.firebasestorage.app",
-  messagingSenderId: "549059630729",
-  appId:             "1:549059630729:web:36fb8d5440644caab01858",
-  measurementId:     "G-F4K6WHLRF6"
-};
+const firebaseConfig={apiKey:"AIzaSyAch5QXGqpzu2ZzR4LGVuxiGmV8Y_BBt-I",authDomain:"liferhythm-cb0e2.firebaseapp.com",projectId:"liferhythm-cb0e2",storageBucket:"liferhythm-cb0e2.firebasestorage.app",messagingSenderId:"549059630729",appId:"1:549059630729:web:36fb8d5440644caab01858",measurementId:"G-F4K6WHLRF6"};
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db   = firebase.firestore();
-
-/* ============================================================
-   DEFAULT STATE
-============================================================ */
-function defaultState(name){
-  return {
-    displayName:         name || 'ユーザー',
-    coins:               100,
-    todayEarned:         0,
-    totalEarned:         100,
-    focusWeekActive:     true,
-    focusWeekMultiplier: 2,
-    focusWeekDaysLeft:   3,
-    streak:              0,
-    lastDate:            today(),
-    todos:               [],   // ← 空スタート
-    combos:              [],   // { id, name, taskIds:[], bonus, lastCompletedDate }
-    history:             [],
-    settings:            { weeklyBoost: true },
-    nextId:              1,
-    access:              {},
-  };
-}
-
-let state = null;
-let currentUser = null;
-let saveTimer = null;
-
-function today(){
-  const n = new Date();
-  return `${n.getFullYear()}-${n.getMonth()+1}-${n.getDate()}`;
-}
-
-/* ============================================================
-   AUTH
-============================================================ */
-let authMode = 'login';
-function switchTab(mode){
-  authMode = mode;
-  document.querySelectorAll('.auth-tab').forEach((t,i)=>{
-    t.classList.toggle('active',(i===0&&mode==='login')||(i===1&&mode==='signup'));
-  });
-  document.getElementById('auth-btn').textContent = mode==='login'?'ログイン':'アカウント作成';
-  document.getElementById('name-field').classList.toggle('show', mode==='signup');
-  document.getElementById('auth-error').textContent = '';
-}
-
-function doAuth(){
-  const email = document.getElementById('auth-email').value.trim();
-  const pass  = document.getElementById('auth-pass').value;
-  const name  = document.getElementById('auth-name').value.trim() || 'ユーザー';
-  const errEl = document.getElementById('auth-error');
-  errEl.textContent = '';
-  if(!email||!pass){ errEl.textContent='メールとパスワードを入力してください'; return; }
-  document.getElementById('auth-btn').textContent = '処理中...';
-  if(authMode==='login'){
-    auth.signInWithEmailAndPassword(email,pass)
-      .catch(e=>{ errEl.textContent=authErrMsg(e.code); document.getElementById('auth-btn').textContent='ログイン'; });
-  } else {
-    if(pass.length<6){ errEl.textContent='パスワードは6文字以上'; document.getElementById('auth-btn').textContent='アカウント作成'; return; }
-    auth.createUserWithEmailAndPassword(email,pass)
-      .then(cred=>cred.user.updateProfile({displayName:name}))
-      .catch(e=>{ errEl.textContent=authErrMsg(e.code); document.getElementById('auth-btn').textContent='アカウント作成'; });
-  }
-}
-function authErrMsg(code){
-  const map = {
-    'auth/user-not-found':'メールアドレスが見つかりません',
-    'auth/wrong-password':'パスワードが間違っています',
-    'auth/email-already-in-use':'このメールはすでに使われています',
-    'auth/invalid-email':'メールアドレスの形式が正しくありません',
-    'auth/weak-password':'パスワードが短すぎます（6文字以上）',
-    'auth/invalid-credential':'メールまたはパスワードが間違っています',
-  };
-  return map[code]||`エラー（${code}）`;
-}
-function doLogout(){ auth.signOut(); }
-
-/* ============================================================
-   FIRESTORE
-============================================================ */
-async function loadUserData(user){
-  const ref  = db.collection('users').doc(user.uid);
-  const snap = await ref.get();
-  const name = user.displayName || 'ユーザー';
-  if(snap.exists){
-    state = snap.data();
-    if(!state.access)  state.access  = {};
-    if(!state.combos)  state.combos  = [];
-    if(!state.todos)   state.todos   = [];
-    // 日付が変わったら ToDo リセット
-    if(state.lastDate !== today()){
-      state.todayEarned = 0;
-      state.lastDate    = today();
-      state.todos.forEach(t => t.done = false);
-      await saveNow();
-    }
-  } else {
-    state = defaultState(name);
-    await saveNow();
-  }
-  document.getElementById('user-name-disp').textContent = state.displayName;
-}
-function scheduleSave(){
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(saveNow, 1000);
-}
-async function saveNow(){
-  if(!currentUser||!state) return;
-  await db.collection('users').doc(currentUser.uid).set(state);
-}
-
-/* ============================================================
-   AUTH STATE LISTENER
-============================================================ */
-auth.onAuthStateChanged(async user=>{
-  document.getElementById('loading').style.display = 'none';
-  if(user){
-    currentUser = user;
-    await loadUserData(user);
-    document.getElementById('auth-screen').style.display = 'none';
-    document.getElementById('main-app').style.display    = 'flex';
-    updateClock();
-    startAccessTimer();
-    goto('home');
-  } else {
-    currentUser = null;
-    state = null;
-    document.getElementById('main-app').style.display    = 'none';
-    document.getElementById('auth-screen').style.display = 'flex';
-  }
-});
-document.addEventListener('keydown',e=>{
-  if(e.key==='Enter'&&document.getElementById('auth-screen').style.display!=='none') doAuth();
-});
-
-/* ============================================================
-   TIME / MODE
-============================================================ */
-function getMode(h){
-  if(h>=6&&h<12)  return 'focus';
-  if(h>=12&&h<14) return 'free';
-  if(h>=14&&h<18) return 'focus';
-  if(h>=18&&h<22) return 'free';
-  return 'focus';
-}
-function getMultiplier(mode){ return mode==='focus' ? 5 : 0.5; }
-function currentMode(){ return getMode(new Date().getHours()); }
-
-function updateClock(){
-  const now  = new Date();
-  const h    = String(now.getHours()).padStart(2,'0');
-  const mi   = String(now.getMinutes()).padStart(2,'0');
-  document.getElementById('clock').textContent = `${h}:${mi}`;
-  const days = ['日','月','火','水','木','金','土'];
-  document.getElementById('clock-date').textContent = `${now.getMonth()+1}/${now.getDate()}（${days[now.getDay()]}）`;
-  const mode   = currentMode();
-  const banner = document.getElementById('mode-banner');
-  if(mode==='focus'){
-    banner.className   = 'mode-focus';
-    banner.textContent = '🔴 集中タイム — 娯楽の価格が高騰しています（通常の5倍）';
-  } else {
-    banner.className   = 'mode-free';
-    banner.textContent = '🟢 自由タイム — 娯楽がセール価格！ゆっくり休もう 🎉';
-  }
-  if(state&&document.getElementById('main-app').style.display!=='none') renderPage();
-}
-
-/* ============================================================
-   NAVIGATION
-============================================================ */
-function goto(page){
-  state.currentPage = page;
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  const nb = document.getElementById('nav-'+page);
-  if(nb) nb.classList.add('active');
-  renderPage();
-}
-function renderPage(){
-  if(!state) return;
-  const v    = document.getElementById('view');
-  const page = state.currentPage || 'home';
-  switch(page){
-    case 'home':    v.innerHTML=pageHome();    bindHome();    break;
-    case 'shop':    v.innerHTML=pageShop();    bindShop();    break;
-    case 'rank':    v.innerHTML=pageRank();                   break;
-    case 'profile': v.innerHTML=pageProfile(); bindProfile(); break;
-  }
-}
-
-/* ============================================================
-   PAGE: HOME
-============================================================ */
+const auth=firebase.auth(),db=firebase.firestore();
+function defaultState(name){return{displayName:name||'ユーザー',coins:100,todayEarned:0,totalEarned:100,focusWeekActive:true,focusWeekMultiplier:2,focusWeekDaysLeft:3,streak:0,lastDate:today(),todos:[],combos:[],history:[],settings:{weeklyBoost:true},nextId:1,access:{}};}
+let state=null,currentUser=null,saveTimer=null;
+function today(){const n=new Date();return n.getFullYear()+'-'+(n.getMonth()+1)+'-'+n.getDate();}
+// v0.5: 通知システム
+const notified5min=new Set();
+function showNotifBanner(){if(typeof Notification!=='undefined'&&Notification.permission==='default')document.getElementById('notif-banner').classList.add('show');}
+function requestNotifPermission(){if(typeof Notification==='undefined'){showToast('この環境では通知は利用できません');return;}Notification.requestPermission().then(p=>{document.getElementById('notif-banner').classList.remove('show');showToast(p==='granted'?'🔔 通知が許可されました！':'通知が拒否されました');if(state&&state.currentPage==='profile')renderPage();});}
+function sendNotif(title,body){if(typeof Notification==='undefined'||Notification.permission!=='granted')return;try{new Notification(title,{body,icon:'https://em-content.zobj.net/source/apple/354/high-voltage_26a1.png'});}catch(e){}}
+let authMode='login';
+function switchTab(mode){authMode=mode;document.querySelectorAll('.auth-tab').forEach((t,i)=>{t.classList.toggle('active',(i===0&&mode==='login')||(i===1&&mode==='signup'));});document.getElementById('auth-btn').textContent=mode==='login'?'ログイン':'アカウント作成';document.getElementById('name-field').classList.toggle('show',mode==='signup');document.getElementById('auth-error').textContent='';}
+function doAuth(){const email=document.getElementById('auth-email').value.trim(),pass=document.getElementById('auth-pass').value,name=document.getElementById('auth-name').value.trim()||'ユーザー',errEl=document.getElementById('auth-error');errEl.textContent='';if(!email||!pass){errEl.textContent='メールとパスワードを入力してください';return;}document.getElementById('auth-btn').textContent='処理中...';if(authMode==='login'){auth.signInWithEmailAndPassword(email,pass).catch(e=>{errEl.textContent=authErrMsg(e.code);document.getElementById('auth-btn').textContent='ログイン';});}else{if(pass.length<6){errEl.textContent='パスワードは6文字以上';document.getElementById('auth-btn').textContent='アカウント作成';return;}auth.createUserWithEmailAndPassword(email,pass).then(cred=>cred.user.updateProfile({displayName:name})).catch(e=>{errEl.textContent=authErrMsg(e.code);document.getElementById('auth-btn').textContent='アカウント作成';});}}
+function authErrMsg(c){const m={'auth/user-not-found':'メールアドレスが見つかりません','auth/wrong-password':'パスワードが間違っています','auth/email-already-in-use':'このメールはすでに使われています','auth/invalid-email':'メールアドレスの形式が正しくありません','auth/weak-password':'パスワードが短すぎます','auth/invalid-credential':'メールまたはパスワードが間違っています'};return m[c]||'エラー('+c+')';}
+function doLogout(){auth.signOut();}
+async function loadUserData(user){const ref=db.collection('users').doc(user.uid),snap=await ref.get(),name=user.displayName||'ユーザー';if(snap.exists){state=snap.data();if(!state.access)state.access={};if(!state.combos)state.combos=[];if(!state.todos)state.todos=[];if(state.lastDate!==today()){state.todayEarned=0;state.lastDate=today();state.todos.forEach(t=>t.done=false);await saveNow();}}else{state=defaultState(name);await saveNow();}document.getElementById('user-name-disp').textContent=state.displayName;}
+function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(saveNow,1000);}
+async function saveNow(){if(!currentUser||!state)return;await db.collection('users').doc(currentUser.uid).set(state);}
+auth.onAuthStateChanged(async user=>{document.getElementById('loading').style.display='none';if(user){currentUser=user;await loadUserData(user);document.getElementById('auth-screen').style.display='none';document.getElementById('main-app').style.display='flex';updateClock();startAccessTimer();showNotifBanner();goto('home');}else{currentUser=null;state=null;document.getElementById('main-app').style.display='none';document.getElementById('auth-screen').style.display='flex';}});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('auth-screen').style.display!=='none')doAuth();});
+function getMode(h){if(h>=6&&h<12)return'focus';if(h>=12&&h<14)return'free';if(h>=14&&h<18)return'focus';if(h>=18&&h<22)return'free';return'focus';}
+function getMultiplier(mode){return mode==='focus'?5:0.5;}
+function currentMode(){return getMode(new Date().getHours());}
+function updateClock(){const now=new Date(),h=String(now.getHours()).padStart(2,'0'),mi=String(now.getMinutes()).padStart(2,'0');document.getElementById('clock').textContent=h+':'+mi;const days=['日','月','火','水','木','金','土'];document.getElementById('clock-date').textContent=(now.getMonth()+1)+'/'+now.getDate()+'('+days[now.getDay()]+')';const mode=currentMode(),banner=document.getElementById('mode-banner');if(mode==='focus'){banner.className='mode-focus';banner.textContent='🔴 集中タイム — 娯楽の価格が高騰中（5倍）';}else{banner.className='mode-free';banner.textContent='🟢 自由タイム — 娯楽がセール価格！🎉';}if(state&&document.getElementById('main-app').style.display!=='none')renderPage();}
+function goto(page){state.currentPage=page;document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));const nb=document.getElementById('nav-'+page);if(nb)nb.classList.add('active');renderPage();}
+function renderPage(){if(!state)return;const v=document.getElementById('view'),page=state.currentPage||'home';switch(page){case'home':v.innerHTML=pageHome();bindHome();break;case'shop':v.innerHTML=pageShop();bindShop();break;case'rank':v.innerHTML=pageRank();break;case'profile':v.innerHTML=pageProfile();bindProfile();break;}}
 function pageHome(){
-  const todos = state.todos || [];
-  const done  = todos.filter(t=>t.done).length;
-  const total = todos.length;
-  const pct   = total ? Math.round(done/total*100) : 0;
-
-  const todoRows = todos.length === 0
-    ? `<div class="todo-empty">タスクがありません<br><span style="font-size:12px;">下の入力欄から追加してください</span></div>`
-    : todos.map(t=>`
-      <div class="todo-item${t.done?' done':''}" data-id="${t.id}">
-        <div class="todo-check todo-check-btn" data-id="${t.id}">${t.done?'✓':''}</div>
-        <div class="todo-text">${escHtml(t.text)}</div>
-        <div class="todo-reward">+${t.reward}${state.focusWeekActive?`<span style="color:#f59e0b;">×${state.focusWeekMultiplier}</span>`:''}🪙</div>
-        <button class="todo-del" data-id="${t.id}" title="削除">×</button>
-      </div>`).join('');
-
-  const combos = (state.combos||[]);
-  const comboSection = combos.length === 0 ? '' : `
-    <div class="card" style="margin-top:14px;">
-      <div class="card-title">🔥 コンボボーナス
-        <span style="margin-left:auto;">
-          <button class="btn btn-outline" style="font-size:11px;padding:3px 9px;" onclick="openAddCombo()">＋ 追加</button>
-        </span>
-      </div>
-      ${combos.map(c=>renderComboCard(c)).join('')}
-    </div>`;
-
-  const recentHistory = (state.history||[]).slice(-5).reverse().map(h=>`
-    <div class="history-item">
-      <div class="history-sign ${h.type}">${h.type==='plus'?'+':'-'}${h.amount}</div>
-      <div class="history-desc">${h.desc}</div>
-      <div class="history-time">${h.time}</div>
-    </div>`).join('') || '<div style="font-size:13px;color:var(--muted);">まだ履歴がありません</div>';
-
-  return `<div class="container">
-    <div class="coin-strip">
-      <div class="coin-orb">🪙</div>
-      <div>
-        <div class="coin-val">${(state.coins||0).toLocaleString()}</div>
-        <div class="coin-label">LifeCoins 残高</div>
-        <div class="coin-today">今日 +${state.todayEarned||0} コイン獲得済み</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">✅ 今日のタスク
-        <span style="margin-left:auto;display:flex;gap:6px;">
-          ${combos.length>0?'':'<button class="btn btn-outline" style="font-size:11px;padding:3px 9px;" onclick="openAddCombo()">🔥 コンボ追加</button>'}
-        </span>
-      </div>
-      ${todoRows}
-      <div class="add-todo-row">
-        <input class="add-todo-input" id="quick-todo-text" type="text" placeholder="タスクを入力..." maxlength="50"/>
-        <input class="num-input" id="quick-todo-reward" type="number" value="20" min="5" max="200" step="5" style="width:64px;"/>
-        <span style="font-size:12px;color:var(--muted);align-self:center;">🪙</span>
-        <button class="add-todo-btn" onclick="quickAddTodo()">追加</button>
-      </div>
-      ${total>0?`
-      <div style="margin-top:12px;">
-        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;">
-          <span>進捗</span><span>${done} / ${total} 完了</span>
-        </div>
-        <div class="progress-wrap"><div class="progress-bar" style="width:${pct}%"></div></div>
-        ${done===total&&total>0?'<div style="font-size:11px;color:var(--gold);margin-top:5px;font-weight:700;">🎉 全タスク完了！</div>':'<div style="font-size:11px;color:var(--muted);margin-top:5px;">全タスク完了でボーナス +50 🪙</div>'}
-      </div>`:''}
-    </div>
-
-    ${comboSection}
-
-    ${state.focusWeekActive?`
-    <div class="week-card" style="margin-top:14px;">
-      <div class="week-active-tag">🔥 集中強化ウィーク 開催中！</div>
-      <div style="font-size:13px;">獲得コインが <b style="color:var(--gold)">×${state.focusWeekMultiplier} 倍</b>！</div>
-      <div style="font-size:26px;font-weight:800;color:var(--gold);margin:6px 0;">残り ${state.focusWeekDaysLeft} 日</div>
-    </div>`:''}
-
-    <div class="card" style="margin-top:14px;">
-      <div class="card-title">📜 コイン履歴</div>
-      ${recentHistory}
-    </div>
-  </div>`;
+  const todos=state.todos||[],done=todos.filter(t=>t.done).length,total=todos.length,pct=total?Math.round(done/total*100):0;
+  const todoRows=todos.length===0?'<div class="todo-empty">タスクがありません<br><span style="font-size:12px;">下の入力欄から追加してください</span></div>':todos.map(t=>'<div class="todo-item'+(t.done?' done':'')+'" data-id="'+t.id+'"><div class="todo-check todo-check-btn" data-id="'+t.id+'">'+(t.done?'✓':'')+'</div><div class="todo-text">'+escHtml(t.text)+'</div><div class="todo-reward">+'+t.reward+(state.focusWeekActive?'<span style="color:#f59e0b;">&times;'+state.focusWeekMultiplier+'</span>':'')+'🪙</div><button class="todo-del" data-id="'+t.id+'">&times;</button></div>').join('');
+  const combos=state.combos||[];
+  const comboSection=combos.length===0?'':'<div class="card" style="margin-top:14px;"><div class="card-title">🔥 コンボボーナス<span style="margin-left:auto;"><button class="btn btn-outline" style="font-size:11px;padding:3px 9px;" onclick="openAddCombo()">+ 追加</button></span></div>'+combos.map(c=>renderComboCard(c)).join('')+'</div>';
+  const hist=(state.history||[]).slice(-5).reverse().map(h=>'<div class="history-item"><div class="history-sign '+h.type+'">'+(h.type==='plus'?'+':'-')+h.amount+'</div><div class="history-desc">'+h.desc+'</div><div class="history-time">'+h.time+'</div></div>').join('')||'<div style="font-size:13px;color:var(--muted);">まだ履歴がありません</div>';
+  return '<div class="container">'
+    +'<div class="coin-strip"><div class="coin-orb">🪙</div><div><div class="coin-val">'+(state.coins||0).toLocaleString()+'</div><div class="coin-label">LifeCoins 残高</div><div class="coin-today">今日 +'+(state.todayEarned||0)+' コイン獲得済み</div></div></div>'
+    +'<div class="card"><div class="card-title">✅ 今日のタスク<span style="margin-left:auto;">'+(combos.length===0?'<button class="btn btn-outline" style="font-size:11px;padding:3px 9px;" onclick="openAddCombo()">🔥 コンボ追加</button>':'')+'</span></div>'
+    +todoRows
+    +'<div class="add-todo-row"><input class="add-todo-input" id="quick-todo-text" type="text" placeholder="タスクを入力..." maxlength="50"/><input class="num-input" id="quick-todo-reward" type="number" value="20" min="5" max="200" step="5" style="width:64px;"/><span style="font-size:12px;color:var(--muted);align-self:center;">🪙</span><button class="add-todo-btn" onclick="quickAddTodo()">追加</button></div>'
+    +(total>0?'<div style="margin-top:12px;"><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;"><span>進捗</span><span>'+done+'/'+total+' 完了</span></div><div class="progress-wrap"><div class="progress-bar" style="width:'+pct+'%"></div></div>'+(done===total&&total>0?'<div style="font-size:11px;color:var(--gold);margin-top:5px;font-weight:700;">🎉 全タスク完了！</div>':'<div style="font-size:11px;color:var(--muted);margin-top:5px;">全タスク完了でボーナス +50 🪙</div>')+'</div>':'')+'</div>'
+    +comboSection
+    +(state.focusWeekActive?'<div class="week-card" style="margin-top:14px;"><div class="week-active-tag">🔥 集中強化ウィーク 開催中！</div><div style="font-size:13px;">獲得コインが <b style="color:var(--gold)">&times;'+state.focusWeekMultiplier+' 倍</b>！</div><div style="font-size:26px;font-weight:800;color:var(--gold);margin:6px 0;">残り '+state.focusWeekDaysLeft+' 日</div></div>':'')
+    +'<div class="card" style="margin-top:14px;"><div class="card-title">📜 コイン履歴</div>'+hist+'</div></div>';
 }
-
-function renderComboCard(combo){
-  const tasks    = combo.taskIds.map(id=>state.todos.find(t=>t.id===id)).filter(Boolean);
-  const allDone  = tasks.length > 0 && tasks.every(t=>t.done);
-  const doneToday= combo.lastCompletedDate === today();
-  const doneCnt  = tasks.filter(t=>t.done).length;
-
-  const chips = combo.taskIds.map(id=>{
-    const t = state.todos.find(x=>x.id===id);
-    if(!t) return `<span class="combo-task-chip missing">（削除済み）</span>`;
-    return `<span class="combo-task-chip${t.done?' done':''}">${t.done?'✅':'⬜'} ${escHtml(t.text)}</span>`;
-  }).join('');
-
-  let statusText = '';
-  if(doneToday)           statusText = '✨ 本日達成済み！';
-  else if(tasks.length===0) statusText = 'タスクが削除されました';
-  else if(allDone)        statusText = '達成条件クリア！';
-  else                    statusText = `あと ${tasks.length - doneCnt} 個で達成`;
-
-  return `<div class="combo-card${doneToday?' done-today':''}" data-cid="${combo.id}">
-    <button class="combo-del" data-cid="${combo.id}" title="コンボ削除">×</button>
-    <div class="combo-name">🔗 ${escHtml(combo.name)}</div>
-    <div class="combo-tasks">${chips}</div>
-    <div class="combo-footer">
-      <div class="combo-bonus">+${combo.bonus}🪙 ボーナス</div>
-      <div class="combo-status">${statusText}</div>
-    </div>
-  </div>`;
-}
-
-function bindHome(){
-  // タスク完了（チェックボタン）
-  document.querySelectorAll('.todo-check-btn').forEach(btn=>{
-    btn.addEventListener('click', e=>{
-      e.stopPropagation();
-      const id   = parseInt(btn.dataset.id);
-      const todo = state.todos.find(t=>t.id===id);
-      if(todo && !todo.done) completeTodo(todo);
-    });
-  });
-  // タスク削除
-  document.querySelectorAll('.todo-del').forEach(btn=>{
-    btn.addEventListener('click', e=>{
-      e.stopPropagation();
-      const id = parseInt(btn.dataset.id);
-      state.todos = state.todos.filter(t=>t.id!==id);
-      showToast('🗑️ タスクを削除しました');
-      scheduleSave(); renderPage();
-    });
-  });
-  // コンボ削除
-  document.querySelectorAll('.combo-del').forEach(btn=>{
-    btn.addEventListener('click', e=>{
-      e.stopPropagation();
-      const cid = parseInt(btn.dataset.cid);
-      state.combos = state.combos.filter(c=>c.id!==cid);
-      showToast('🗑️ コンボを削除しました');
-      scheduleSave(); renderPage();
-    });
-  });
-  // クイック追加 Enter
-  const inp = document.getElementById('quick-todo-text');
-  if(inp) inp.addEventListener('keydown', e=>{ if(e.key==='Enter') quickAddTodo(); });
-}
-
-function completeTodo(todo){
-  todo.done = true;
-  let earned = todo.reward;
-  if(state.focusWeekActive) earned *= state.focusWeekMultiplier;
-  state.coins       = (state.coins||0) + earned;
-  state.todayEarned = (state.todayEarned||0) + earned;
-  state.totalEarned = (state.totalEarned||0) + earned;
-  addHistory('plus', earned, `${todo.text} — 達成`);
-  showToast(`✅ +${earned}🪙 獲得！`);
-
-  // 全タスク完了ボーナス
-  if(state.todos.every(t=>t.done) && state.todos.length > 0){
-    setTimeout(()=>{
-      state.coins       += 50;
-      state.todayEarned += 50;
-      state.totalEarned += 50;
-      addHistory('plus', 50, '全タスク完了ボーナス');
-      showToast('🎊 全タスク完了ボーナス +50🪙！');
-      scheduleSave(); renderPage();
-    }, 600);
-  }
-
-  // コンボチェック
-  checkCombos();
-  scheduleSave(); renderPage();
-}
-
-function checkCombos(){
-  (state.combos||[]).forEach(combo=>{
-    if(combo.lastCompletedDate === today()) return;
-    const tasks   = combo.taskIds.map(id=>state.todos.find(t=>t.id===id)).filter(Boolean);
-    if(tasks.length === 0) return;
-    const allDone = tasks.every(t=>t.done);
-    if(allDone){
-      combo.lastCompletedDate = today();
-      state.coins       += combo.bonus;
-      state.todayEarned += combo.bonus;
-      state.totalEarned += combo.bonus;
-      addHistory('plus', combo.bonus, `🔥 コンボ達成: ${combo.name}`);
-      setTimeout(()=>{
-        showToast(`🔥 コンボ「${combo.name}」達成！ +${combo.bonus}🪙`);
-      }, 1000);
-    }
-  });
-}
-
-function quickAddTodo(){
-  const textEl   = document.getElementById('quick-todo-text');
-  const rewardEl = document.getElementById('quick-todo-reward');
-  if(!textEl) return;
-  const text   = textEl.value.trim();
-  const reward = parseInt(rewardEl.value) || 20;
-  if(!text){ showToast('❌ タスク名を入力してください'); return; }
-  state.todos.push({ id: state.nextId++, text, reward, done: false });
-  textEl.value = '';
-  scheduleSave(); renderPage();
-  // フォーカスを入力欄に戻す
-  setTimeout(()=>{ const el=document.getElementById('quick-todo-text'); if(el) el.focus(); }, 50);
-}
-
-/* ============================================================
-   COMBO MODAL
-============================================================ */
-function openAddCombo(){
-  const todos = state.todos || [];
-  if(todos.length < 2){
-    showToast('❌ コンボを作るにはタスクが2つ以上必要です');
-    return;
-  }
-  const listEl = document.getElementById('combo-task-list');
-  listEl.innerHTML = todos.map(t=>`
-    <div class="combo-task-pick">
-      <input type="checkbox" id="cpick-${t.id}" value="${t.id}"/>
-      <label for="cpick-${t.id}">${escHtml(t.text)}</label>
-      <span class="reward-hint">+${t.reward}🪙</span>
-    </div>`).join('');
-  document.getElementById('combo-name').value  = '';
-  document.getElementById('combo-bonus').value = '50';
-  openModal('addcombo-modal');
-}
-
-function saveCombo(){
-  const name  = document.getElementById('combo-name').value.trim();
-  const bonus = parseInt(document.getElementById('combo-bonus').value) || 50;
-  const checked = [...document.querySelectorAll('#combo-task-list input:checked')].map(cb=>parseInt(cb.value));
-  if(!name)          { showToast('❌ コンボ名を入力してください'); return; }
-  if(checked.length < 2){ showToast('❌ 2つ以上のタスクを選択してください'); return; }
-  if(!state.combos) state.combos = [];
-  state.combos.push({ id: state.nextId++, name, taskIds: checked, bonus, lastCompletedDate: null });
-  closeModal('addcombo-modal');
-  showToast(`🔥 コンボ「${name}」を追加しました！`);
-  scheduleSave(); renderPage();
-}
-
-/* ============================================================
-   PAGE: SHOP — アクセス制限
-============================================================ */
-const ENTERTAINMENTS=[
-  {id:'yt',icon:'📺',name:'YouTube',   bg:'#ff000022',br:'#ff000044',basePrice:30,desc:'動画視聴',    duration:30, url:'https://youtube.com'},
-  {id:'tt',icon:'🎵',name:'TikTok',    bg:'#ffffff11',br:'#ffffff22',basePrice:20,desc:'ショート動画',duration:15, url:'https://tiktok.com'},
-  {id:'tw',icon:'🐦',name:'X',         bg:'#1d9bf022',br:'#1d9bf044',basePrice:15,desc:'タイムライン',duration:15, url:'https://x.com'},
-  {id:'ig',icon:'📸',name:'Instagram', bg:'#e1306c22',br:'#e1306c44',basePrice:15,desc:'フィード',    duration:15, url:'https://instagram.com'},
-  {id:'nt',icon:'🎬',name:'Netflix',   bg:'#e5000022',br:'#e5000044',basePrice:50,desc:'動画視聴',    duration:60, url:'https://netflix.com'},
-  {id:'gm',icon:'🎮',name:'ゲーム',    bg:'#7c3aed22',br:'#7c3aed44',basePrice:40,desc:'ゲームプレイ',duration:30, url:''},
-];
-
-function isAccessActive(id){
-  const until = state.access && state.access[id];
-  return until && until > Date.now();
-}
-function remainingSec(id){
-  const until = state.access && state.access[id];
-  if(!until) return 0;
-  return Math.max(0, Math.ceil((until - Date.now()) / 1000));
-}
-function fmtTime(sec){
-  return `${String(Math.floor(sec/60)).padStart(2,'0')}:${String(sec%60).padStart(2,'0')}`;
-}
-
-function pageShop(){
-  const mode    = currentMode();
-  const mult    = getMultiplier(mode);
-  const isSurge = mode === 'focus';
-  const rows    = ENTERTAINMENTS.map(e=>{
-    const price  = Math.round(e.basePrice * mult);
-    const active = isAccessActive(e.id);
-    const sec    = remainingSec(e.id);
-    if(active){
-      return `<div class="ent-item">
-        <div class="ent-icon" style="background:${e.bg};border:2px solid var(--green);">${e.icon}</div>
-        <div style="flex:1">
-          <div class="ent-name">${e.name}</div>
-          <div class="ent-desc" style="color:var(--green);">✅ アクセス中</div>
-        </div>
-        <div class="ent-price-area" style="text-align:center;">
-          <div class="access-timer" id="timer-${e.id}">${fmtTime(sec)}</div>
-          <div class="access-timer-label">残り時間</div>
-          ${e.url?`<button class="open-btn" data-url="${e.url}">▶ 開く</button>`:'<div style="font-size:11px;color:var(--muted);margin-top:6px;">デバイスで開く</div>'}
-        </div>
-      </div>`;
-    } else {
-      const urlLabel = e.url ? e.url.replace('https://','') : '';
-      return `<div class="ent-item">
-        <div class="ent-icon" style="background:${e.bg};border:1px solid ${e.br};filter:grayscale(60%);">🔒</div>
-        <div style="flex:1">
-          <div class="ent-name" style="color:var(--muted);">${e.name}</div>
-          <div class="ent-desc">${e.desc}（${e.duration}分）</div>
-          ${urlLabel?`<div class="locked-url-btn" data-id="${e.id}">🔗 ${urlLabel}</div>`:''}
-        </div>
-        <div class="ent-price-area">
-          <div class="ent-price ${isSurge?'price-surge':'price-sale'}">${price}🪙</div>
-          <div class="ent-price-orig">通常 ${e.basePrice}🪙</div>
-          <div class="price-tag ${isSurge?'tag-surge':'tag-sale'}">${isSurge?'🔴 高騰中':'🟢 セール'}</div><br>
-          <button class="buy-btn-locked ${isSurge?'surge':'sale'}" data-id="${e.id}" data-price="${price}" data-name="${e.name}" data-duration="${e.duration}">解除する</button>
-        </div>
-      </div>`;
-    }
-  }).join('');
-
-  return `<div class="container">
-    <div class="card">
-      <div class="card-title">🎮 娯楽アクセス権 <span style="margin-left:auto;font-size:11px;color:var(--muted);">残高: <b style="color:var(--gold)">${state.coins}🪙</b></span></div>
-      ${rows}
-    </div>
-    <div class="card" style="margin-top:14px;">
-      <div class="card-title">ℹ️ 価格変動のしくみ</div>
-      <div style="font-size:12px;color:var(--muted);line-height:1.8;">
-        ・ <b style="color:#c4b5fd">集中タイム</b>（午前・午後）→ ×5<br>
-        ・ <b style="color:#6ee7b7">自由タイム</b>（昼・夜）→ ×0.5
-      </div>
-    </div>
-  </div>`;
-}
-
-function bindShop(){
-  document.querySelectorAll('.locked-url-btn').forEach(b=>{
-    b.addEventListener('click',()=>{
-      const name = ENTERTAINMENTS.find(e=>e.id===b.dataset.id)?.name||'';
-      showToast(`🔒 ${name} はロック中！コインで解除してください`);
-    });
-  });
-  document.querySelectorAll('.buy-btn-locked').forEach(b=>{
-    b.addEventListener('click',()=>{
-      const id=b.dataset.id, price=parseInt(b.dataset.price);
-      const name=b.dataset.name, duration=parseInt(b.dataset.duration);
-      if((state.coins||0)>=price){
-        state.coins -= price;
-        if(!state.access) state.access={};
-        state.access[id] = Date.now() + duration*60*1000;
-        addHistory('minus',price,`${name} アクセス解除（${duration}分）`);
-        showToast(`🔓 ${name} を解除！${duration}分間アクセスできます`);
-        scheduleSave(); renderPage();
-      } else { showToast(`❌ コイン不足（必要: ${price}🪙）`); }
-    });
-  });
-  document.querySelectorAll('.open-btn').forEach(b=>{
-    b.addEventListener('click',()=>{ window.open(b.dataset.url,'_blank'); });
-  });
-}
-
-/* ============================================================
-   ACCESS TIMER
-============================================================ */
-let accessTimerInterval = null;
-function startAccessTimer(){
-  if(accessTimerInterval) clearInterval(accessTimerInterval);
-  accessTimerInterval = setInterval(()=>{
-    if(!state||!state.access) return;
-    const now = Date.now();
-    let expired = false;
-    Object.keys(state.access).forEach(id=>{
-      const until = state.access[id];
-      if(!until) return;
-      if(until <= now){
-        state.access[id] = null;
-        expired = true;
-        const ent = ENTERTAINMENTS.find(e=>e.id===id);
-        showToast(`⏰ ${ent?.name||id} のアクセス時間が終了しました`);
-      } else {
-        const el = document.getElementById('timer-'+id);
-        if(el) el.textContent = fmtTime(Math.max(0,Math.ceil((until-now)/1000)));
-      }
-    });
-    if(expired){ scheduleSave(); if(state.currentPage==='shop') renderPage(); }
-  }, 1000);
-}
-
-/* ============================================================
-   PAGE: RANK
-============================================================ */
-const RANKS=[
-  {name:'Bronze',  icon:'🥉',min:0,    max:999},
-  {name:'Silver',  icon:'🥈',min:1000, max:2999},
-  {name:'Gold',    icon:'🥇',min:3000, max:5999},
-  {name:'Platinum',icon:'💎',min:6000, max:9999},
-  {name:'Diamond', icon:'💠',min:10000,max:Infinity},
-];
-function pageRank(){
-  const total = state.totalEarned||0;
-  const idx   = RANKS.findIndex(r=>total>=r.min&&total<=r.max);
-  const rank  = RANKS[idx];
-  const next  = RANKS[idx+1];
-  const pct   = next ? Math.min(100,Math.round((total-rank.min)/(next.min-rank.min)*100)) : 100;
-  const rankList = RANKS.map((r,i)=>{
-    const active=i===idx, passed=i<idx;
-    return `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);opacity:${passed||active?1:.4};">
-      <span style="font-size:22px;">${r.icon}</span>
-      <div style="flex:1">
-        <div style="font-size:14px;font-weight:${active?700:400};">${r.name}${active?' ← 現在':''}</div>
-        <div style="font-size:11px;color:var(--muted);">${r.min.toLocaleString()} 〜 ${r.max===Infinity?'∞':r.max.toLocaleString()}</div>
-      </div>
-      ${passed?'<span style="color:var(--green);">✓</span>':''}
-    </div>`;
-  }).join('');
-  return `<div class="container">
-    <div class="rank-card">
-      <div class="rank-badge-big">${rank.icon}</div>
-      <div class="rank-name-big">${rank.name}</div>
-      <div style="font-size:12px;color:var(--muted);">全期間 ${total.toLocaleString()} コイン獲得</div>
-      ${next?`
-        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin:12px 0 4px;">
-          <span>${total.toLocaleString()}</span><span>次: ${next.name}（${next.min.toLocaleString()}）</span>
-        </div>
-        <div class="progress-wrap"><div class="progress-bar" style="width:${pct}%;"></div></div>
-        <div style="font-size:11px;color:var(--muted);margin-top:5px;">あと ${(next.min-total).toLocaleString()} コインで昇格！</div>
-      `:'<div style="font-size:13px;color:var(--gold);margin-top:10px;">🏆 最高ランク達成！</div>'}
-    </div>
-    <div class="card" style="margin-top:14px;">
-      <div class="card-title">📊 統計</div>
-      <div class="stats-grid">
-        <div class="stat-box"><div class="stat-val" style="color:#a78bfa;">${total.toLocaleString()}</div><div class="stat-label">全期間獲得コイン</div></div>
-        <div class="stat-box"><div class="stat-val" style="color:#22d3ee;">${state.todayEarned||0}</div><div class="stat-label">本日獲得</div></div>
-        <div class="stat-box"><div class="stat-val" style="color:#f59e0b;">🔥 ${state.streak||0}</div><div class="stat-label">連続達成日数</div></div>
-        <div class="stat-box"><div class="stat-val" style="color:#10b981;">${state.coins||0}</div><div class="stat-label">現在の残高</div></div>
-      </div>
-    </div>
-    <div class="card" style="margin-top:14px;">
-      <div class="card-title">🏅 ランク一覧</div>${rankList}
-    </div>
-  </div>`;
-}
-
-/* ============================================================
-   PAGE: PROFILE
-============================================================ */
-function pageProfile(){
-  const rank = RANKS.find(r=>(state.totalEarned||0)>=r.min&&(state.totalEarned||0)<=r.max);
-  const allHistory = (state.history||[]).slice().reverse().map(h=>`
-    <div class="history-item">
-      <div class="history-sign ${h.type}">${h.type==='plus'?'+':'-'}${h.amount}</div>
-      <div class="history-desc">${h.desc}</div>
-      <div class="history-time">${h.time}</div>
-    </div>`).join('') || '<div style="font-size:13px;color:var(--muted);">まだ履歴がありません</div>';
-
-  return `<div class="container">
-    <div class="profile-hero">
-      <div style="font-size:52px;margin-bottom:8px;">😎</div>
-      <div style="font-size:20px;font-weight:800;">${state.displayName||'ユーザー'}</div>
-      <div style="font-size:12px;color:var(--muted);margin-top:4px;">${currentUser?.email||''}</div>
-      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px;">
-        <span style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:4px 11px;font-size:12px;">${rank.icon} ${rank.name}</span>
-        <span style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:4px 11px;font-size:12px;">🔥 ${state.streak||0}日連続</span>
-        ${state.focusWeekActive?'<span style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:4px 11px;font-size:12px;">⚡ 集中強化中</span>':''}
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">⚙️ 設定</div>
-      <div class="setting-row">
-        <div>
-          <div style="font-size:14px;">集中強化ウィーク参加</div>
-          <div style="font-size:11px;color:var(--muted);">コイン獲得を×${state.focusWeekMultiplier}倍にする</div>
-        </div>
-        <label class="toggle"><input type="checkbox" id="toggle-week" ${state.focusWeekActive?'checked':''}/><span class="toggle-slider"></span></label>
-      </div>
-      <div class="setting-row">
-        <div><div style="font-size:14px;">ニックネーム変更</div></div>
-        <button class="btn btn-outline" style="font-size:12px;padding:5px 10px;" onclick="changeName()">変更</button>
-      </div>
-    </div>
-    <div class="card" style="margin-top:14px;">
-      <div class="card-title">📜 コイン履歴（全件）</div>${allHistory}
-    </div>
-  </div>`;
-}
-function bindProfile(){
-  const tw = document.getElementById('toggle-week');
-  if(tw) tw.addEventListener('change',()=>{
-    state.focusWeekActive = tw.checked;
-    showToast(tw.checked?'🔥 集中強化ウィーク参加！':'集中強化ウィーク 離脱');
-    scheduleSave();
-  });
-}
-function changeName(){
-  const n = prompt('新しいニックネームを入力してください:',state.displayName||'');
-  if(n&&n.trim()){
-    state.displayName = n.trim();
-    document.getElementById('user-name-disp').textContent = state.displayName;
-    showToast(`✅ 「${state.displayName}」に変更しました`);
-    scheduleSave(); renderPage();
-  }
-}
-
-/* ============================================================
-   UTILITIES
-============================================================ */
-function addHistory(type,amount,desc){
-  if(!state.history) state.history=[];
-  const now = new Date();
-  const t = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-  state.history.push({type,amount,desc,time:t});
-  if(state.history.length>100) state.history=state.history.slice(-100);
-}
-function openModal(id){ document.getElementById(id).classList.add('open'); }
-function closeModal(id){ document.getElementById(id).classList.remove('open'); }
-document.querySelectorAll('.modal-overlay').forEach(o=>{
-  o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); });
-});
+function renderComboCard(c){const tasks=c.taskIds.map(id=>state.todos.find(t=>t.id===id)).filter(Boolean);const allDone=tasks.length>0&&tasks.every(t=>t.done),doneToday=c.lastCompletedDate===today(),dc=tasks.filter(t=>t.done).length;const chips=c.taskIds.map(id=>{const t=state.todos.find(x=>x.id===id);if(!t)return'<span class="combo-task-chip missing">(削除済)</span>';return'<span class="combo-task-chip'+(t.done?' done':'')+'">'+( t.done?'✅':'⬜')+' '+escHtml(t.text)+'</span>';}).join('');const st=doneToday?'✨ 本日達成済み！':tasks.length===0?'タスク削除済':allDone?'達成条件OK！':'あと'+(tasks.length-dc)+'個で達成';return'<div class="combo-card'+(doneToday?' done-today':'')+'"><button class="combo-del" data-cid="'+c.id+'">&times;</button><div class="combo-name">🔗 '+escHtml(c.name)+'</div><div class="combo-tasks">'+chips+'</div><div class="combo-footer"><div class="combo-bonus">+'+c.bonus+'🪙 ボーナス</div><div class="combo-status">'+st+'</div></div></div>';}
+function bindHome(){document.querySelectorAll('.todo-check-btn').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();const todo=state.todos.find(t=>t.id===parseInt(btn.dataset.id));if(todo&&!todo.done)completeTodo(todo);});});document.querySelectorAll('.todo-del').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();state.todos=state.todos.filter(t=>t.id!==parseInt(btn.dataset.id));showToast('🗑️ タスクを削除しました');scheduleSave();renderPage();});});document.querySelectorAll('.combo-del').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();state.combos=state.combos.filter(c=>c.id!==parseInt(btn.dataset.cid));showToast('🗑️ コンボを削除しました');scheduleSave();renderPage();});});const inp=document.getElementById('quick-todo-text');if(inp)inp.addEventListener('keydown',e=>{if(e.key==='Enter')quickAddTodo();});}
+function completeTodo(todo){todo.done=true;let earned=todo.reward;if(state.focusWeekActive)earned*=state.focusWeekMultiplier;state.coins=(state.coins||0)+earned;state.todayEarned=(state.todayEarned||0)+earned;state.totalEarned=(state.totalEarned||0)+earned;addHistory('plus',earned,todo.text+'—達成');showToast('✅ +'+earned+'🪙 獲得！');if(state.todos.every(t=>t.done)&&state.todos.length>0){setTimeout(()=>{state.coins+=50;state.todayEarned+=50;state.totalEarned+=50;addHistory('plus',50,'全タスク完了ボーナス');showToast('🎉 全タスク完了ボーナス +50🪙！');scheduleSave();renderPage();},600);}checkCombos();scheduleSave();renderPage();}
+function checkCombos(){(state.combos||[]).forEach(c=>{if(c.lastCompletedDate===today())return;const tasks=c.taskIds.map(id=>state.todos.find(t=>t.id===id)).filter(Boolean);if(!tasks.length||!tasks.every(t=>t.done))return;c.lastCompletedDate=today();state.coins+=c.bonus;state.todayEarned+=c.bonus;state.totalEarned+=c.bonus;addHistory('plus',c.bonus,'🔥コンボ達成: '+c.name);setTimeout(()=>showToast('🔥 コンボ「'+c.name+'」達成！ +'+c.bonus+'🪙'),1000);});}
+function quickAddTodo(){const tEl=document.getElementById('quick-todo-text'),rEl=document.getElementById('quick-todo-reward');if(!tEl)return;const text=tEl.value.trim(),reward=parseInt(rEl.value)||20;if(!text){showToast('❌ タスク名を入力してください');return;}state.todos.push({id:state.nextId++,text,reward,done:false});tEl.value='';scheduleSave();renderPage();setTimeout(()=>{const el=document.getElementById('quick-todo-text');if(el)el.focus();},50);}
+function openAddCombo(){if((state.todos||[]).length<2){showToast('❌ コンボにはタスク2つ以上必要');return;}document.getElementById('combo-task-list').innerHTML=state.todos.map(t=>'<div class="combo-task-pick"><input type="checkbox" id="cp'+t.id+'" value="'+t.id+'"/><label for="cp'+t.id+'">'+escHtml(t.text)+'</label><span class="reward-hint">+'+t.reward+'🪙</span></div>').join('');document.getElementById('combo-name').value='';document.getElementById('combo-bonus').value='50';openModal('addcombo-modal');}
+function saveCombo(){const name=document.getElementById('combo-name').value.trim(),bonus=parseInt(document.getElementById('combo-bonus').value)||50,checked=[...document.querySelectorAll('#combo-task-list input:checked')].map(cb=>parseInt(cb.value));if(!name){showToast('❌ コンボ名を入力してください');return;}if(checked.length<2){showToast('❌ 2つ以上選択してください');return;}if(!state.combos)state.combos=[];state.combos.push({id:state.nextId++,name,taskIds:checked,bonus,lastCompletedDate:null});closeModal('addcombo-modal');showToast('🔥 コンボ「'+name+'」を追加！');scheduleSave();renderPage();}
+const ENTERTAINMENTS=[{id:'yt',icon:'📺',name:'YouTube',bg:'#ff000022',br:'#ff000044',basePrice:30,desc:'動画視聴',duration:30,url:'https://youtube.com'},{id:'tt',icon:'🎵',name:'TikTok',bg:'#ffffff11',br:'#ffffff22',basePrice:20,desc:'ショート動画',duration:15,url:'https://tiktok.com'},{id:'tw',icon:'🐦',name:'X',bg:'#1d9bf022',br:'#1d9bf044',basePrice:15,desc:'タイムライン',duration:15,url:'https://x.com'},{id:'ig',icon:'📸',name:'Instagram',bg:'#e1306c22',br:'#e1306c44',basePrice:15,desc:'フィード',duration:15,url:'https://instagram.com'},{id:'nt',icon:'🎬',name:'Netflix',bg:'#e5000022',br:'#e5000044',basePrice:50,desc:'動画視聴',duration:60,url:'https://netflix.com'},{id:'gm',icon:'🎮',name:'ゲーム',bg:'#7c3aed22',br:'#7c3aed44',basePrice:40,desc:'ゲームプレイ',duration:30,url:''}];
+function isAccessActive(id){const u=state.access&&state.access[id];return u&&u>Date.now();}
+function remainingSec(id){const u=state.access&&state.access[id];if(!u)return 0;return Math.max(0,Math.ceil((u-Date.now())/1000));}
+function fmtTime(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+function pageShop(){const mode=currentMode(),mult=getMultiplier(mode),isSurge=mode==='focus';const rows=ENTERTAINMENTS.map(e=>{const price=Math.round(e.basePrice*mult),active=isAccessActive(e.id),sec=remainingSec(e.id);if(active)return'<div class="ent-item"><div class="ent-icon" style="background:'+e.bg+';border:2px solid var(--green);">'+e.icon+'</div><div style="flex:1"><div class="ent-name">'+e.name+'</div><div class="ent-desc" style="color:var(--green);">✅ アクセス中</div></div><div class="ent-price-area" style="text-align:center;"><div class="access-timer" id="timer-'+e.id+'">'+fmtTime(sec)+'</div><div class="access-timer-label">残り時間</div>'+(e.url?'<button class="open-btn" data-url="'+e.url+'">▶ 開く</button>':'<div style="font-size:11px;color:var(--muted);margin-top:6px;">デバイスで開く</div>')+'</div></div>';const ul=e.url?e.url.replace('https://',''):'';return'<div class="ent-item"><div class="ent-icon" style="background:'+e.bg+';border:1px solid '+e.br+';filter:grayscale(60%);">🔒</div><div style="flex:1"><div class="ent-name" style="color:var(--muted);">'+e.name+'</div><div class="ent-desc">'+e.desc+'('+e.duration+'分)</div>'+(ul?'<div class="locked-url-btn" data-id="'+e.id+'">🔗 '+ul+'</div>':'')+'</div><div class="ent-price-area"><div class="ent-price '+(isSurge?'price-surge':'price-sale')+'">'+price+'🪙</div><div class="ent-price-orig">通常 '+e.basePrice+'🪙</div><div class="price-tag '+(isSurge?'tag-surge':'tag-sale')+'">'+(isSurge?'🔴 高騰中':'🟢 セール')+'</div><br><button class="buy-btn-locked '+(isSurge?'surge':'sale')+'" data-id="'+e.id+'" data-price="'+price+'" data-name="'+e.name+'" data-duration="'+e.duration+'">解除する</button></div></div>';}).join('');return'<div class="container"><div class="card"><div class="card-title">🎮 娯楽アクセス権 <span style="margin-left:auto;font-size:11px;color:var(--muted);">残高: <b style="color:var(--gold)">'+state.coins+'🪙</b></span></div>'+rows+'</div><div class="card" style="margin-top:14px;"><div class="card-title">ℹ️ 価格変動のしくみ</div><div style="font-size:12px;color:var(--muted);line-height:1.8;">・ <b style="color:#c4b5fd">集中タイム</b>(午前・午後) &rarr; &times;5<br>・ <b style="color:#6ee7b7">自由タイム</b>(昼・夜) &rarr; &times;0.5</div></div></div>';}
+function bindShop(){document.querySelectorAll('.locked-url-btn').forEach(b=>{b.addEventListener('click',()=>{const name=ENTERTAINMENTS.find(e=>e.id===b.dataset.id)?.name||'';showToast('🔒 '+name+' はロック中！コインで解除してください');});});document.querySelectorAll('.buy-btn-locked').forEach(b=>{b.addEventListener('click',()=>{const id=b.dataset.id,price=parseInt(b.dataset.price),name=b.dataset.name,dur=parseInt(b.dataset.duration);if((state.coins||0)>=price){state.coins-=price;if(!state.access)state.access={};state.access[id]=Date.now()+dur*60*1000;notified5min.delete(id);addHistory('minus',price,name+'解除('+dur+'分)');showToast('🔓 '+name+' 解除！'+dur+'分アクセス可能');scheduleSave();renderPage();}else showToast('❌ コイン不足(必要: '+price+'🪙)');});});document.querySelectorAll('.open-btn').forEach(b=>{b.addEventListener('click',()=>{window.open(b.dataset.url,'_blank');});});}
+// v0.5: 残り5分通知システム
+let accessTimerInterval=null;
+function startAccessTimer(){if(accessTimerInterval)clearInterval(accessTimerInterval);accessTimerInterval=setInterval(()=>{if(!state||!state.access)return;const now=Date.now();let expired=false;Object.keys(state.access).forEach(id=>{const until=state.access[id];if(!until)return;const sec=Math.max(0,Math.ceil((until-now)/1000));const ent=ENTERTAINMENTS.find(e=>e.id===id),name=ent?.name||id;if(until<=now){state.access[id]=null;notified5min.delete(id);expired=true;showToast('⏰ '+name+' の時間が終了しました');sendNotif('⏰ LifeRhythm',name+' のアクセス時間が終了しました');}else{const el=document.getElementById('timer-'+id);if(el)el.textContent=fmtTime(sec);if(sec<=300&&!notified5min.has(id)){notified5min.add(id);showToast('⚠️ '+name+' 残り5分！キリのいいところで終わりにしよう');sendNotif('⚠️ '+name+' 残り5分！','もうすぐ時間が終了します。キリのいいところで終わりに！');}}});if(expired){scheduleSave();if(state.currentPage==='shop')renderPage();}},1000);}
+const RANKS=[{name:'Bronze',icon:'🥉',min:0,max:999},{name:'Silver',icon:'🥈',min:1000,max:2999},{name:'Gold',icon:'🥇',min:3000,max:5999},{name:'Platinum',icon:'💎',min:6000,max:9999},{name:'Diamond',icon:'💠',min:10000,max:Infinity}];
+function pageRank(){const total=state.totalEarned||0,idx=RANKS.findIndex(r=>total>=r.min&&total<=r.max),rank=RANKS[idx],next=RANKS[idx+1],pct=next?Math.min(100,Math.round((total-rank.min)/(next.min-rank.min)*100)):100;const rl=RANKS.map((r,i)=>{const a=i===idx,p=i<idx;return'<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);opacity:'+(p||a?1:.4)+';"><span style="font-size:22px;">'+r.icon+'</span><div style="flex:1"><div style="font-size:14px;font-weight:'+(a?700:400)+';">'+r.name+(a?' ← 現在':'')+'</div><div style="font-size:11px;color:var(--muted);">'+r.min.toLocaleString()+' ~ '+(r.max===Infinity?'∞':r.max.toLocaleString())+'</div></div>'+(p?'<span style="color:var(--green);">✓</span>':'')+'</div>';}).join('');return'<div class="container"><div class="rank-card"><div class="rank-badge-big">'+rank.icon+'</div><div class="rank-name-big">'+rank.name+'</div><div style="font-size:12px;color:var(--muted);">全期間 '+total.toLocaleString()+' コイン獲得</div>'+(next?'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin:12px 0 4px;"><span>'+total.toLocaleString()+'</span><span>次: '+next.name+'('+next.min.toLocaleString()+')</span></div><div class="progress-wrap"><div class="progress-bar" style="width:'+pct+'%;"></div></div><div style="font-size:11px;color:var(--muted);margin-top:5px;">あと'+(next.min-total).toLocaleString()+'コインで昇格！</div>':'<div style="font-size:13px;color:var(--gold);margin-top:10px;">🏆 最高ランク達成！</div>')+'</div><div class="card" style="margin-top:14px;"><div class="card-title">📊 統計</div><div class="stats-grid"><div class="stat-box"><div class="stat-val" style="color:#a78bfa;">'+total.toLocaleString()+'</div><div class="stat-label">全期間獲得</div></div><div class="stat-box"><div class="stat-val" style="color:#22d3ee;">'+(state.todayEarned||0)+'</div><div class="stat-label">本日獲得</div></div><div class="stat-box"><div class="stat-val" style="color:#f59e0b;">🔥 '+(state.streak||0)+'</div><div class="stat-label">連続日数</div></div><div class="stat-box"><div class="stat-val" style="color:#10b981;">'+(state.coins||0)+'</div><div class="stat-label">現在の残高</div></div></div></div><div class="card" style="margin-top:14px;"><div class="card-title">🏅 ランク一覧</div>'+rl+'</div></div>';}
+function pageProfile(){const rank=RANKS.find(r=>(state.totalEarned||0)>=r.min&&(state.totalEarned||0)<=r.max);const hist=(state.history||[]).slice().reverse().map(h=>'<div class="history-item"><div class="history-sign '+h.type+'">'+(h.type==='plus'?'+':'-')+h.amount+'</div><div class="history-desc">'+h.desc+'</div><div class="history-time">'+h.time+'</div></div>').join('')||'<div style="font-size:13px;color:var(--muted);">まだ履歴なし</div>';const np=typeof Notification!=='undefined'?Notification.permission:'unsupported';return'<div class="container"><div class="profile-hero"><div style="font-size:52px;margin-bottom:8px;">😎</div><div style="font-size:20px;font-weight:800;">'+(state.displayName||'ユーザー')+'</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">'+(currentUser?.email||'')+'</div><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px;"><span style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:4px 11px;font-size:12px;">'+rank.icon+' '+rank.name+'</span><span style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:4px 11px;font-size:12px;">🔥 '+(state.streak||0)+'日連続</span>'+(state.focusWeekActive?'<span style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:4px 11px;font-size:12px;">⚡ 集中強化中</span>':'')+'</div></div>'+'<div class="card"><div class="card-title">⚙️ 設定</div><div class="setting-row"><div><div style="font-size:14px;">集中強化ウィーク</div><div style="font-size:11px;color:var(--muted);">コイン&times;'+state.focusWeekMultiplier+'倍</div></div><label class="toggle"><input type="checkbox" id="toggle-week" '+(state.focusWeekActive?'checked':'')+'/><span class="toggle-slider"></span></label></div><div class="setting-row"><div><div style="font-size:14px;">ニックネーム変更</div></div><button class="btn btn-outline" style="font-size:12px;padding:5px 10px;" onclick="changeName()">変更</button></div><div class="setting-row"><div><div style="font-size:14px;">残り5分通知</div><div style="font-size:11px;color:var(--muted);">娯楽の残り5分で通知</div></div><button class="btn btn-outline" style="font-size:12px;padding:5px 10px;" onclick="requestNotifPermission()">'+(np==='granted'?'✅ 許可済み':np==='denied'?'🚫 拒否済み':'許可する')+'</button></div></div>'+'<div class="card" style="margin-top:14px;"><div class="card-title">📜 コイン履歴(全件)</div>'+hist+'</div></div>';}
+function bindProfile(){const tw=document.getElementById('toggle-week');if(tw)tw.addEventListener('change',()=>{state.focusWeekActive=tw.checked;showToast(tw.checked?'🔥 集中強化ウィーク参加！':'集中強化ウィーク 離脱');scheduleSave();});}
+function changeName(){const n=prompt('新しいニックネーム:',state.displayName||'');if(n&&n.trim()){state.displayName=n.trim();document.getElementById('user-name-disp').textContent=state.displayName;showToast('✅ 「'+state.displayName+'」に変更');scheduleSave();renderPage();}}
+function addHistory(type,amount,desc){if(!state.history)state.history=[];const now=new Date(),t=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');state.history.push({type,amount,desc,time:t});if(state.history.length>100)state.history=state.history.slice(-100);}
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(o=>{o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});});
 let toastTimer;
-function showToast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>t.classList.remove('show'), 3000);
-}
-function escHtml(s){
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-setInterval(updateClock, 30000);
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3000);}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+setInterval(updateClock,30000);
 </script>
 </body>
 </html>
