@@ -1,2 +1,4 @@
 # Local Netlify folder
 .netlify
+# Deploy script temp file
+.commit_msg_tmp
