@@ -314,7 +314,7 @@ function today(){const n=new Date();return n.getFullYear()+'-'+(n.getMonth()+1)+
 const notified5min=new Set();
 // v0.6: Gemini AI統合
 let pendingMilestoneTodoId=null;
-async function callGemini(prompt){try{const res=await fetch('/.netlify/functions/gemini',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});if(!res.ok){const err=await res.json().catch(()=>({}));if(res.status!==404)showToast('❌ AIエラー: '+(err.error||res.status));return null;}return await res.json();}catch(e){return null;}}
+async function callGemini(prompt){try{const res=await fetch('https://liferhythm-gemini.daqiaoling0.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});if(!res.ok){const err=await res.json().catch(()=>({}));showToast('❌ AIエラー: '+(err.error||res.status));return null;}return await res.json();}catch(e){return null;}}
 function showNotifBanner(){if(typeof Notification!=='undefined'&&Notification.permission==='default')document.getElementById('notif-banner').classList.add('show');}
 function requestNotifPermission(){if(typeof Notification==='undefined'){showToast('この環境では通知は利用できません');return;}Notification.requestPermission().then(p=>{document.getElementById('notif-banner').classList.remove('show');showToast(p==='granted'?'🔔 通知が許可されました！':'通知が拒否されました');if(state&&state.currentPage==='profile')renderPage();});}
 function sendNotif(title,body){if(typeof Notification==='undefined'||Notification.permission!=='granted')return;try{new Notification(title,{body,icon:'https://em-content.zobj.net/source/apple/354/high-voltage_26a1.png'});}catch(e){}}
