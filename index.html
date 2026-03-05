@@ -171,6 +171,22 @@ nav{position:fixed;bottom:0;left:0;right:0;background:#111827;border-top:1px sol
 .milestone-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;background:var(--card2);margin-bottom:8px;}
 .milestone-item input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);flex-shrink:0;}.milestone-coins{font-size:12px;color:var(--gold);font-weight:700;white-space:nowrap;}
 .add-todo-reward-wrap{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.auth-divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--muted);font-size:12px;}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.guest-btn{width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--card2);color:var(--fg);font-size:14px;font-weight:600;cursor:pointer;margin-top:4px;transition:background .15s;}
+.guest-btn:hover{background:#334155;}
+.guest-form{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:16px;margin-top:12px;display:none;}
+.guest-select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--fg);font-size:14px;}
+.guest-badge{background:#7c3aed22;border:1px solid #7c3aed44;color:#a78bfa;font-size:11px;padding:2px 8px;border-radius:20px;margin-left:6px;vertical-align:middle;}
+.tutorial-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;display:none;align-items:center;justify-content:center;}
+.tutorial-overlay.show{display:flex;}
+.tutorial-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px 28px;max-width:340px;width:90%;text-align:center;}
+.tutorial-emoji{font-size:64px;margin-bottom:16px;}
+.tutorial-title{font-size:20px;font-weight:800;margin-bottom:10px;}
+.tutorial-desc{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:24px;}
+.tutorial-dots{display:flex;gap:7px;justify-content:center;margin-bottom:22px;}
+.tutorial-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:background .2s;}
+.tutorial-dot.active{background:var(--accent);}
 </style>
 </head>
 <body>
@@ -190,6 +206,22 @@ nav{position:fixed;bottom:0;left:0;right:0;background:#111827;border-top:1px sol
     <div class="auth-field"><label>&#12497;&#12473;&#12527;&#12540;&#12489;&#65288;6&#25991;&#23383;&#20197;&#19978;&#65289;</label><input class="auth-input" id="auth-pass" type="password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"/></div>
     <button class="auth-submit" id="auth-btn" onclick="doAuth()">&#12525;&#12464;&#12452;&#12531;</button>
     <div class="auth-error" id="auth-error"></div>
+    <div class="auth-divider">&#12414;&#12383;&#12399;</div>
+    <button class="guest-btn" id="guest-toggle-btn">&#128100; &#12466;&#12473;&#12488;&#12392;&#12375;&#12390;&#35430;&#12377;</button>
+    <div class="guest-form" id="guest-form">
+      <div class="auth-field"><label>&#24180;&#40802;</label><input class="auth-input" id="guest-age" type="number" placeholder="20" min="10" max="100"/></div>
+      <div class="auth-field"><label>&#32077;&#26989;</label>
+        <select class="guest-select" id="guest-job">
+          <option value="&#22823;&#23398;&#29983;">&#22823;&#23398;&#29983;</option>
+          <option value="&#39640;&#26657;&#29983;">&#39640;&#26657;&#29983;</option>
+          <option value="&#31192;&#23398;&#29983;">&#31192;&#23398;&#29983;</option>
+          <option value="&#31038;&#20250;&#20154;">&#31038;&#20250;&#20154;</option>
+          <option value="&#20027;&#23507;&#12539;&#20027;&#22253;">&#20027;&#23507;&#12539;&#20027;&#22253;</option>
+          <option value="&#12381;&#12398;&#20182;">&#12381;&#12398;&#20182;</option>
+        </select>
+      </div>
+      <button class="auth-submit" style="margin-top:12px;" id="guest-start-btn">&#20170;&#12377;&#12368;&#22987;&#12417;&#12427; &#8594;</button>
+    </div>
   </div>
 </div>
 <div id="main-app">
@@ -242,6 +274,15 @@ nav{position:fixed;bottom:0;left:0;right:0;background:#111827;border-top:1px sol
     </div>
   </div>
 </div>
+<div class="tutorial-overlay" id="tutorial-overlay">
+  <div class="tutorial-box">
+    <div class="tutorial-emoji" id="tut-emoji"></div>
+    <div class="tutorial-title" id="tut-title"></div>
+    <div class="tutorial-desc" id="tut-desc"></div>
+    <div class="tutorial-dots" id="tut-dots"></div>
+    <button class="btn btn-primary" style="width:100%;padding:14px;font-size:15px;" id="tut-btn"></button>
+  </div>
+</div>
 <div id="toast"></div>
 <script>
 const firebaseConfig={apiKey:"AIzaSyAch5QXGqpzu2ZzR4LGVuxiGmV8Y_BBt-I",authDomain:"liferhythm-cb0e2.firebaseapp.com",projectId:"liferhythm-cb0e2",storageBucket:"liferhythm-cb0e2.firebasestorage.app",messagingSenderId:"549059630729",appId:"1:549059630729:web:36fb8d5440644caab01858",measurementId:"G-F4K6WHLRF6"};
@@ -254,7 +295,7 @@ function today(){const n=new Date();return n.getFullYear()+'-'+(n.getMonth()+1)+
 const notified5min=new Set();
 // v0.6: Gemini AI統合
 let pendingMilestoneTodoId=null;
-async function callGemini(prompt){try{const res=await fetch('/.netlify/functions/gemini',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});if(!res.ok){const err=await res.json().catch(()=>({}));showToast('❌ AIエラー: '+(err.error||res.status));return null;}return await res.json();}catch(e){showToast('❌ AI接続エラー: '+e.message);return null;}}
+async function callGemini(prompt){try{const res=await fetch('/.netlify/functions/gemini',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});if(!res.ok){const err=await res.json().catch(()=>({}));if(res.status!==404)showToast('❌ AIエラー: '+(err.error||res.status));return null;}return await res.json();}catch(e){return null;}}
 function showNotifBanner(){if(typeof Notification!=='undefined'&&Notification.permission==='default')document.getElementById('notif-banner').classList.add('show');}
 function requestNotifPermission(){if(typeof Notification==='undefined'){showToast('この環境では通知は利用できません');return;}Notification.requestPermission().then(p=>{document.getElementById('notif-banner').classList.remove('show');showToast(p==='granted'?'🔔 通知が許可されました！':'通知が拒否されました');if(state&&state.currentPage==='profile')renderPage();});}
 function sendNotif(title,body){if(typeof Notification==='undefined'||Notification.permission!=='granted')return;try{new Notification(title,{body,icon:'https://em-content.zobj.net/source/apple/354/high-voltage_26a1.png'});}catch(e){}}
@@ -262,11 +303,20 @@ let authMode='login';
 function switchTab(mode){authMode=mode;document.querySelectorAll('.auth-tab').forEach((t,i)=>{t.classList.toggle('active',(i===0&&mode==='login')||(i===1&&mode==='signup'));});document.getElementById('auth-btn').textContent=mode==='login'?'ログイン':'アカウント作成';document.getElementById('name-field').classList.toggle('show',mode==='signup');document.getElementById('auth-error').textContent='';}
 function doAuth(){const email=document.getElementById('auth-email').value.trim(),pass=document.getElementById('auth-pass').value,name=document.getElementById('auth-name').value.trim()||'ユーザー',errEl=document.getElementById('auth-error');errEl.textContent='';if(!email||!pass){errEl.textContent='メールとパスワードを入力してください';return;}document.getElementById('auth-btn').textContent='処理中...';if(authMode==='login'){auth.signInWithEmailAndPassword(email,pass).catch(e=>{errEl.textContent=authErrMsg(e.code);document.getElementById('auth-btn').textContent='ログイン';});}else{if(pass.length<6){errEl.textContent='パスワードは6文字以上';document.getElementById('auth-btn').textContent='アカウント作成';return;}auth.createUserWithEmailAndPassword(email,pass).then(cred=>cred.user.updateProfile({displayName:name})).catch(e=>{errEl.textContent=authErrMsg(e.code);document.getElementById('auth-btn').textContent='アカウント作成';});}}
 function authErrMsg(c){const m={'auth/user-not-found':'メールアドレスが見つかりません','auth/wrong-password':'パスワードが間違っています','auth/email-already-in-use':'このメールはすでに使われています','auth/invalid-email':'メールアドレスの形式が正しくありません','auth/weak-password':'パスワードが短すぎます','auth/invalid-credential':'メールまたはパスワードが間違っています'};return m[c]||'エラー('+c+')';}
-function doLogout(){auth.signOut();}
+function doLogout(){if(state&&state.isGuest){state=null;localStorage.removeItem('guestState');document.getElementById('main-app').style.display='none';document.getElementById('auth-screen').style.display='flex';}else{auth.signOut();}}
+function toggleGuestForm(){const f=document.getElementById('guest-form');f.style.display=f.style.display==='none'||!f.style.display?'block':'none';}
+function startGuest(){const age=parseInt(document.getElementById('guest-age').value)||0,job=document.getElementById('guest-job').value;if(!age||age<10||age>100){showToast('❌ 年齢を入力してください');return;}state=defaultState('ゲスト');state.isGuest=true;state.guestAge=age;state.guestJob=job;state.tutorialDone=false;localStorage.setItem('guestState',JSON.stringify(state));document.getElementById('auth-screen').style.display='none';document.getElementById('loading').style.display='none';document.getElementById('main-app').style.display='flex';document.getElementById('user-name-disp').textContent='ゲスト';initApp();}
+const TUTORIAL_STEPS=[{e:'⚡',t:'LifeRhythmへようこそ！',d:'SNSは「ご襲美」。タスクをこなしてコインを稼ぎ、好きな時間にSNSを楽しもう！'},{e:'✅',t:'タスクを追加しよう',d:'「今日やること」を入力するだけ。AIが自動でコインを設定してくれる！'},{e:'🪙',t:'タスク完了でコインゲット！',d:'完了ボタンを押すたびにコイン獲得。集中タイムはボーナスコイン！'},{e:'🎮',t:'SNSを解放しよう！',d:'集めたコインでYouTube・TikTok・Instagramなどを時間制限付きで解放できる！'}];
+let tutStep=0;
+function showTutorial(){tutStep=0;renderTutStep();document.getElementById('tutorial-overlay').classList.add('show');}
+function renderTutStep(){const s=TUTORIAL_STEPS[tutStep];document.getElementById('tut-emoji').textContent=s.e;document.getElementById('tut-title').textContent=s.t;document.getElementById('tut-desc').textContent=s.d;document.getElementById('tut-btn').textContent=tutStep<TUTORIAL_STEPS.length-1?'次へ →':'始める！⚡';document.getElementById('tut-dots').innerHTML=TUTORIAL_STEPS.map((_,i)=>'<div class="tutorial-dot'+(i===tutStep?' active':'')+'"></div>').join('');}
+function tutNext(){tutStep++;if(tutStep>=TUTORIAL_STEPS.length){document.getElementById('tutorial-overlay').classList.remove('show');state.tutorialDone=true;scheduleSave();return;}renderTutStep();}
+document.addEventListener('click',e=>{if(e.target.id==='guest-toggle-btn')toggleGuestForm();if(e.target.id==='guest-start-btn')startGuest();if(e.target.id==='tut-btn')tutNext();});
 async function loadUserData(user){const ref=db.collection('users').doc(user.uid),snap=await ref.get(),name=user.displayName||'ユーザー';if(snap.exists){state=snap.data();if(!state.access)state.access={};if(!state.combos)state.combos=[];if(!state.todos)state.todos=[];if(state.lastDate!==today()){state.todayEarned=0;state.lastDate=today();state.todos.forEach(t=>t.done=false);await saveNow();}}else{state=defaultState(name);await saveNow();}document.getElementById('user-name-disp').textContent=state.displayName;}
 function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(saveNow,1000);}
-async function saveNow(){if(!currentUser||!state)return;await db.collection('users').doc(currentUser.uid).set(state);}
-auth.onAuthStateChanged(async user=>{document.getElementById('loading').style.display='none';if(user){currentUser=user;await loadUserData(user);document.getElementById('auth-screen').style.display='none';document.getElementById('main-app').style.display='flex';updateClock();startAccessTimer();showNotifBanner();goto('home');}else{currentUser=null;state=null;document.getElementById('main-app').style.display='none';document.getElementById('auth-screen').style.display='flex';}});
+async function saveNow(){if(!state)return;if(state.isGuest){localStorage.setItem('guestState',JSON.stringify(state));return;}if(!currentUser)return;await db.collection('users').doc(currentUser.uid).set(state);}
+function initApp(){updateClock();startAccessTimer();showNotifBanner();goto('home');if(!state.tutorialDone)setTimeout(showTutorial,400);}
+auth.onAuthStateChanged(async user=>{document.getElementById('loading').style.display='none';if(user){currentUser=user;await loadUserData(user);document.getElementById('auth-screen').style.display='none';document.getElementById('main-app').style.display='flex';initApp();}else{currentUser=null;state=null;document.getElementById('main-app').style.display='none';document.getElementById('auth-screen').style.display='flex';const gs=localStorage.getItem('guestState');if(gs){try{state=JSON.parse(gs);document.getElementById('auth-screen').style.display='none';document.getElementById('main-app').style.display='flex';document.getElementById('user-name-disp').textContent='ゲスト';initApp();}catch(e){localStorage.removeItem('guestState');}}}});
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('auth-screen').style.display!=='none')doAuth();});
 function getMode(h){if(h>=6&&h<12)return'focus';if(h>=12&&h<14)return'free';if(h>=14&&h<18)return'focus';if(h>=18&&h<22)return'free';return'focus';}
 function getMultiplier(mode){return mode==='focus'?5:0.5;}
