@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LifeRhythm — SNSは「ご褒美」</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --black:#0a0a0a;
+  --dark:#18181b;
+  --gray:#71717a;
+  --light:#f4f4f5;
+  --border:#e4e4e7;
+  --gold:#f59e0b;
+  --gold-light:#fef3c7;
+  --green:#10b981;
+  --white:#ffffff;
+  --text:#27272a;
+}
+html{scroll-behavior:smooth;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Hiragino Sans',sans-serif;color:var(--text);background:var(--white);line-height:1.6;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{font-size:18px;font-weight:800;color:var(--black);display:flex;align-items:center;gap:6px;}
+.nav-badge{background:var(--gold);color:var(--black);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.5px;}
+.nav-cta{background:var(--black);color:var(--white);font-size:13px;font-weight:700;padding:8px 18px;border-radius:20px;text-decoration:none;transition:opacity .2s;}
+.nav-cta:hover{opacity:.8;}
+
+/* ── HERO ── */
+.hero{background:var(--black);color:var(--white);padding:120px 24px 80px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(245,158,11,.12),transparent);}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);color:var(--gold);font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;letter-spacing:.5px;margin-bottom:24px;}
+.hero-title{font-size:clamp(36px,8vw,72px);font-weight:900;line-height:1.1;margin-bottom:16px;letter-spacing:-1.5px;}
+.hero-title span{color:var(--gold);}
+.hero-sub{font-size:clamp(15px,3vw,19px);color:#a1a1aa;max-width:520px;margin:0 auto 40px;line-height:1.7;}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{background:var(--gold);color:var(--black);font-size:15px;font-weight:800;padding:14px 32px;border-radius:30px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:transform .15s,box-shadow .15s;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(245,158,11,.4);}
+.btn-secondary{background:rgba(255,255,255,.1);color:var(--white);font-size:15px;font-weight:700;padding:14px 32px;border-radius:30px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.2);transition:background .15s;}
+.btn-secondary:hover{background:rgba(255,255,255,.15);}
+.hero-note{margin-top:24px;font-size:12px;color:#52525b;}
+
+/* ── MOCKUP ── */
+.mockup-section{background:var(--black);padding:0 24px 80px;display:flex;justify-content:center;}
+.phone{width:240px;background:#18181b;border-radius:36px;border:2px solid #3f3f46;padding:12px;box-shadow:0 40px 80px rgba(0,0,0,.6);position:relative;}
+.phone-notch{width:80px;height:20px;background:#0a0a0a;border-radius:10px;margin:0 auto 8px;}
+.phone-screen{background:#f4f4f5;border-radius:24px;padding:16px;min-height:420px;}
+.ps-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.ps-logo{font-size:16px;font-weight:900;color:#18181b;}
+.ps-coin{background:#18181b;color:#f59e0b;font-size:11px;font-weight:800;padding:4px 10px;border-radius:10px;}
+.ps-card{background:#fff;border:1px solid #e4e4e7;border-radius:14px;padding:12px;margin-bottom:8px;}
+.ps-card-label{font-size:9px;font-weight:700;color:#71717a;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.ps-todo{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.ps-check{width:18px;height:18px;border-radius:5px;border:2px solid #e4e4e7;flex-shrink:0;}
+.ps-check.done{background:#10b981;border-color:#10b981;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;}
+.ps-todo-text{font-size:11px;color:#27272a;font-weight:500;}
+.ps-todo-coin{margin-left:auto;font-size:10px;color:#f59e0b;font-weight:700;white-space:nowrap;}
+.ps-ai{font-size:9px;color:#71717a;background:#f4f4f5;padding:3px 7px;border-radius:5px;white-space:nowrap;}
+.ps-sns-card{background:#fff;border:1px solid #e4e4e7;border-radius:14px;padding:12px;}
+.ps-sns-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.ps-sns-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.ps-sns-name{font-size:11px;font-weight:700;color:#27272a;}
+.ps-sns-price{font-size:10px;color:#71717a;}
+.ps-unlock-btn{margin-left:auto;background:#18181b;color:#fff;font-size:9px;font-weight:700;padding:4px 8px;border-radius:6px;}
+.ps-unlock-btn.locked{background:#f4f4f5;color:#71717a;}
+
+/* ── PROBLEM ── */
+.section{padding:80px 24px;}
+.section-inner{max-width:900px;margin:0 auto;}
+.section-eyebrow{font-size:12px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
+.section-title{font-size:clamp(26px,5vw,42px);font-weight:900;line-height:1.2;margin-bottom:16px;letter-spacing:-1px;}
+.section-desc{font-size:16px;color:var(--gray);max-width:560px;line-height:1.7;}
+
+.problems{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:40px;}
+.problem-card{background:var(--light);border-radius:20px;padding:24px;border:1px solid var(--border);}
+.problem-icon{font-size:28px;margin-bottom:12px;}
+.problem-title{font-size:15px;font-weight:800;margin-bottom:6px;color:var(--black);}
+.problem-desc{font-size:13px;color:var(--gray);line-height:1.6;}
+
+/* ── HOW IT WORKS ── */
+.how{background:var(--light);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;margin-top:40px;position:relative;}
+.steps::before{content:'';position:absolute;top:36px;left:10%;right:10%;height:2px;background:linear-gradient(90deg,var(--border),var(--gold),var(--border));z-index:0;}
+.step{text-align:center;padding:0 16px;position:relative;z-index:1;}
+.step-num{width:72px;height:72px;background:var(--white);border:2px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px;box-shadow:0 4px 12px rgba(0,0,0,.06);}
+.step.active .step-num{background:var(--gold);border-color:var(--gold);}
+.step-title{font-size:16px;font-weight:800;margin-bottom:8px;color:var(--black);}
+.step-desc{font-size:13px;color:var(--gray);line-height:1.6;}
+.step-tag{display:inline-block;background:var(--black);color:var(--white);font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px;margin-bottom:8px;letter-spacing:.5px;}
+.step.active .step-tag{background:var(--gold);color:var(--black);}
+
+/* ── FEATURES ── */
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:40px;}
+.feature-card{background:var(--white);border:1px solid var(--border);border-radius:24px;padding:28px;transition:box-shadow .2s,transform .2s;}
+.feature-card:hover{box-shadow:0 8px 32px rgba(0,0,0,.08);transform:translateY(-2px);}
+.feature-icon{width:48px;height:48px;background:var(--light);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px;}
+.feature-title{font-size:16px;font-weight:800;margin-bottom:8px;color:var(--black);}
+.feature-desc{font-size:13px;color:var(--gray);line-height:1.7;}
+.feature-badge{display:inline-block;background:var(--gold-light);color:#92400e;font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;margin-top:10px;}
+
+/* ── TESTER ── */
+.tester{background:linear-gradient(135deg,#0a0a0a 0%,#18181b 100%);color:var(--white);}
+.tester .section-eyebrow{color:var(--gold);}
+.tester .section-title{color:var(--white);}
+.tester .section-desc{color:#a1a1aa;}
+.tester-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:40px;}
+.tester-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:24px;}
+.tester-card-icon{font-size:24px;margin-bottom:12px;}
+.tester-card-title{font-size:14px;font-weight:800;color:var(--white);margin-bottom:8px;}
+.tester-card-desc{font-size:13px;color:#a1a1aa;line-height:1.6;}
+.tester-cta{margin-top:48px;text-align:center;}
+.tester-note{margin-top:16px;font-size:12px;color:#52525b;}
+
+/* ── FOOTER ── */
+footer{background:var(--light);border-top:1px solid var(--border);padding:40px 24px;text-align:center;}
+.footer-logo{font-size:20px;font-weight:900;color:var(--black);margin-bottom:8px;}
+.footer-tagline{font-size:13px;color:var(--gray);margin-bottom:24px;}
+.footer-copy{font-size:12px;color:#a1a1aa;}
+
+/* ── DIVIDER ── */
+.divider{width:40px;height:3px;background:var(--gold);border-radius:2px;margin:16px 0 32px;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px){
+  nav{padding:12px 16px;}
+  .hero{padding:100px 20px 60px;}
+  .steps::before{display:none;}
+  .steps{gap:24px;}
+  .section{padding:60px 20px;}
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fade-up{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+.fade-up{animation:fade-up .6s ease both;}
+.fade-up-2{animation:fade-up .6s .15s ease both;}
+.fade-up-3{animation:fade-up .6s .3s ease both;}
+.fade-up-4{animation:fade-up .6s .45s ease both;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">⚡ LifeRhythm <span class="nav-badge">BETA</span></div>
+  <a class="nav-cta" href="https://lilyprime.github.io/liferhythm-app/" target="_blank">試してみる →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">🎮 テスター先行公開</div>
+  <h1 class="hero-title fade-up">SNSは<br><span>「ご褒美」</span></h1>
+  <p class="hero-sub fade-up-2">タスクをこなしてコインを稼ぎ、好きな時間にSNSを楽しもう。スマホとの新しい付き合い方。</p>
+  <div class="hero-btns fade-up-3">
+    <a class="btn-primary" href="https://lilyprime.github.io/liferhythm-app/" target="_blank">🚀 今すぐ試す</a>
+    <a class="btn-secondary" href="#how">仕組みを見る ↓</a>
+  </div>
+  <p class="hero-note fade-up-4">現在テスター限定公開 · 無料 · 登録不要でゲストプレイ可</p>
+</section>
+
+<!-- PHONE MOCKUP -->
+<div class="mockup-section">
+  <div class="phone">
+    <div class="phone-notch"></div>
+    <div class="phone-screen">
+      <div class="ps-header">
+        <div class="ps-logo">⚡ LifeRhythm</div>
+        <div class="ps-coin">💰 320🪙</div>
+      </div>
+
+      <div class="ps-card">
+        <div class="ps-card-label">📋 今日のタスク</div>
+        <div class="ps-todo">
+          <div class="ps-check done">✓</div>
+          <div class="ps-todo-text">英語の単語を12個覚える</div>
+          <div class="ps-todo-coin">+50🪙</div>
+        </div>
+        <div class="ps-todo">
+          <div class="ps-check done">✓</div>
+          <div class="ps-todo-text">レポートの序文を書く</div>
+          <div class="ps-todo-coin">+100🪙</div>
+        </div>
+        <div class="ps-todo">
+          <div class="ps-check"></div>
+          <div class="ps-todo-text" style="color:#71717a;">部屋を片付ける</div>
+          <div class="ps-todo-coin" style="color:#a1a1aa;">+50🪙</div>
+          <div class="ps-ai">🤖</div>
+        </div>
+      </div>
+
+      <div class="ps-sns-card">
+        <div class="ps-card-label">🎮 SNSを解除する</div>
+        <div class="ps-sns-row">
+          <div class="ps-sns-icon" style="background:#fee2e2;">▶️</div>
+          <div>
+            <div class="ps-sns-name">YouTube</div>
+            <div class="ps-sns-price">30分 · 200🪙</div>
+          </div>
+          <div class="ps-unlock-btn">解除する</div>
+        </div>
+        <div class="ps-sns-row" style="margin-bottom:0;">
+          <div class="ps-sns-icon" style="background:#fce7f3;">🎵</div>
+          <div>
+            <div class="ps-sns-name">TikTok</div>
+            <div class="ps-sns-price">30分 · 150🪙</div>
+          </div>
+          <div class="ps-unlock-btn locked">🔒</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-eyebrow">📱 こんな悩み、ありませんか？</div>
+    <h2 class="section-title">「やらなきゃ」と思っても<br>気づけばSNSを開いてる</h2>
+    <div class="divider"></div>
+    <p class="section-desc">現代人の集中力を妨げる最大の原因はスマホのSNS。でも「我慢しろ」では続かない。</p>
+    <div class="problems">
+      <div class="problem-card">
+        <div class="problem-icon">😵‍💫</div>
+        <div class="problem-title">気づいたらSNSを見ている</div>
+        <div class="problem-desc">勉強・仕事の合間についついスクロールしてしまう習慣</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">⏰</div>
+        <div class="problem-title">時間が溶けていく感覚</div>
+        <div class="problem-desc">「少しだけ」のつもりが気づけば1〜2時間経過している</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">😔</div>
+        <div class="problem-title">自己嫌悪のループ</div>
+        <div class="problem-desc">「また無駄にした」という罪悪感が次の集中を妨げる</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🚫</div>
+        <div class="problem-title">制限アプリが続かない</div>
+        <div class="problem-desc">「やめろ」「制限しろ」という強制は反発を生んで三日坊主</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how" id="how">
+  <div class="section-inner">
+    <div class="section-eyebrow">✨ 仕組み</div>
+    <h2 class="section-title">ゲーム感覚で<br>生活リズムを整える</h2>
+    <div class="divider"></div>
+    <p class="section-desc">SNSを「禁止」するのではなく、「ご褒美」に変える。タスクをこなすほど、SNSを楽しめる仕組み。</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">✅</div>
+        <div class="step-tag">STEP 1</div>
+        <div class="step-title">タスクを追加する</div>
+        <div class="step-desc">やるべきことを入力するだけ。AIが難易度に応じて自動でコインを設定してくれる。</div>
+      </div>
+      <div class="step active">
+        <div class="step-num">🪙</div>
+        <div class="step-tag">STEP 2</div>
+        <div class="step-title">タスクを完了してコインを獲得</div>
+        <div class="step-desc">タスクを完了するたびにコインがもらえる。集中強化ウィーク中は獲得コインが2倍！</div>
+      </div>
+      <div class="step">
+        <div class="step-num">🎮</div>
+        <div class="step-tag">STEP 3</div>
+        <div class="step-title">コインでSNSを解除する</div>
+        <div class="step-desc">貯めたコインを使ってYouTube・TikTok・Instagramを時間制限付きで楽しめる。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-eyebrow">🛠 機能紹介</div>
+    <h2 class="section-title">続けたくなる<br>工夫が詰まっている</h2>
+    <div class="divider"></div>
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <div class="feature-title">AI自動コイン設定</div>
+        <div class="feature-desc">タスク名を入力するだけで、AIが所要時間を推定してコイン報酬を自動設定。さらに、タスクをサブタスクに細分化することもできる。</div>
+        <span class="feature-badge">Gemini AI搭載</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔥</div>
+        <div class="feature-title">集中強化ウィーク</div>
+        <div class="feature-desc">特定の期間中はコイン獲得量が2倍に。短期間でモチベーションを上げてSNS解除をどんどん狙おう。</div>
+        <span class="feature-badge">コイン×2</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <div class="feature-title">主要SNSに対応</div>
+        <div class="feature-desc">YouTube・TikTok・Instagram・X・Threads など人気のSNSを時間制限付きで解除。コインが切れると自動でロック。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">ストリーク＆ランキング</div>
+        <div class="feature-desc">毎日コツコツ続けるとストリークが伸びる。ランキング機能で友達とモチベーションを競い合おう。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎨</div>
+        <div class="feature-title">ライト／ダークテーマ</div>
+        <div class="feature-desc">白ベースのライトモードと黒ベースのダークモードを選択可能。目的や気分に合わせて切り替えできる。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">登録不要で即スタート</div>
+        <div class="feature-desc">メールアドレスなしのゲストモードでもすぐに試せる。データを保存したい場合は無料のアカウント登録を。</div>
+        <span class="feature-badge">ゲストモードあり</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTER SECTION -->
+<section class="section tester">
+  <div class="section-inner">
+    <div class="section-eyebrow">🧪 テスターの方へ</div>
+    <h2 class="section-title">一緒にアプリを<br>育ててください</h2>
+    <div class="divider"></div>
+    <p class="section-desc">LifeRhythmは現在ベータ版です。実際に使ってみて気になった点・使いにくかった点をぜひ教えてください。皆さんのフィードバックがアプリをより良くします。</p>
+    <div class="tester-cards">
+      <div class="tester-card">
+        <div class="tester-card-icon">🎯</div>
+        <div class="tester-card-title">使い心地を確認して</div>
+        <div class="tester-card-desc">タスクの追加・完了・SNS解除の一連の流れがスムーズかどうか教えてください</div>
+      </div>
+      <div class="tester-card">
+        <div class="tester-card-icon">💬</div>
+        <div class="tester-card-title">わかりにくい部分を教えて</div>
+        <div class="tester-card-desc">説明文・ボタン名・チュートリアルで「え、これ何？」と思った箇所を教えてください</div>
+      </div>
+      <div class="tester-card">
+        <div class="tester-card-icon">🐛</div>
+        <div class="tester-card-title">バグを見つけて</div>
+        <div class="tester-card-desc">動作がおかしい・表示が崩れているなど気になった点を報告してください</div>
+      </div>
+      <div class="tester-card">
+        <div class="tester-card-icon">💡</div>
+        <div class="tester-card-title">「あったら嬉しい」機能</div>
+        <div class="tester-card-desc">「こんな機能があれば使いたい」というアイデアも大歓迎です</div>
+      </div>
+    </div>
+    <div class="tester-cta">
+      <a class="btn-primary" href="https://lilyprime.github.io/liferhythm-app/" target="_blank">🚀 LifeRhythmを試してみる</a>
+      <p class="tester-note">ゲストモードで登録不要 · スマホで動作確認推奨</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">⚡ LifeRhythm</div>
+  <p class="footer-tagline">SNSは「ご褒美」。タスクをこなして好きなSNSを楽しもう。</p>
+  <p class="footer-copy">© 2025 LifeRhythm — Beta Version</p>
+</footer>
+
+</body>
+</html>
