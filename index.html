@@ -31,6 +31,8 @@ input{font-family:inherit;}
 .auth-error{font-size:12px;color:var(--red);margin-top:10px;text-align:center;min-height:18px;}
 .auth-name-field{display:none;}
 .auth-name-field.show{display:block;}
+.auth-job-field{display:none;}
+.auth-job-field.show{display:block;}
 #loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:16px;}
 .spin{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
@@ -87,19 +89,6 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
 .add-todo-input{flex:1;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:9px 12px;color:var(--text);font-size:13px;}
 .add-todo-input:focus{outline:none;border-color:var(--accent);}
 .add-todo-btn{padding:9px 14px;border-radius:10px;background:var(--text);color:var(--bg);font-size:13px;font-weight:700;white-space:nowrap;}
-.combo-card{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px;position:relative;}
-.combo-card:last-child{margin-bottom:0;}
-.combo-card.done-today{border-color:#f59e0b55;background:#f59e0b08;}
-.combo-name{font-size:13px;font-weight:700;margin-bottom:8px;}
-.combo-tasks{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
-.combo-task-chip{font-size:11px;padding:3px 9px;border-radius:20px;border:1px solid var(--border);background:var(--card);display:flex;align-items:center;gap:4px;}
-.combo-task-chip.done{border-color:var(--green);background:#10b98115;color:var(--green);}
-.combo-task-chip.missing{opacity:.45;}
-.combo-footer{display:flex;align-items:center;justify-content:space-between;}
-.combo-bonus{font-size:12px;font-weight:700;color:var(--gold);}
-.combo-status{font-size:11px;color:var(--muted);}
-.combo-del{position:absolute;top:10px;right:10px;background:none;color:#71717a;font-size:13px;width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;}
-.combo-del:hover{background:#ef444420;color:var(--red);}
 .ent-item{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--border);}
 .ent-item:last-child{border-bottom:none;}
 .ent-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
@@ -153,10 +142,6 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
 .modal-input:focus{outline:none;border-color:var(--accent);}
 .num-input{width:90px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:8px 12px;color:var(--text);font-size:14px;text-align:center;}
 .num-input:focus{outline:none;border-color:var(--accent);}
-.combo-task-pick{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;background:var(--card2);margin-bottom:6px;cursor:pointer;}
-.combo-task-pick input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);}
-.combo-task-pick label{flex:1;font-size:13px;cursor:pointer;}
-.combo-task-pick .reward-hint{font-size:11px;color:var(--muted);}
 .history-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
 .history-item:last-child{border-bottom:none;}
 .history-sign{font-size:16px;font-weight:800;}
@@ -225,6 +210,16 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
     <div class="auth-name-field" id="name-field">
       <div class="auth-field"><label>&#12491;&#12483;&#12463;&#12493;&#12540;&#12512;</label><input class="auth-input" id="auth-name" type="text" placeholder="&#20363;: &#12373;&#12367;&#12425;"/></div>
     </div>
+    <div class="auth-job-field" id="job-field">
+      <div class="auth-field"><label>&#32077;&#26989;</label>
+        <select class="guest-select" id="auth-job">
+          <option value="&#39640;&#26657;&#29983;">&#39640;&#26657;&#29983;</option>
+          <option value="&#22823;&#23398;&#29983;">&#22823;&#23398;&#29983;</option>
+          <option value="&#31038;&#20250;&#20154;">&#31038;&#20250;&#20154;</option>
+          <option value="&#12381;&#12398;&#20182;">&#12381;&#12398;&#20182;</option>
+        </select>
+      </div>
+    </div>
     <div class="auth-field"><label>&#12513;&#12540;&#12523;&#12450;&#12489;&#12524;&#12473;</label><input class="auth-input" id="auth-email" type="email" placeholder="you@example.com"/></div>
     <div class="auth-field"><label>&#12497;&#12473;&#12527;&#12540;&#12489;&#65288;6&#25991;&#23383;&#20197;&#19978;&#65289;</label><input class="auth-input" id="auth-pass" type="password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"/></div>
     <button class="auth-submit" id="auth-btn" onclick="doAuth()">&#12525;&#12464;&#12452;&#12531;</button>
@@ -235,11 +230,9 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
       <div class="auth-field"><label>&#24180;&#40802;</label><input class="auth-input" id="guest-age" type="number" placeholder="20" min="10" max="100"/></div>
       <div class="auth-field"><label>&#32077;&#26989;</label>
         <select class="guest-select" id="guest-job">
-          <option value="&#22823;&#23398;&#29983;">&#22823;&#23398;&#29983;</option>
           <option value="&#39640;&#26657;&#29983;">&#39640;&#26657;&#29983;</option>
-          <option value="&#31192;&#23398;&#29983;">&#31192;&#23398;&#29983;</option>
+          <option value="&#22823;&#23398;&#29983;">&#22823;&#23398;&#29983;</option>
           <option value="&#31038;&#20250;&#20154;">&#31038;&#20250;&#20154;</option>
-          <option value="&#20027;&#23507;&#12539;&#20027;&#22253;">&#20027;&#23507;&#12539;&#20027;&#22253;</option>
           <option value="&#12381;&#12398;&#20182;">&#12381;&#12398;&#20182;</option>
         </select>
       </div>
@@ -268,23 +261,6 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
     <button class="nav-btn" onclick="goto('rank')" id="nav-rank"><span class="nav-icon">&#127942;</span>&#12521;&#12531;&#12463;</button>
     <button class="nav-btn" onclick="goto('profile')" id="nav-profile"><span class="nav-icon">&#128100;</span>&#12503;&#12525;&#12501;&#12451;&#12540;&#12523;</button>
   </nav>
-</div>
-<div class="modal-overlay" id="addcombo-modal">
-  <div class="modal-box">
-    <div class="modal-title">&#128293; &#12467;&#12531;&#12508;&#12434;&#36861;&#21152;</div>
-    <input class="modal-input" id="combo-name" type="text" placeholder="&#12467;&#12531;&#12508;&#21517;&#65288;&#20363;: &#12514;&#12540;&#12491;&#12531;&#12464;&#12523;&#12540;&#12486;&#12451;&#12531;&#65289;"/>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">&#36948;&#25104;&#12377;&#12427;&#12479;&#12473;&#12463;&#12434;&#36984;&#25246;&#65306;</div>
-    <div id="combo-task-list" style="max-height:200px;overflow-y:auto;"></div>
-    <div style="display:flex;align-items:center;gap:10px;margin-top:12px;">
-      <span style="font-size:13px;color:var(--muted);">&#12508;&#12540;&#12490;&#12473;:</span>
-      <input class="num-input" type="number" id="combo-bonus" value="50" min="10" max="500" step="10"/>
-      <span style="font-size:13px;color:var(--muted);">&#129689;</span>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-primary" style="flex:1" onclick="saveCombo()">&#36861;&#21152;</button>
-      <button class="btn btn-outline" style="flex:1" onclick="closeModal('addcombo-modal')">&#12461;&#12515;&#12531;&#12475;&#12523;</button>
-    </div>
-  </div>
 </div>
 <div class="modal-overlay" id="milestone-modal">
   <div class="modal-box">
@@ -326,7 +302,7 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
 const firebaseConfig={apiKey:"AIzaSyAch5QXGqpzu2ZzR4LGVuxiGmV8Y_BBt-I",authDomain:"liferhythm-cb0e2.firebaseapp.com",projectId:"liferhythm-cb0e2",storageBucket:"liferhythm-cb0e2.firebasestorage.app",messagingSenderId:"549059630729",appId:"1:549059630729:web:36fb8d5440644caab01858",measurementId:"G-F4K6WHLRF6"};
 firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth(),db=firebase.firestore();
-function defaultState(name){return{displayName:name||'ユーザー',coins:100,todayEarned:0,totalEarned:100,focusWeekActive:true,focusWeekMultiplier:2,focusWeekDaysLeft:3,streak:0,lastDate:today(),todos:[],combos:[],history:[],settings:{weeklyBoost:true},nextId:1,access:{},theme:'light'};}
+function defaultState(name){return{displayName:name||'ユーザー',coins:100,todayEarned:0,totalEarned:100,focusWeekActive:true,focusWeekMultiplier:2,focusWeekDaysLeft:3,streak:0,lastDate:today(),todos:[],history:[],settings:{weeklyBoost:true},nextId:1,access:{},theme:'light'};}
 let state=null,currentUser=null,saveTimer=null;
 function today(){const n=new Date();return n.getFullYear()+'-'+(n.getMonth()+1)+'-'+n.getDate();}
 // v0.5: 通知システム
@@ -338,9 +314,9 @@ function applyTheme(){const isDark=(state&&state.theme==='dark');document.docume
 function showNotifBanner(){if(typeof Notification!=='undefined'&&Notification.permission==='default')document.getElementById('notif-banner').classList.add('show');}
 function requestNotifPermission(){if(typeof Notification==='undefined'){showToast('この環境では通知は利用できません');return;}Notification.requestPermission().then(p=>{document.getElementById('notif-banner').classList.remove('show');showToast(p==='granted'?'🔔 通知が許可されました！':'通知が拒否されました');if(state&&state.currentPage==='profile')renderPage();});}
 function sendNotif(title,body){if(typeof Notification==='undefined'||Notification.permission!=='granted')return;try{new Notification(title,{body,icon:'https://em-content.zobj.net/source/apple/354/high-voltage_26a1.png'});}catch(e){}}
-let authMode='login';
-function switchTab(mode){authMode=mode;document.querySelectorAll('.auth-tab').forEach((t,i)=>{t.classList.toggle('active',(i===0&&mode==='login')||(i===1&&mode==='signup'));});document.getElementById('auth-btn').textContent=mode==='login'?'ログイン':'アカウント作成';document.getElementById('name-field').classList.toggle('show',mode==='signup');document.getElementById('auth-error').textContent='';}
-function doAuth(){const email=document.getElementById('auth-email').value.trim(),pass=document.getElementById('auth-pass').value,name=document.getElementById('auth-name').value.trim()||'ユーザー',errEl=document.getElementById('auth-error');errEl.textContent='';if(!email||!pass){errEl.textContent='メールとパスワードを入力してください';return;}document.getElementById('auth-btn').textContent='処理中...';if(authMode==='login'){auth.signInWithEmailAndPassword(email,pass).catch(e=>{errEl.textContent=authErrMsg(e.code);document.getElementById('auth-btn').textContent='ログイン';});}else{if(pass.length<6){errEl.textContent='パスワードは6文字以上';document.getElementById('auth-btn').textContent='アカウント作成';return;}auth.createUserWithEmailAndPassword(email,pass).then(cred=>cred.user.updateProfile({displayName:name})).catch(e=>{errEl.textContent=authErrMsg(e.code);document.getElementById('auth-btn').textContent='アカウント作成';});}}
+let authMode='login',pendingSignupJob='その他';
+function switchTab(mode){authMode=mode;document.querySelectorAll('.auth-tab').forEach((t,i)=>{t.classList.toggle('active',(i===0&&mode==='login')||(i===1&&mode==='signup'));});document.getElementById('auth-btn').textContent=mode==='login'?'ログイン':'アカウント作成';document.getElementById('name-field').classList.toggle('show',mode==='signup');document.getElementById('job-field').classList.toggle('show',mode==='signup');document.getElementById('auth-error').textContent='';}
+function doAuth(){const email=document.getElementById('auth-email').value.trim(),pass=document.getElementById('auth-pass').value,name=document.getElementById('auth-name').value.trim()||'ユーザー',errEl=document.getElementById('auth-error');errEl.textContent='';if(!email||!pass){errEl.textContent='メールとパスワードを入力してください';return;}document.getElementById('auth-btn').textContent='処理中...';if(authMode==='login'){auth.signInWithEmailAndPassword(email,pass).catch(e=>{errEl.textContent=authErrMsg(e.code);document.getElementById('auth-btn').textContent='ログイン';});}else{if(pass.length<6){errEl.textContent='パスワードは6文字以上';document.getElementById('auth-btn').textContent='アカウント作成';return;}pendingSignupJob=(document.getElementById('auth-job')?.value)||'その他';auth.createUserWithEmailAndPassword(email,pass).then(cred=>cred.user.updateProfile({displayName:name})).catch(e=>{errEl.textContent=authErrMsg(e.code);document.getElementById('auth-btn').textContent='アカウント作成';});}}
 function authErrMsg(c){const m={'auth/user-not-found':'メールアドレスが見つかりません','auth/wrong-password':'パスワードが間違っています','auth/email-already-in-use':'このメールはすでに使われています','auth/invalid-email':'メールアドレスの形式が正しくありません','auth/weak-password':'パスワードが短すぎます','auth/invalid-credential':'メールまたはパスワードが間違っています'};return m[c]||'エラー('+c+')';}
 function doLogout(){if(state&&state.isGuest){state=null;localStorage.removeItem('guestState');document.getElementById('main-app').style.display='none';document.getElementById('auth-screen').style.display='flex';}else{auth.signOut();}}
 function toggleGuestForm(){const f=document.getElementById('guest-form');f.style.display=f.style.display==='none'||!f.style.display?'block':'none';}
@@ -358,7 +334,7 @@ function checkITutProgress(){if(!state||!state.itutStep)return;if(state.itutStep
 function skipITut(){state.itutStep=0;document.getElementById('itut-bar').style.display='none';scheduleSave();}
 document.addEventListener('click',e=>{if(e.target.id==='itut-skip-btn')skipITut();});
 document.addEventListener('click',e=>{if(e.target.id==='guest-toggle-btn')toggleGuestForm();if(e.target.id==='guest-start-btn')startGuest();if(e.target.id==='tut-btn')tutNext();if(e.target.id==='tut-choose-light'){state.theme='light';applyTheme();finishTutorial();}if(e.target.id==='tut-choose-dark'){state.theme='dark';applyTheme();finishTutorial();}});
-async function loadUserData(user){const ref=db.collection('users').doc(user.uid),snap=await ref.get(),name=user.displayName||'ユーザー';if(snap.exists){state=snap.data();if(!state.access)state.access={};if(!state.combos)state.combos=[];if(!state.todos)state.todos=[];if(!state.theme)state.theme='light';if(state.lastDate!==today()){state.todayEarned=0;state.lastDate=today();state.todos.forEach(t=>t.done=false);await saveNow();}}else{state=defaultState(name);await saveNow();}document.getElementById('user-name-disp').textContent=state.displayName;}
+async function loadUserData(user){const ref=db.collection('users').doc(user.uid),snap=await ref.get(),name=user.displayName||'ユーザー';if(snap.exists){state=snap.data();if(!state.access)state.access={};if(!state.todos)state.todos=[];if(!state.theme)state.theme='light';if(state.lastDate!==today()){state.todayEarned=0;state.lastDate=today();state.todos.forEach(t=>t.done=false);await saveNow();}}else{state=defaultState(name);state.job=pendingSignupJob;await saveNow();}document.getElementById('user-name-disp').textContent=state.displayName;}
 function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(saveNow,1000);}
 async function saveNow(){if(!state)return;if(state.isGuest){localStorage.setItem('guestState',JSON.stringify(state));return;}if(!currentUser)return;await db.collection('users').doc(currentUser.uid).set(state);}
 function initApp(){applyTheme();updateClock();startAccessTimer();showNotifBanner();goto('home');setTimeout(()=>{renderITutBar();if(!state.tutorialDone)showTutorial();},400);}
@@ -373,8 +349,6 @@ function renderPage(){if(!state)return;const v=document.getElementById('view'),p
 function pageHome(){
   const todos=state.todos||[],done=todos.filter(t=>t.done).length,total=todos.length,pct=total?Math.round(done/total*100):0;
   const todoRows=todos.length===0?'<div class="todo-empty">タスクがありません<br><span style="font-size:12px;">下の入力欄から追加してください</span></div>':todos.map(t=>'<div class="todo-item'+(t.done?' done':'')+'" data-id="'+t.id+'"><div class="todo-check todo-check-btn" data-id="'+t.id+'">'+(t.done?'✓':'')+'</div><div class="todo-text">'+escHtml(t.text)+'</div><div class="todo-reward">+'+t.reward+(state.focusWeekActive?'<span style="color:#f59e0b;">&times;'+state.focusWeekMultiplier+'</span>':'')+'🪙</div>'+(t.done?'':'<button class="todo-ai-btn" data-id="'+t.id+'">🤖</button>')+'<button class="todo-del" data-id="'+t.id+'">&times;</button></div>').join('');
-  const combos=state.combos||[];
-  const comboSection=combos.length===0?'':'<div class="card" style="margin-top:14px;"><div class="card-title">🔥 コンボボーナス<span style="margin-left:auto;"><button class="btn btn-outline" style="font-size:11px;padding:3px 9px;" onclick="openAddCombo()">+ 追加</button></span></div>'+combos.map(c=>renderComboCard(c)).join('')+'</div>';
   const hist=(state.history||[]).slice(-5).reverse().map(h=>'<div class="history-item"><div class="history-sign '+h.type+'">'+(h.type==='plus'?'+':'-')+h.amount+'</div><div class="history-desc">'+h.desc+'</div><div class="history-time">'+h.time+'</div></div>').join('')||'<div style="font-size:13px;color:var(--muted);">まだ履歴がありません</div>';
   const mode=currentMode(),mult=getMultiplier(mode);
   const locked=ENTERTAINMENTS.filter(e=>!isAccessActive(e.id)).map(e=>({...e,price:Math.round(e.basePrice*mult)})).sort((a,b)=>a.price-b.price);
@@ -387,23 +361,18 @@ function pageHome(){
     +goalBanner
     +'<button class="tut-start-btn" id="tut-again-btn">📖 チュートリアルを始める</button>'
     +'<div class="coin-strip"><div class="coin-orb">🪙</div><div><div class="coin-val">'+(state.coins||0).toLocaleString()+'</div><div class="coin-label">LifeCoins 残高</div><div class="coin-today">今日 +'+(state.todayEarned||0)+' コイン獲得済み</div></div></div>'
-    +'<div class="card"><div class="card-title">✅ 今日のタスク<span style="margin-left:auto;">'+(combos.length===0?'<button class="btn btn-outline" style="font-size:11px;padding:3px 9px;" onclick="openAddCombo()">🔥 コンボ追加</button>':'')+'</span></div>'
+    +'<div class="card"><div class="card-title">✅ 今日のタスク</div>'
     +todoRows
     +'<div class="add-todo-row"><input class="add-todo-input" id="quick-todo-text" type="text" placeholder="タスクを入力..." maxlength="50"/><div class="add-todo-reward-wrap"><input class="num-input" id="quick-todo-reward" type="number" value="" placeholder="🤖" min="5" max="500" step="5" style="width:72px;"/><span style="font-size:11px;color:var(--muted);">🪙</span></div><button class="add-todo-btn" id="quick-add-btn" onclick="quickAddTodo()">追加</button></div>'
     +'<div class="template-row">'+templateChips+'</div>'
     +(total>0?'<div style="margin-top:12px;"><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;"><span>進捗</span><span>'+done+'/'+total+' 完了</span></div><div class="progress-wrap"><div class="progress-bar" style="width:'+pct+'%"></div></div>'+(done===total&&total>0?'<div style="font-size:11px;color:var(--gold);margin-top:5px;font-weight:700;">🎉 全タスク完了！</div>':'<div style="font-size:11px;color:var(--muted);margin-top:5px;">全タスク完了でボーナス +50 🪙</div>')+'</div>':'')+'</div>'
-    +comboSection
     +(state.focusWeekActive?'<div class="week-card" style="margin-top:14px;"><div class="week-active-tag">🔥 集中強化ウィーク 開催中！</div><div style="font-size:13px;">獲得コインが <b style="color:var(--gold)">&times;'+state.focusWeekMultiplier+' 倍</b>！</div><div style="font-size:26px;font-weight:800;color:var(--gold);margin:6px 0;">残り '+state.focusWeekDaysLeft+' 日</div></div>':'')
     +'<div class="card" style="margin-top:14px;"><div class="card-title">📜 コイン履歴</div>'+hist+'</div></div>';
 }
-function renderComboCard(c){const tasks=c.taskIds.map(id=>state.todos.find(t=>t.id===id)).filter(Boolean);const allDone=tasks.length>0&&tasks.every(t=>t.done),doneToday=c.lastCompletedDate===today(),dc=tasks.filter(t=>t.done).length;const chips=c.taskIds.map(id=>{const t=state.todos.find(x=>x.id===id);if(!t)return'<span class="combo-task-chip missing">(削除済)</span>';return'<span class="combo-task-chip'+(t.done?' done':'')+'">'+( t.done?'✅':'⬜')+' '+escHtml(t.text)+'</span>';}).join('');const st=doneToday?'✨ 本日達成済み！':tasks.length===0?'タスク削除済':allDone?'達成条件OK！':'あと'+(tasks.length-dc)+'個で達成';return'<div class="combo-card'+(doneToday?' done-today':'')+'"><button class="combo-del" data-cid="'+c.id+'">&times;</button><div class="combo-name">🔗 '+escHtml(c.name)+'</div><div class="combo-tasks">'+chips+'</div><div class="combo-footer"><div class="combo-bonus">+'+c.bonus+'🪙 ボーナス</div><div class="combo-status">'+st+'</div></div></div>';}
-function bindHome(){document.querySelectorAll('.todo-check-btn').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();const todo=state.todos.find(t=>t.id===parseInt(btn.dataset.id));if(todo&&!todo.done)completeTodo(todo);});});document.querySelectorAll('.todo-del').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();state.todos=state.todos.filter(t=>t.id!==parseInt(btn.dataset.id));showToast('🗑️ タスクを削除しました');scheduleSave();renderPage();});});document.querySelectorAll('.todo-ai-btn').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();generateMilestones(parseInt(btn.dataset.id));});});document.querySelectorAll('.combo-del').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();state.combos=state.combos.filter(c=>c.id!==parseInt(btn.dataset.cid));showToast('🗑️ コンボを削除しました');scheduleSave();renderPage();});});const inp=document.getElementById('quick-todo-text');if(inp)inp.addEventListener('keydown',e=>{if(e.key==='Enter')quickAddTodo();});const gb=document.getElementById('goal-banner-unlock');if(gb)gb.addEventListener('click',()=>goto('shop'));document.querySelectorAll('.template-chip').forEach(b=>b.addEventListener('click',()=>useTemplate(b.dataset.tmpl)));const tab=document.getElementById('tut-again-btn');if(tab)tab.addEventListener('click',startInteractiveTutorial);}
+function bindHome(){document.querySelectorAll('.todo-check-btn').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();const todo=state.todos.find(t=>t.id===parseInt(btn.dataset.id));if(todo&&!todo.done)completeTodo(todo);});});document.querySelectorAll('.todo-del').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();state.todos=state.todos.filter(t=>t.id!==parseInt(btn.dataset.id));showToast('🗑️ タスクを削除しました');scheduleSave();renderPage();});});document.querySelectorAll('.todo-ai-btn').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();generateMilestones(parseInt(btn.dataset.id));});});const inp=document.getElementById('quick-todo-text');if(inp)inp.addEventListener('keydown',e=>{if(e.key==='Enter')quickAddTodo();});const gb=document.getElementById('goal-banner-unlock');if(gb)gb.addEventListener('click',()=>goto('shop'));document.querySelectorAll('.template-chip').forEach(b=>b.addEventListener('click',()=>useTemplate(b.dataset.tmpl)));const tab=document.getElementById('tut-again-btn');if(tab)tab.addEventListener('click',startInteractiveTutorial);}
 function useTemplate(text){const el=document.getElementById('quick-todo-text');if(el){el.value=text;el.focus();quickAddTodo();}}
-function completeTodo(todo){todo.done=true;let earned=todo.reward;if(state.focusWeekActive)earned*=state.focusWeekMultiplier;const oldCoins=state.coins||0;state.coins=oldCoins+earned;state.todayEarned=(state.todayEarned||0)+earned;state.totalEarned=(state.totalEarned||0)+earned;addHistory('plus',earned,todo.text+'—達成');showToast('✅ +'+earned+'🪙 獲得！');const m=currentMode(),ml=getMultiplier(m);const newlyUnlockable=ENTERTAINMENTS.find(e=>!isAccessActive(e.id)&&oldCoins<Math.round(e.basePrice*ml)&&state.coins>=Math.round(e.basePrice*ml));if(newlyUnlockable)setTimeout(()=>showToast('🎉 '+newlyUnlockable.name+'が解除できます！ショップへ →'),1200);if(state.todos.every(t=>t.done)&&state.todos.length>0){setTimeout(()=>{state.coins+=50;state.todayEarned+=50;state.totalEarned+=50;addHistory('plus',50,'全タスク完了ボーナス');showToast('🎉 全タスク完了ボーナス +50🪙！');scheduleSave();renderPage();},600);}checkCombos();scheduleSave();renderPage();checkITutProgress();}
-function checkCombos(){(state.combos||[]).forEach(c=>{if(c.lastCompletedDate===today())return;const tasks=c.taskIds.map(id=>state.todos.find(t=>t.id===id)).filter(Boolean);if(!tasks.length||!tasks.every(t=>t.done))return;c.lastCompletedDate=today();state.coins+=c.bonus;state.todayEarned+=c.bonus;state.totalEarned+=c.bonus;addHistory('plus',c.bonus,'🔥コンボ達成: '+c.name);setTimeout(()=>showToast('🔥 コンボ「'+c.name+'」達成！ +'+c.bonus+'🪙'),1000);});}
+function completeTodo(todo){todo.done=true;let earned=todo.reward;if(state.focusWeekActive)earned*=state.focusWeekMultiplier;const oldCoins=state.coins||0;state.coins=oldCoins+earned;state.todayEarned=(state.todayEarned||0)+earned;state.totalEarned=(state.totalEarned||0)+earned;addHistory('plus',earned,todo.text+'—達成');showToast('✅ +'+earned+'🪙 獲得！');const m=currentMode(),ml=getMultiplier(m);const newlyUnlockable=ENTERTAINMENTS.find(e=>!isAccessActive(e.id)&&oldCoins<Math.round(e.basePrice*ml)&&state.coins>=Math.round(e.basePrice*ml));if(newlyUnlockable)setTimeout(()=>showToast('🎉 '+newlyUnlockable.name+'が解除できます！ショップへ →'),1200);if(state.todos.every(t=>t.done)&&state.todos.length>0){setTimeout(()=>{state.coins+=50;state.todayEarned+=50;state.totalEarned+=50;addHistory('plus',50,'全タスク完了ボーナス');showToast('🎉 全タスク完了ボーナス +50🪙！');scheduleSave();renderPage();},600);}scheduleSave();renderPage();checkITutProgress();}
 async function quickAddTodo(){const tEl=document.getElementById('quick-todo-text'),rEl=document.getElementById('quick-todo-reward'),addBtn=document.getElementById('quick-add-btn');if(!tEl)return;const text=tEl.value.trim();if(!text){showToast('❌ タスク名を入力してください');return;}let reward=parseInt(rEl.value);if(!reward||isNaN(reward)){if(addBtn){addBtn.textContent='⏳ AI設定中...';addBtn.disabled=true;}const result=await callGemini('以下のタスクに適切な報酬コインを提案してください。\nタスク名: "'+text+'"\n所要時間を推定してコインを決定。目安: 1～5分=10, 5～15分=20, 15～30分=50, 30～60分=100, 60分以上=150\nJSON形式のみで回答: {"coins": 数値(10～200), "minutes": 推定分数}');if(addBtn){addBtn.textContent='追加';addBtn.disabled=false;}reward=result?.coins||20;if(result)showToast('🤖 AI提案: '+reward+'🪙 (推定'+result.minutes+'分)');}state.todos.push({id:state.nextId++,text,reward,done:false});tEl.value='';rEl.value='';scheduleSave();renderPage();checkITutProgress();setTimeout(()=>{const el=document.getElementById('quick-todo-text');if(el)el.focus();},50);}
-function openAddCombo(){if((state.todos||[]).length<2){showToast('❌ コンボにはタスク2つ以上必要');return;}document.getElementById('combo-task-list').innerHTML=state.todos.map(t=>'<div class="combo-task-pick"><input type="checkbox" id="cp'+t.id+'" value="'+t.id+'"/><label for="cp'+t.id+'">'+escHtml(t.text)+'</label><span class="reward-hint">+'+t.reward+'🪙</span></div>').join('');document.getElementById('combo-name').value='';document.getElementById('combo-bonus').value='50';openModal('addcombo-modal');}
-function saveCombo(){const name=document.getElementById('combo-name').value.trim(),bonus=parseInt(document.getElementById('combo-bonus').value)||50,checked=[...document.querySelectorAll('#combo-task-list input:checked')].map(cb=>parseInt(cb.value));if(!name){showToast('❌ コンボ名を入力してください');return;}if(checked.length<2){showToast('❌ 2つ以上選択してください');return;}if(!state.combos)state.combos=[];state.combos.push({id:state.nextId++,name,taskIds:checked,bonus,lastCompletedDate:null});closeModal('addcombo-modal');showToast('🔥 コンボ「'+name+'」を追加！');scheduleSave();renderPage();}
 const ENTERTAINMENTS=[{id:'yt',icon:'📺',name:'YouTube',bg:'#ff000022',br:'#ff000044',basePrice:30,desc:'動画視聴',duration:30,url:'https://youtube.com'},{id:'tt',icon:'🎵',name:'TikTok',bg:'#ffffff11',br:'#ffffff22',basePrice:20,desc:'ショート動画',duration:15,url:'https://tiktok.com'},{id:'tw',icon:'🐦',name:'X',bg:'#1d9bf022',br:'#1d9bf044',basePrice:15,desc:'タイムライン',duration:15,url:'https://x.com'},{id:'ig',icon:'📸',name:'Instagram',bg:'#e1306c22',br:'#e1306c44',basePrice:15,desc:'フィード',duration:15,url:'https://instagram.com'},{id:'nt',icon:'🎬',name:'Netflix',bg:'#e5000022',br:'#e5000044',basePrice:50,desc:'動画視聴',duration:60,url:'https://netflix.com'},{id:'gm',icon:'🎮',name:'ゲーム',bg:'#18181b22',br:'#18181b44',basePrice:40,desc:'ゲームプレイ',duration:30,url:''}];
 function isAccessActive(id){const u=state.access&&state.access[id];return u&&u>Date.now();}
 function remainingSec(id){const u=state.access&&state.access[id];if(!u)return 0;return Math.max(0,Math.ceil((u-Date.now())/1000));}
@@ -429,8 +398,9 @@ function addHistory(type,amount,desc){if(!state.history)state.history=[];const n
 function openModal(id){document.getElementById(id).classList.add('open');const bar=document.getElementById('itut-bar');if(bar)bar.style.display='none';}
 function closeModal(id){document.getElementById(id).classList.remove('open');renderITutBar();}
 document.querySelectorAll('.modal-overlay').forEach(o=>{o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});});
-let toastTimer;
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3000);}
+let toastTimer,toastShownAt=0;
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastShownAt=Date.now();toastTimer=setTimeout(()=>t.classList.remove('show'),3000);}
+document.addEventListener('click',()=>{const t=document.getElementById('toast');if(t&&t.classList.contains('show')&&Date.now()-toastShownAt>300){clearTimeout(toastTimer);t.classList.remove('show');}},true);
 function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 setInterval(updateClock,30000);
 </script>
