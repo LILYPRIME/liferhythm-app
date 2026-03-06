@@ -399,8 +399,10 @@ function openModal(id){document.getElementById(id).classList.add('open');const b
 function closeModal(id){document.getElementById(id).classList.remove('open');renderITutBar();}
 document.querySelectorAll('.modal-overlay').forEach(o=>{o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});});
 let toastTimer,toastShownAt=0;
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastShownAt=Date.now();toastTimer=setTimeout(()=>t.classList.remove('show'),3000);}
-document.addEventListener('click',()=>{const t=document.getElementById('toast');if(t&&t.classList.contains('show')&&Date.now()-toastShownAt>300){clearTimeout(toastTimer);t.classList.remove('show');}},true);
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastShownAt=Date.now();toastTimer=setTimeout(()=>t.classList.remove('show'),4000);}
+function _dismissToast(){const t=document.getElementById('toast');if(t&&t.classList.contains('show')&&Date.now()-toastShownAt>300){clearTimeout(toastTimer);t.classList.remove('show');}}
+document.addEventListener('click',_dismissToast,true);
+document.addEventListener('touchend',_dismissToast,true);
 function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 setInterval(updateClock,30000);
 </script>
