@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>LifeRhythm Admin</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0f0f13;color:#e2e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;}
+a{color:inherit;text-decoration:none;}
+
+/* Auth */
+#auth-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;}
+.auth-card{background:#1e1e2e;border:1px solid #2d2d3d;border-radius:16px;padding:40px;width:340px;text-align:center;}
+.auth-logo{font-size:22px;font-weight:800;color:#f59e0b;margin-bottom:8px;}
+.auth-sub{font-size:13px;color:#64748b;margin-bottom:28px;}
+.auth-input{width:100%;background:#0f0f13;border:1px solid #2d2d3d;border-radius:8px;padding:10px 14px;color:#e2e8f0;font-size:14px;margin-bottom:10px;outline:none;}
+.auth-input:focus{border-color:#f59e0b;}
+.auth-btn{width:100%;background:#f59e0b;border:none;border-radius:8px;padding:11px;color:#0f0f13;font-weight:700;font-size:14px;cursor:pointer;margin-top:4px;}
+.auth-btn:hover{background:#fbbf24;}
+.auth-error{color:#f87171;font-size:13px;margin-top:10px;}
+
+/* Dashboard */
+#dashboard{display:none;padding:24px;}
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid #2d2d3d;}
+.top-logo{font-size:18px;font-weight:800;color:#f59e0b;}
+.top-right{display:flex;align-items:center;gap:12px;font-size:13px;color:#64748b;}
+.logout-btn{background:transparent;border:1px solid #2d2d3d;border-radius:6px;padding:5px 12px;color:#94a3b8;cursor:pointer;font-size:12px;}
+.logout-btn:hover{border-color:#f59e0b;color:#f59e0b;}
+.refresh-btn{background:#f59e0b22;border:1px solid #f59e0b44;border-radius:6px;padding:5px 12px;color:#f59e0b;cursor:pointer;font-size:12px;}
+.refresh-btn:hover{background:#f59e0b33;}
+
+/* Stats Grid */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:24px;}
+.stat-card{background:#1e1e2e;border:1px solid #2d2d3d;border-radius:12px;padding:18px;}
+.stat-label{font-size:11px;color:#64748b;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+.stat-val{font-size:28px;font-weight:800;color:#f59e0b;}
+.stat-sub{font-size:11px;color:#64748b;margin-top:4px;}
+
+/* Charts */
+.charts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:24px;}
+.chart-card{background:#1e1e2e;border:1px solid #2d2d3d;border-radius:12px;padding:18px;}
+.chart-title{font-size:13px;font-weight:700;color:#94a3b8;margin-bottom:14px;}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.bar-label{font-size:12px;color:#94a3b8;width:80px;flex-shrink:0;text-align:right;}
+.bar-wrap{flex:1;background:#0f0f13;border-radius:4px;height:14px;}
+.bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#f59e0b,#fde68a);transition:width .4s;}
+.bar-count{font-size:11px;color:#64748b;width:30px;text-align:right;flex-shrink:0;}
+
+/* User Table */
+.section-title{font-size:14px;font-weight:700;color:#94a3b8;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.table-wrap{background:#1e1e2e;border:1px solid #2d2d3d;border-radius:12px;overflow:hidden;margin-bottom:24px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead{background:#16162a;}
+th{padding:10px 14px;text-align:left;font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;cursor:pointer;user-select:none;white-space:nowrap;}
+th:hover{color:#f59e0b;}
+th.sorted{color:#f59e0b;}
+td{padding:10px 14px;border-top:1px solid #2d2d3d;vertical-align:middle;}
+tr:hover td{background:#16162a;}
+.rank-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;}
+.rank-bronze{background:#cd7f3222;color:#cd7f32;border:1px solid #cd7f3244;}
+.rank-silver{background:#9ca3af22;color:#9ca3af;border:1px solid #9ca3af44;}
+.rank-gold{background:#ffd70022;color:#ffd700;border:1px solid #ffd70044;}
+.rank-platinum{background:#e2e8f022;color:#e2e8f0;border:1px solid #e2e8f044;}
+.rank-diamond{background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;}
+.pill{display:inline-block;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:600;}
+.pill-green{background:#22c55e22;color:#22c55e;}
+.pill-muted{background:#2d2d3d;color:#64748b;}
+.todo-mini{font-size:11px;color:#64748b;}
+.todo-done{color:#22c55e;}
+
+/* Expand row */
+.expand-row td{padding:0;}
+.expand-inner{padding:16px 24px;background:#16162a;border-top:1px solid #2d2d3d;}
+.expand-inner h4{font-size:12px;color:#64748b;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;}
+.hist-list{display:flex;flex-direction:column;gap:4px;max-height:200px;overflow-y:auto;}
+.hist-item{display:flex;gap:10px;font-size:12px;color:#94a3b8;}
+.hist-plus{color:#22c55e;font-weight:700;width:50px;}
+.hist-minus{color:#f87171;font-weight:700;width:50px;}
+.todo-list{display:flex;flex-direction:column;gap:4px;}
+.todo-item-row{font-size:12px;padding:4px 8px;border-radius:4px;background:#0f0f13;display:flex;justify-content:space-between;}
+
+/* Loading */
+#loading-overlay{display:none;position:fixed;inset:0;background:#0f0f1399;align-items:center;justify-content:center;z-index:100;}
+.spinner{width:32px;height:32px;border:3px solid #2d2d3d;border-top-color:#f59e0b;border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* Error */
+.error-box{background:#f8717122;border:1px solid #f87171;border-radius:10px;padding:16px;color:#f87171;font-size:13px;margin-bottom:16px;}
+
+/* Sort indicator */
+.sort-arrow{margin-left:4px;opacity:.5;}
+
+/* Responsive */
+@media(max-width:600px){
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  table{font-size:11px;}
+  td,th{padding:8px 10px;}
+}
+</style>
+</head>
+<body>
+
+<!-- Auth -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">⚡ LifeRhythm Admin</div>
+    <div class="auth-sub">管理者のみアクセス可能</div>
+    <input class="auth-input" id="email" type="email" placeholder="メールアドレス" autocomplete="email"/>
+    <input class="auth-input" id="pass" type="password" placeholder="パスワード"/>
+    <button class="auth-btn" onclick="doLogin()">ログイン</button>
+    <div class="auth-error" id="auth-err"></div>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboard">
+  <div class="top-bar">
+    <div class="top-logo">⚡ LifeRhythm Admin</div>
+    <div class="top-right">
+      <span id="admin-email-disp"></span>
+      <button class="refresh-btn" onclick="loadData()">↻ 更新</button>
+      <button class="logout-btn" onclick="doLogout()">ログアウト</button>
+    </div>
+  </div>
+
+  <div class="error-box" id="err-box" style="display:none;"></div>
+
+  <!-- Aggregate Stats -->
+  <div class="stats-grid" id="stats-grid"></div>
+
+  <!-- Charts -->
+  <div class="charts-grid" id="charts-grid"></div>
+
+  <!-- User Table -->
+  <div class="section-title">
+    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    ユーザー一覧
+    <span id="user-count-label" style="font-weight:400;color:#64748b;"></span>
+  </div>
+  <div class="table-wrap">
+    <table id="user-table">
+      <thead>
+        <tr>
+          <th onclick="sortTable('displayName')">名前 <span class="sort-arrow">↕</span></th>
+          <th onclick="sortTable('job')">職業 <span class="sort-arrow">↕</span></th>
+          <th onclick="sortTable('rank')">ランク <span class="sort-arrow">↕</span></th>
+          <th onclick="sortTable('totalEarned')">累計コイン <span class="sort-arrow">↕</span></th>
+          <th onclick="sortTable('coins')">残高 <span class="sort-arrow">↕</span></th>
+          <th onclick="sortTable('streak')">連続日数 <span class="sort-arrow">↕</span></th>
+          <th onclick="sortTable('todoTotal')">タスク <span class="sort-arrow">↕</span></th>
+          <th>アクセス中</th>
+          <th>詳細</th>
+        </tr>
+      </thead>
+      <tbody id="user-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Loading -->
+<div id="loading-overlay"><div class="spinner"></div></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+const ADMIN_EMAIL = 'daqiaoling0@gmail.com';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAch5QXGqpzu2ZzR4LGVuxiGmV8Y_BBt-I",
+  authDomain: "liferhythm-cb0e2.firebaseapp.com",
+  projectId: "liferhythm-cb0e2",
+  storageBucket: "liferhythm-cb0e2.firebasestorage.app",
+  messagingSenderId: "549059630729",
+  appId: "1:549059630729:web:36fb8d5440644caab01858"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+const RANKS = [
+  {name:'Bronze',min:0,max:999,cls:'rank-bronze'},
+  {name:'Silver',min:1000,max:2999,cls:'rank-silver'},
+  {name:'Gold',min:3000,max:5999,cls:'rank-gold'},
+  {name:'Platinum',min:6000,max:9999,cls:'rank-platinum'},
+  {name:'Diamond',min:10000,max:Infinity,cls:'rank-diamond'}
+];
+const ENT_NAMES = {yt:'YouTube',tt:'TikTok',tw:'X',ig:'Instagram',nt:'Netflix',gm:'ゲーム'};
+
+function getRank(total) {
+  return RANKS.find(r => total >= r.min && total <= r.max) || RANKS[0];
+}
+
+// Auth
+auth.onAuthStateChanged(user => {
+  if (user) {
+    if (ADMIN_EMAIL !== 'YOUR_EMAIL@example.com' && user.email !== ADMIN_EMAIL) {
+      auth.signOut();
+      showAuthErr('アクセス権がありません');
+      return;
+    }
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    document.getElementById('admin-email-disp').textContent = user.email;
+    loadData();
+  } else {
+    document.getElementById('auth-screen').style.display = 'flex';
+    document.getElementById('dashboard').style.display = 'none';
+  }
+});
+
+async function doLogin() {
+  const email = document.getElementById('email').value.trim();
+  const pass = document.getElementById('pass').value;
+  if (!email || !pass) return showAuthErr('入力してください');
+  try {
+    await auth.signInWithEmailAndPassword(email, pass);
+  } catch(e) {
+    showAuthErr('ログインエラー: ' + (e.code === 'auth/invalid-credential' ? 'メール/パスワードが違います' : e.message));
+  }
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('auth-screen').style.display !== 'none') doLogin();
+});
+function doLogout() { auth.signOut(); }
+function showAuthErr(msg) { document.getElementById('auth-err').textContent = msg; }
+
+// Load data
+let allUsers = [];
+let sortKey = 'totalEarned';
+let sortAsc = false;
+
+async function loadData() {
+  setLoading(true);
+  document.getElementById('err-box').style.display = 'none';
+  try {
+    const snap = await db.collection('users').get();
+    allUsers = snap.docs.map(doc => {
+      const d = doc.data();
+      const rank = getRank(d.totalEarned || 0);
+      const todos = d.todos || [];
+      const access = d.access || {};
+      const now = Date.now();
+      const activeEnts = Object.entries(access).filter(([,v]) => v && v > now).map(([k]) => ENT_NAMES[k] || k);
+      return {
+        uid: doc.id,
+        displayName: d.displayName || 'ゲスト',
+        job: d.job || '不明',
+        coins: d.coins || 0,
+        totalEarned: d.totalEarned || 0,
+        todayEarned: d.todayEarned || 0,
+        streak: d.streak || 0,
+        todoTotal: todos.length,
+        todoDone: todos.filter(t => t.done).length,
+        todos: todos,
+        history: d.history || [],
+        activeEnts,
+        access,
+        rank,
+        focusWeekActive: d.focusWeekActive || false,
+        tutorialDone: d.tutorialDone || false,
+        lastDate: d.lastDate || ''
+      };
+    });
+    renderAll();
+  } catch(e) {
+    showErr(e.code === 'permission-denied'
+      ? 'Firestoreの権限エラー。下の「Firestoreルール設定」を参照してください。\n\n' + e.message
+      : '読み込みエラー: ' + e.message);
+  } finally {
+    setLoading(false);
+  }
+}
+
+function renderAll() {
+  renderStats();
+  renderCharts();
+  renderTable();
+}
+
+function renderStats() {
+  const total = allUsers.length;
+  const today = new Date().toISOString().slice(0,10);
+  const activeToday = allUsers.filter(u => u.lastDate === today).length;
+  const totalCoins = allUsers.reduce((a,u) => a + u.totalEarned, 0);
+  const avgCoins = total ? Math.round(totalCoins / total) : 0;
+  const maxStreak = allUsers.length ? Math.max(...allUsers.map(u => u.streak)) : 0;
+  const totalTodos = allUsers.reduce((a,u) => a + u.todoTotal, 0);
+  const totalDone = allUsers.reduce((a,u) => a + u.todoDone, 0);
+
+  document.getElementById('stats-grid').innerHTML = [
+    {label:'総ユーザー数', val: total, sub: `本日アクティブ: ${activeToday}人`},
+    {label:'累計獲得コイン', val: totalCoins.toLocaleString(), sub: `平均 ${avgCoins.toLocaleString()} / ユーザー`},
+    {label:'最大連続日数', val: maxStreak, sub: 'ユーザー中の最高記録'},
+    {label:'タスク完了率', val: totalTodos ? Math.round(totalDone/totalTodos*100)+'%' : '0%', sub: `${totalDone} / ${totalTodos} タスク`},
+  ].map(s => `
+    <div class="stat-card">
+      <div class="stat-label">${s.label}</div>
+      <div class="stat-val">${s.val}</div>
+      <div class="stat-sub">${s.sub}</div>
+    </div>
+  `).join('');
+}
+
+function renderCharts() {
+  const jobCounts = {};
+  allUsers.forEach(u => { jobCounts[u.job] = (jobCounts[u.job] || 0) + 1; });
+  const maxJob = Math.max(1, ...Object.values(jobCounts));
+  const jobChart = `
+    <div class="chart-card">
+      <div class="chart-title">職業分布</div>
+      ${Object.entries(jobCounts).sort((a,b)=>b[1]-a[1]).map(([k,v]) => `
+        <div class="bar-row">
+          <div class="bar-label">${k}</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:${Math.round(v/maxJob*100)}%"></div></div>
+          <div class="bar-count">${v}</div>
+        </div>
+      `).join('')}
+    </div>`;
+
+  const rankCounts = {};
+  RANKS.forEach(r => { rankCounts[r.name] = 0; });
+  allUsers.forEach(u => { rankCounts[u.rank.name] = (rankCounts[u.rank.name] || 0) + 1; });
+  const maxRank = Math.max(1, ...Object.values(rankCounts));
+  const rankChart = `
+    <div class="chart-card">
+      <div class="chart-title">ランク分布</div>
+      ${RANKS.map(r => `
+        <div class="bar-row">
+          <div class="bar-label">${r.name}</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:${Math.round((rankCounts[r.name]||0)/maxRank*100)}%"></div></div>
+          <div class="bar-count">${rankCounts[r.name]||0}</div>
+        </div>
+      `).join('')}
+    </div>`;
+
+  const entCounts = {};
+  allUsers.forEach(u => {
+    Object.entries(u.access || {}).forEach(([k,v]) => {
+      if (v && v > 0) entCounts[ENT_NAMES[k]||k] = (entCounts[ENT_NAMES[k]||k] || 0) + 1;
+    });
+  });
+  const maxEnt = Math.max(1, ...Object.values(entCounts), 1);
+  const entChart = `
+    <div class="chart-card">
+      <div class="chart-title">娯楽利用回数（累計解除）</div>
+      ${Object.entries(entCounts).sort((a,b)=>b[1]-a[1]).map(([k,v]) => `
+        <div class="bar-row">
+          <div class="bar-label">${k}</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:${Math.round(v/maxEnt*100)}%"></div></div>
+          <div class="bar-count">${v}</div>
+        </div>
+      `).join(Object.keys(entCounts).length ? '' : '<div style="color:#64748b;font-size:13px;">データなし</div>')}
+    </div>`;
+
+  document.getElementById('charts-grid').innerHTML = jobChart + rankChart + entChart;
+}
+
+function renderTable() {
+  const sorted = [...allUsers].sort((a,b) => {
+    let va = a[sortKey], vb = b[sortKey];
+    if (typeof va === 'string') va = va.toLowerCase(), vb = (vb||'').toLowerCase();
+    if (typeof va === 'number') return sortAsc ? va - vb : vb - va;
+    return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+  });
+
+  document.getElementById('user-count-label').textContent = `(${sorted.length}人)`;
+
+  const tbody = document.getElementById('user-tbody');
+  tbody.innerHTML = sorted.map((u, i) => `
+    <tr>
+      <td><b>${esc(u.displayName)}</b></td>
+      <td>${esc(u.job)}</td>
+      <td><span class="rank-badge ${u.rank.cls}">${u.rank.name}</span></td>
+      <td><b style="color:#f59e0b">${u.totalEarned.toLocaleString()}</b> <span style="font-size:11px;color:#64748b;">今日+${u.todayEarned}</span></td>
+      <td>${u.coins.toLocaleString()}</td>
+      <td>${u.streak > 0 ? `<span style="color:#f59e0b;">🔥 ${u.streak}日</span>` : `<span style="color:#64748b;">0日</span>`}</td>
+      <td class="todo-mini"><span class="todo-done">${u.todoDone}</span>/${u.todoTotal}</td>
+      <td>${u.activeEnts.length ? u.activeEnts.map(e=>`<span class="pill pill-green">${e}</span>`).join(' ') : '<span class="pill pill-muted">なし</span>'}</td>
+      <td><button onclick="toggleExpand('${u.uid}')" style="background:#2d2d3d;border:none;border-radius:6px;padding:3px 10px;color:#94a3b8;cursor:pointer;font-size:11px;" id="expand-btn-${u.uid}">▼ 詳細</button></td>
+    </tr>
+    <tr class="expand-row" id="expand-${u.uid}" style="display:none;">
+      <td colspan="9">
+        <div class="expand-inner">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div>
+              <h4>タスク一覧</h4>
+              <div class="todo-list">
+                ${u.todos.length ? u.todos.map(t => `
+                  <div class="todo-item-row">
+                    <span style="color:${t.done?'#22c55e':'#94a3b8'}">${t.done?'✓':' '} ${esc(t.text)}</span>
+                    <span style="color:#f59e0b;font-size:11px;">+${t.reward} LC</span>
+                  </div>
+                `).join('') : '<div style="color:#64748b;font-size:12px;">タスクなし</div>'}
+              </div>
+            </div>
+            <div>
+              <h4>コイン履歴（最新10件）</h4>
+              <div class="hist-list">
+                ${u.history.slice().reverse().slice(0,10).map(h => `
+                  <div class="hist-item">
+                    <span class="${h.type==='plus'?'hist-plus':'hist-minus'}">${h.type==='plus'?'+':'-'}${h.amount}</span>
+                    <span>${esc(h.desc)}</span>
+                    <span style="margin-left:auto;color:#475569;">${h.time}</span>
+                  </div>
+                `).join('') || '<div style="color:#64748b;font-size:12px;">履歴なし</div>'}
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:12px;font-size:11px;color:#475569;display:flex;gap:16px;">
+            <span>UID: ${u.uid}</span>
+            <span>最終日: ${u.lastDate || 'なし'}</span>
+            <span>チュートリアル: ${u.tutorialDone?'完了':'未'}</span>
+            <span>フォーカスウィーク: ${u.focusWeekActive?'ON':'OFF'}</span>
+          </div>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function toggleExpand(uid) {
+  const row = document.getElementById('expand-' + uid);
+  const btn = document.getElementById('expand-btn-' + uid);
+  const visible = row.style.display !== 'none';
+  row.style.display = visible ? 'none' : 'table-row';
+  btn.textContent = visible ? '▼ 詳細' : '▲ 閉じる';
+}
+
+function sortTable(key) {
+  if (sortKey === key) sortAsc = !sortAsc;
+  else { sortKey = key; sortAsc = false; }
+  document.querySelectorAll('th').forEach(th => th.classList.remove('sorted'));
+  event.target.closest('th').classList.add('sorted');
+  renderTable();
+}
+
+function setLoading(v) {
+  document.getElementById('loading-overlay').style.display = v ? 'flex' : 'none';
+}
+function showErr(msg) {
+  const el = document.getElementById('err-box');
+  el.style.display = 'block';
+  el.innerHTML = msg.replace(/\n/g,'<br>') + `
+    <details style="margin-top:12px;">
+      <summary style="cursor:pointer;color:#f59e0b;">Firestoreルール設定方法</summary>
+      <pre style="margin-top:8px;background:#0f0f13;padding:12px;border-radius:6px;font-size:11px;overflow-x:auto;color:#94a3b8;">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read, write: if request.auth != null
+        && (request.auth.uid == userId
+          || request.auth.token.email == 'YOUR_ADMIN_EMAIL');
+    }
+  }
+}</pre>
+      <div style="margin-top:8px;font-size:12px;color:#64748b;">Firebase Console → Firestore → ルール に貼り付けてください</div>
+    </details>`;
+}
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
