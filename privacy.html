@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>プライバシーポリシー — LifeRhythm</title>
+<style>
+  :root {
+    --bg: #f8f9fa;
+    --fg: #1a1a1a;
+    --card: #ffffff;
+    --border: #e5e7eb;
+    --accent: #6366f1;
+    --muted: #6b7280;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.7;
+    padding: 20px 16px 60px;
+  }
+  .container {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .logo {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--fg);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .updated {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+  }
+  h2 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--accent);
+  }
+  p {
+    font-size: 14px;
+    color: var(--fg);
+    margin-bottom: 10px;
+  }
+  p:last-child { margin-bottom: 0; }
+  ul {
+    padding-left: 18px;
+    margin-bottom: 10px;
+  }
+  li {
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+  .badge {
+    display: inline-block;
+    background: #fef3c7;
+    color: #92400e;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  .contact-box {
+    background: #f0f0ff;
+    border: 1px solid #c7d2fe;
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #3730a3;
+  }
+  a { color: var(--accent); }
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+  .back-btn:hover { color: var(--fg); }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="logo">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    LifeRhythm
+  </div>
+
+  <a class="back-btn" onclick="history.back()">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+    戻る
+  </a>
+
+  <h1>プライバシーポリシー</h1>
+  <div class="updated">最終更新日：2026年3月7日</div>
+
+  <div class="section">
+    <span class="badge">ベータテスト版</span>
+    <p>本サービスは現在ベータテスト段階にあります。テスターの皆さまのデータは、アプリの改善を目的として収集・分析されます。本ポリシーをよくお読みのうえ、同意いただける場合のみご利用ください。</p>
+  </div>
+
+  <div class="section">
+    <h2>1. 収集する情報</h2>
+    <p>LifeRhythm では、以下の情報を収集します。</p>
+    <p><strong>アカウント登録ユーザー</strong></p>
+    <ul>
+      <li>メールアドレス（Firebase Authentication で管理）</li>
+      <li>ニックネーム・職業（任意入力）</li>
+      <li>アプリの利用データ（コイン残高・獲得コイン累計・タスク完了数・連続ログイン日数・解除した娯楽・集中週の記録など）</li>
+    </ul>
+    <p><strong>ゲストユーザー</strong></p>
+    <ul>
+      <li>年齢・職業（アプリ開始時に入力）</li>
+      <li>アプリの利用データ（コイン・タスク・娯楽の解除状況など）</li>
+      <li>ゲストモードでは認証なしで利用できますが、上記データは匿名IDで収集されます。</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>2. 収集目的</h2>
+    <ul>
+      <li>アプリの機能・UXの改善</li>
+      <li>利用傾向の統計的分析（職業別・年代別など）</li>
+      <li>バグの発見と修正</li>
+      <li>ベータ版の品質向上</li>
+    </ul>
+    <p>収集したデータを第三者に販売・提供することはありません。</p>
+  </div>
+
+  <div class="section">
+    <h2>3. データの保管場所</h2>
+    <p>収集したデータは <strong>Google Firebase（Firestore）</strong> に保管されます。Firebaseのサーバーは米国を含む複数の地域に存在し、データが国外に保管される場合があります。</p>
+    <p>詳しくは <a href="https://firebase.google.com/support/privacy" target="_blank">Google / Firebase のプライバシーポリシー</a> をご参照ください。</p>
+  </div>
+
+  <div class="section">
+    <h2>4. データへのアクセス</h2>
+    <p>収集されたデータにアクセスできるのは開発者（LifeRhythm 運営）のみです。Firebase のセキュリティルールにより、他のユーザーが別のユーザーのデータを閲覧することはできません。</p>
+  </div>
+
+  <div class="section">
+    <h2>5. データの保持と削除</h2>
+    <p>ベータテスト終了後、または本サービスのサービス終了時に、収集したデータは削除される場合があります。</p>
+    <p>ご自身のデータの削除をご希望の場合は、下記の連絡先までメールでご連絡ください。速やかに対応いたします。</p>
+  </div>
+
+  <div class="section">
+    <h2>6. Cookieとローカルストレージ</h2>
+    <p>本アプリはブラウザのローカルストレージを使用して、ゲストモードのデータをデバイス上に一時保存します。これはアプリの動作に必要なものであり、トラッキング目的では使用しません。</p>
+  </div>
+
+  <div class="section">
+    <h2>7. 未成年者のご利用について</h2>
+    <p>本アプリは13歳以上を対象としています。13歳未満のお子様のデータを意図的に収集することはありません。13歳未満のお子様が登録されていることが判明した場合、速やかにアカウントを削除します。</p>
+  </div>
+
+  <div class="section">
+    <h2>8. ポリシーの変更</h2>
+    <p>本ポリシーは変更される場合があります。重要な変更がある場合は、アプリ内またはメールでお知らせします。</p>
+  </div>
+
+  <div class="section">
+    <h2>9. お問い合わせ・データ削除依頼</h2>
+    <div class="contact-box">
+      LifeRhythm 運営<br>
+      メール：<a href="mailto:daqiaoling0@gmail.com">daqiaoling0@gmail.com</a><br><br>
+      データの削除依頼・プライバシーに関するご質問はこちらまでご連絡ください。
+    </div>
+  </div>
+</div>
+</body>
+</html>
