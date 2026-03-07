@@ -189,7 +189,12 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
 .tutorial-dots{display:flex;gap:7px;justify-content:center;margin-bottom:22px;}
 .tutorial-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:background .2s;}
 .tutorial-dot.active{background:var(--accent);}
-.itut-bar{position:fixed;bottom:74px;left:50%;transform:translateX(-50%);z-index:200;width:calc(100% - 24px);max-width:480px;}
+.itut-bar{position:fixed;bottom:74px;left:50%;transform:translateX(-50%);z-index:200;width:calc(100% - 24px);max-width:480px;cursor:grab;user-select:none;touch-action:none;}
+.itut-bar.itut-dragging{cursor:grabbing;}
+.itut-bar.itut-collapsed .itut-hint,.itut-bar.itut-collapsed .itut-skip-row{display:none;}
+.itut-bar.itut-collapsed .itut-ex{display:none!important;}
+.itut-collapse-btn{background:none;border:none;color:#94a3b8;cursor:pointer;padding:3px 5px;border-radius:6px;flex-shrink:0;line-height:1;touch-action:auto;}
+.itut-collapse-btn:hover{background:#f1f5f9;color:#475569;}
 .itut-inner{background:#fff;border-radius:20px;padding:20px 22px;color:#27272a;box-shadow:0 8px 32px #00000022;border:1px solid var(--border);}
 .itut-step-label{font-size:12px;color:#71717a;margin-bottom:4px;font-weight:600;letter-spacing:.03em;}
 .itut-title{font-size:18px;font-weight:800;margin-bottom:9px;color:#18181b;}
@@ -266,11 +271,14 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
 </div>
 <div class="itut-bar" id="itut-bar" style="display:none;">
   <div class="itut-inner">
-    <div class="itut-step-label" id="itut-step"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <div class="itut-step-label" id="itut-step"></div>
+      <button class="itut-collapse-btn" id="itut-collapse-btn"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+    </div>
     <div class="itut-title" id="itut-title2"></div>
     <div class="itut-hint" id="itut-hint"></div>
     <button class="itut-ex" id="itut-ex" style="display:none;"></button>
-    <div style="display:flex;justify-content:flex-end;"><button class="itut-skip" id="itut-skip-btn">スキップ</button></div>
+    <div class="itut-skip-row" style="display:flex;justify-content:flex-end;"><button class="itut-skip" id="itut-skip-btn">スキップ</button></div>
   </div>
 </div>
 <div class="tutorial-overlay" id="tutorial-overlay">
@@ -320,10 +328,23 @@ function finishTutorial(){document.getElementById('tutorial-overlay').classList.
 function tutNext(){tutStep++;if(tutStep>=TUTORIAL_STEPS.length){finishTutorial();return;}renderTutStep();}
 const ITUT=[{step:'STEP 1 / 3',title:'まずタスクを記入しよう！',hint:'やることを入力して「追加」ボタンを押してね。AIが自動でコインを設定！<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>ボタンでタスクをさらに細かく分解もできるよ。',ex:'→ タップで入力: 「英語の単語を１２個覚える」',exT:'英語の単語を１２個覚える'},{step:'STEP 2 / 3',title:'実際にタスクをやってみよう！',hint:'追加したタスクの⭕ボタンを押して完了しよう。コインがもらえるよ！',ex:null},{step:'STEP 3 / 3',title:'コイン獲得！SNSを解除しよう！',hint:'ショップ画面に移動したよ。好きなSNSの「解除する」ボタンを押してみよう！',ex:null}];
 function startInteractiveTutorial(){state.itutStep=1;scheduleSave();goto('home');renderITutBar();}
-function renderITutBar(){const bar=document.getElementById('itut-bar');if(!bar)return;if(!state||!state.itutStep||state.itutStep<1||state.itutStep>3){bar.style.display='none';return;}const s=ITUT[state.itutStep-1];document.getElementById('itut-step').textContent=s.step;document.getElementById('itut-title2').textContent=s.title;document.getElementById('itut-hint').innerHTML=s.hint;const ex=document.getElementById('itut-ex');if(s.ex){ex.style.display='block';ex.innerHTML=s.ex;ex.onclick=s.exT?()=>{const el=document.getElementById('quick-todo-text');if(el){el.value=s.exT;el.focus();}}:null;}else{ex.style.display='none';}bar.style.display='block';if(state.itutStep===3)setTimeout(()=>goto('shop'),600);}
+function renderITutBar(){const bar=document.getElementById('itut-bar');if(!bar)return;if(!state||!state.itutStep||state.itutStep<1||state.itutStep>3){bar.style.display='none';return;}const s=ITUT[state.itutStep-1];document.getElementById('itut-step').textContent=s.step;document.getElementById('itut-title2').textContent=s.title;document.getElementById('itut-hint').innerHTML=s.hint;const ex=document.getElementById('itut-ex');if(s.ex){ex.style.display='block';ex.innerHTML=s.ex;ex.onclick=s.exT?()=>{const el=document.getElementById('quick-todo-text');if(el){el.value=s.exT;el.focus();}}:null;}else{ex.style.display='none';}itutCollapsed=false;bar.classList.remove('itut-collapsed');const cb=document.getElementById('itut-collapse-btn');if(cb)cb.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';bar.style.display='block';if(state.itutStep===3)setTimeout(()=>goto('shop'),600);}
 function checkITutProgress(){if(!state||!state.itutStep)return;if(state.itutStep===1&&state.todos&&state.todos.length>0){state.itutStep=2;renderITutBar();scheduleSave();}else if(state.itutStep===2&&state.todos&&state.todos.some(t=>t.done&&!t.parentId)){state.itutStep=3;renderITutBar();scheduleSave();}else if(state.itutStep===3&&state.access&&Object.values(state.access).some(v=>v&&v>Date.now())){state.itutStep=0;document.getElementById('itut-bar').style.display='none';showToast('🎉 チュートリアル完了！LifeRhythmを楽しんでね！');scheduleSave();setTimeout(()=>goto('home'),800);}}
+let itutCollapsed=false;
 function skipITut(){state.itutStep=0;document.getElementById('itut-bar').style.display='none';scheduleSave();}
-document.addEventListener('click',e=>{if(e.target.id==='itut-skip-btn')skipITut();});
+document.addEventListener('click',e=>{
+  if(e.target.id==='itut-skip-btn')skipITut();
+  if(e.target.closest&&e.target.closest('#itut-collapse-btn')){
+    itutCollapsed=!itutCollapsed;
+    const bar=document.getElementById('itut-bar');
+    bar.classList.toggle('itut-collapsed',itutCollapsed);
+    const btn=document.getElementById('itut-collapse-btn');
+    btn.innerHTML=itutCollapsed
+      ?'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>'
+      :'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+  }
+});
+(function(){let drag=false,sx=0,sy=0,bx=0,by=0;function getB(){return document.getElementById('itut-bar');}function startDrag(cx,cy){const bar=getB();if(!bar||bar.style.display==='none')return;const r=bar.getBoundingClientRect();bar.style.left=r.left+'px';bar.style.top=r.top+'px';bar.style.bottom='auto';bar.style.transform='none';drag=true;sx=cx;sy=cy;bx=r.left;by=r.top;bar.classList.add('itut-dragging');}function moveDrag(cx,cy){if(!drag)return;const bar=getB();if(!bar)return;bar.style.left=(bx+(cx-sx))+'px';bar.style.top=(by+(cy-sy))+'px';}function endDrag(){drag=false;const bar=getB();if(bar)bar.classList.remove('itut-dragging');}document.addEventListener('mousedown',e=>{if(e.target.closest&&e.target.closest('#itut-bar')&&!e.target.closest('button'))startDrag(e.clientX,e.clientY);});document.addEventListener('mousemove',e=>{moveDrag(e.clientX,e.clientY);});document.addEventListener('mouseup',endDrag);document.addEventListener('touchstart',e=>{if(e.target.closest&&e.target.closest('#itut-bar')&&!e.target.closest('button'))startDrag(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});document.addEventListener('touchmove',e=>{if(drag){e.preventDefault();moveDrag(e.touches[0].clientX,e.touches[0].clientY);}},{passive:false});document.addEventListener('touchend',endDrag);})();
 document.addEventListener('click',e=>{if(e.target.id==='guest-toggle-btn')toggleGuestForm();if(e.target.id==='guest-start-btn')startGuest();if(e.target.id==='tut-btn')tutNext();if(e.target.id==='tut-choose-light'){state.theme='light';applyTheme();finishTutorial();}if(e.target.id==='tut-choose-dark'){state.theme='dark';applyTheme();finishTutorial();}});
 async function loadUserData(user){const ref=db.collection('users').doc(user.uid),snap=await ref.get(),name=user.displayName||'ユーザー';if(snap.exists){state=snap.data();if(!state.access)state.access={};if(!state.todos)state.todos=[];if(!state.theme)state.theme='light';if(state.lastDate!==today()){state.todayEarned=0;state.lastDate=today();state.todos.forEach(t=>t.done=false);await saveNow();}}else{state=defaultState(name);state.job=pendingSignupJob;await saveNow();}document.getElementById('user-name-disp').textContent=state.displayName;}
 function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(saveNow,1000);}
