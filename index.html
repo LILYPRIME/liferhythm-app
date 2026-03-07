@@ -199,10 +199,10 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
 </style>
 </head>
 <body>
-<div id="loading"><div style="font-size:28px;">&#9889;</div><div class="spin"></div><div style="font-size:13px;color:var(--muted);">&#35501;&#12415;&#36796;&#12415;&#20013;...</div></div>
+<div id="loading"><div style="font-size:28px;"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="spin"></div><div style="font-size:13px;color:var(--muted);">&#35501;&#12415;&#36796;&#12415;&#20013;...</div></div>
 <div id="auth-screen" style="display:none;">
   <div class="auth-box">
-    <div class="auth-logo">&#9889; LifeRhythm</div>
+    <div class="auth-logo"><svg viewBox="0 0 24 24" width="18" height="18" style="vertical-align:-3px;" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> LifeRhythm</div>
     <div class="auth-tagline">SNSは「ご褒美」。タスクをこなしてコインを稼ぎ、好きな時間にSNSを楽しもう</div>
     <div class="auth-tabs">
       <button class="auth-tab active" onclick="switchTab('login')">&#12525;&#12464;&#12452;&#12531;</button>
@@ -226,7 +226,7 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
     <button class="auth-submit" id="auth-btn" onclick="doAuth()">&#12525;&#12464;&#12452;&#12531;</button>
     <div class="auth-error" id="auth-error"></div>
     <div class="auth-divider">&#12414;&#12383;&#12399;</div>
-    <button class="guest-btn" id="guest-toggle-btn">&#128100; &#12466;&#12473;&#12488;&#12392;&#12375;&#12390;&#35430;&#12377;</button>
+    <button class="guest-btn" id="guest-toggle-btn"><svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>&#12466;&#12473;&#12488;&#12392;&#12375;&#12390;&#35430;&#12377;</button>
     <div class="guest-form" id="guest-form">
       <div class="auth-field"><label>&#24180;&#40802;</label><input class="auth-input" id="guest-age" type="number" placeholder="20" min="10" max="100"/></div>
       <div class="auth-field"><label>&#32887;&#26989;</label>
@@ -243,10 +243,10 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
 </div>
 <div id="main-app">
   <header class="page-header">
-    <div><div class="logo">&#9889; LifeRhythm</div><div class="logo-sub">タスクをこなして好きなSNSを楽しもう</div></div>
+    <div><div class="logo"><svg viewBox="0 0 24 24" width="18" height="18" style="vertical-align:-3px;" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> LifeRhythm</div><div class="logo-sub">タスクをこなして好きなSNSを楽しもう</div></div>
     <div class="header-right">
       <div class="clock-box"><div class="clock-time" id="clock">--:--</div><div class="clock-date" id="clock-date">---</div></div>
-      <div><div class="user-chip">&#128100; <span id="user-name-disp">---</span></div><button class="logout-btn" style="margin-top:4px;width:100%;" onclick="doLogout()">&#12525;&#12464;&#12450;&#12454;&#12488;</button></div>
+      <div><div class="user-chip"><svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg><span id="user-name-disp">---</span></div><button class="logout-btn" style="margin-top:4px;width:100%;" onclick="doLogout()">&#12525;&#12464;&#12450;&#12454;&#12488;</button></div>
     </div>
   </header>
   <div id="mode-banner" class="mode-focus">&#128308; &#38598;&#20013;&#12479;&#12452;&#12512;</div>
@@ -344,7 +344,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementB
 function getMode(h){if(h>=6&&h<12)return'focus';if(h>=12&&h<14)return'free';if(h>=14&&h<18)return'focus';if(h>=18&&h<22)return'free';return'focus';}
 function getMultiplier(mode){return mode==='focus'?5:0.5;}
 function currentMode(){return getMode(new Date().getHours());}
-function updateClock(){const now=new Date(),h=String(now.getHours()).padStart(2,'0'),mi=String(now.getMinutes()).padStart(2,'0');document.getElementById('clock').textContent=h+':'+mi;const days=['日','月','火','水','木','金','土'];document.getElementById('clock-date').textContent=(now.getMonth()+1)+'/'+now.getDate()+'('+days[now.getDay()]+')';const mode=currentMode(),banner=document.getElementById('mode-banner');if(mode==='focus'){banner.className='mode-focus';banner.textContent='🔴 集中タイム — 娯楽の価格が高騰中（5倍）';}else{banner.className='mode-free';banner.textContent='🟢 自由タイム — 娯楽がセール価格！🎉';}if(state&&document.getElementById('main-app').style.display!=='none')renderPage();}
+function updateClock(){const now=new Date(),h=String(now.getHours()).padStart(2,'0'),mi=String(now.getMinutes()).padStart(2,'0');document.getElementById('clock').textContent=h+':'+mi;const days=['日','月','火','水','木','金','土'];document.getElementById('clock-date').textContent=(now.getMonth()+1)+'/'+now.getDate()+'('+days[now.getDay()]+')';const mode=currentMode(),banner=document.getElementById('mode-banner');if(mode==='focus'){banner.className='mode-focus';banner.innerHTML='<svg viewBox="0 0 24 24" width="10" height="10" style="vertical-align:-1px;" fill="#ef4444"><circle cx="12" cy="12" r="10"/></svg> 集中タイム — 娯楽の価格が高騰中（5倍）';}else{banner.className='mode-free';banner.innerHTML='<svg viewBox="0 0 24 24" width="10" height="10" style="vertical-align:-1px;" fill="#22c55e"><circle cx="12" cy="12" r="10"/></svg> 自由タイム — 娯楽がセール価格！';}if(state&&document.getElementById('main-app').style.display!=='none')renderPage();}
 function goto(page){state.currentPage=page;document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));const nb=document.getElementById('nav-'+page);if(nb)nb.classList.add('active');renderPage();}
 function renderPage(){if(!state)return;const v=document.getElementById('view'),page=state.currentPage||'home';switch(page){case'home':v.innerHTML=pageHome();bindHome();break;case'shop':v.innerHTML=pageShop();bindShop();break;case'rank':v.innerHTML=pageRank();break;case'profile':v.innerHTML=pageProfile();bindProfile();break;}}
 function pageHome(){
