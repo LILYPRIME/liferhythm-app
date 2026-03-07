@@ -189,14 +189,14 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
 .tutorial-dots{display:flex;gap:7px;justify-content:center;margin-bottom:22px;}
 .tutorial-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:background .2s;}
 .tutorial-dot.active{background:var(--accent);}
-.itut-bar{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:200;width:210px;}
-.itut-inner{background:#fff;border-radius:14px 0 0 14px;padding:13px 14px;color:#27272a;box-shadow:-4px 0 20px #00000018;border:1px solid var(--border);border-right:none;}
-.itut-step-label{font-size:11px;color:#71717a;margin-bottom:3px;}
-.itut-title{font-size:15px;font-weight:800;margin-bottom:7px;color:#18181b;}
-.itut-hint{font-size:13px;color:#3f3f46;line-height:1.6;margin-bottom:8px;}
-.itut-ex{background:#f1f5f9;border-radius:8px;padding:7px 11px;font-size:12px;margin-bottom:10px;cursor:pointer;border:1px solid #e2e8f0;color:#27272a;width:100%;text-align:left;line-height:1.5;}
+.itut-bar{position:fixed;bottom:74px;left:50%;transform:translateX(-50%);z-index:200;width:calc(100% - 24px);max-width:480px;}
+.itut-inner{background:#fff;border-radius:20px;padding:20px 22px;color:#27272a;box-shadow:0 8px 32px #00000022;border:1px solid var(--border);}
+.itut-step-label{font-size:12px;color:#71717a;margin-bottom:4px;font-weight:600;letter-spacing:.03em;}
+.itut-title{font-size:18px;font-weight:800;margin-bottom:9px;color:#18181b;}
+.itut-hint{font-size:14px;color:#3f3f46;line-height:1.7;margin-bottom:12px;}
+.itut-ex{background:#f1f5f9;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:12px;cursor:pointer;border:1px solid #e2e8f0;color:#27272a;width:100%;text-align:left;line-height:1.6;}
 .itut-ex:hover{background:#e2e8f0;}
-.itut-skip{background:none;border:1px solid #cbd5e1;color:#71717a;padding:5px 14px;border-radius:8px;font-size:12px;cursor:pointer;}
+.itut-skip{background:none;border:1px solid #cbd5e1;color:#71717a;padding:6px 16px;border-radius:8px;font-size:13px;cursor:pointer;}
 .tut-again-btn{display:none;}
 .tut-start-btn{width:100%;padding:14px;border-radius:14px;font-size:15px;font-weight:700;background:#18181b;color:#fff;box-shadow:0 4px 18px #00000020;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;}
 .tut-start-btn:hover{opacity:.9;}
