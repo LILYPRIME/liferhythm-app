@@ -191,7 +191,7 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
 .tutorial-dot.active{background:var(--accent);}
 .itut-bar{position:fixed;bottom:74px;left:50%;transform:translateX(-50%);z-index:200;width:calc(100% - 24px);max-width:480px;cursor:grab;user-select:none;touch-action:none;}
 .itut-bar.itut-dragging{cursor:grabbing;}
-.itut-bar.itut-collapsed .itut-hint,.itut-bar.itut-collapsed .itut-skip-row{display:none;}
+.itut-bar.itut-collapsed .itut-hint{display:none;}
 .itut-bar.itut-collapsed .itut-ex{display:none!important;}
 .itut-collapse-btn{background:none;border:none;color:#94a3b8;cursor:pointer;padding:3px 5px;border-radius:6px;flex-shrink:0;line-height:1;touch-action:auto;}
 .itut-collapse-btn:hover{background:#f1f5f9;color:#475569;}
@@ -296,12 +296,14 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
   <div class="itut-inner">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
       <div class="itut-step-label" id="itut-step"></div>
-      <button class="itut-collapse-btn" id="itut-collapse-btn"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+      <div style="display:flex;gap:4px;align-items:center;">
+        <button class="itut-collapse-btn" id="itut-collapse-btn"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+        <button class="itut-collapse-btn" id="itut-skip-btn"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+      </div>
     </div>
     <div class="itut-title" id="itut-title2"></div>
     <div class="itut-hint" id="itut-hint"></div>
     <button class="itut-ex" id="itut-ex" style="display:none;"></button>
-    <div class="itut-skip-row" style="display:flex;justify-content:flex-end;"><button class="itut-skip" id="itut-skip-btn">スキップ</button></div>
   </div>
 </div>
 <div class="tutorial-overlay" id="tutorial-overlay">
@@ -365,7 +367,7 @@ let authMode='login',pendingSignupJob='その他';
 function switchTab(mode){authMode=mode;document.querySelectorAll('.auth-tab').forEach((t,i)=>{t.classList.toggle('active',(i===0&&mode==='login')||(i===1&&mode==='signup'));});document.getElementById('auth-btn').textContent=mode==='login'?'ログイン':'アカウント作成';document.getElementById('name-field').classList.toggle('show',mode==='signup');document.getElementById('job-field').classList.toggle('show',mode==='signup');document.getElementById('signup-consent').classList.toggle('show',mode==='signup');if(mode==='signup')document.getElementById('signup-consent-check').checked=false;document.getElementById('auth-error').textContent='';}
 function doAuth(){const email=document.getElementById('auth-email').value.trim(),pass=document.getElementById('auth-pass').value,name=document.getElementById('auth-name').value.trim()||'ユーザー',errEl=document.getElementById('auth-error');errEl.textContent='';if(!email||!pass){errEl.textContent='メールとパスワードを入力してください';return;}if(authMode==='signup'&&!document.getElementById('signup-consent-check').checked){errEl.textContent='プライバシーポリシーへの同意が必要です';return;}document.getElementById('auth-btn').textContent='処理中...';if(authMode==='login'){auth.signInWithEmailAndPassword(email,pass).catch(e=>{errEl.textContent=authErrMsg(e.code);document.getElementById('auth-btn').textContent='ログイン';});}else{if(pass.length<6){errEl.textContent='パスワードは6文字以上';document.getElementById('auth-btn').textContent='アカウント作成';return;}pendingSignupJob=(document.getElementById('auth-job')?.value)||'その他';auth.createUserWithEmailAndPassword(email,pass).then(cred=>cred.user.updateProfile({displayName:name})).catch(e=>{errEl.textContent=authErrMsg(e.code);document.getElementById('auth-btn').textContent='アカウント作成';});}}
 function authErrMsg(c){const m={'auth/user-not-found':'メールアドレスが見つかりません','auth/wrong-password':'パスワードが間違っています','auth/email-already-in-use':'このメールはすでに使われています','auth/invalid-email':'メールアドレスの形式が正しくありません','auth/weak-password':'パスワードが短すぎます','auth/invalid-credential':'メールまたはパスワードが間違っています'};return m[c]||'エラー('+c+')';}
-function doLogout(){if(state&&state.isGuest){state=null;localStorage.removeItem('guestState');document.getElementById('main-app').style.display='none';document.getElementById('auth-screen').style.display='flex';}else{auth.signOut();}}
+function doLogout(){const bar=document.getElementById('itut-bar');if(bar)bar.style.display='none';if(state&&state.isGuest){state=null;localStorage.removeItem('guestState');document.getElementById('main-app').style.display='none';document.getElementById('auth-screen').style.display='flex';}else{auth.signOut();}}
 function toggleAdminLogin(){const p=document.getElementById('admin-login-panel');p.style.display=p.style.display==='none'?'block':'none';}
 async function startGuest(){
   const ageValue=parseInt(document.getElementById("guest-age").value,10);
