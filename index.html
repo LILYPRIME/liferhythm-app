@@ -410,7 +410,7 @@ function renderTutStep(){
   document.getElementById("tut-desc").textContent=s.d;
   document.getElementById("tut-theme-choice").style.display="none";
   document.getElementById("tut-btn").style.display="block";
-  document.getElementById("tut-btn").textContent=tutStep<TUTORIAL_STEPS.length-1?"??":"????";
+  document.getElementById("tut-btn").textContent=tutStep<TUTORIAL_STEPS.length-1?"次へ →":"始める！";
   document.getElementById("tut-dots").innerHTML=TUTORIAL_STEPS.map((_,i)=>'<div class="tutorial-dot'+(i===tutStep?' active':'')+'"></div>').join("");
 }
 function finishTutorial(){document.getElementById("tutorial-overlay").classList.remove("show");state.tutorialDone=true;markGuestFunnelStep("tutorialCompleteAt","tutorial_complete");scheduleSave();startInteractiveTutorial();}
@@ -422,7 +422,7 @@ function checkITutProgress(){if(!state||!state.itutStep)return;if(state.itutStep
 let itutCollapsed=false;
 function skipITut(){state.itutStep=0;document.getElementById('itut-bar').style.display='none';scheduleSave();}
 document.addEventListener('click',e=>{
-  if(e.target.id==='itut-skip-btn')skipITut();
+  if(e.target.closest&&e.target.closest('#itut-skip-btn'))skipITut();
   if(e.target.closest&&e.target.closest('#itut-collapse-btn')){
     itutCollapsed=!itutCollapsed;
     const bar=document.getElementById('itut-bar');
