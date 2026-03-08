@@ -1,0 +1,214 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LifeRhythm | テスターフィードバック</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#f7f5ef;
+  --card:#fffdf8;
+  --ink:#171410;
+  --muted:#6d645b;
+  --line:#e7decf;
+  --accent:#dc8f00;
+  --accent-deep:#8b4e00;
+  --ok:#12794c;
+  --error:#c43c3c;
+}
+body{
+  min-height:100vh;
+  font-family:"Hiragino Sans","Yu Gothic UI","Segoe UI",sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at top, rgba(220,143,0,.16), transparent 30%),
+    linear-gradient(180deg, #f6f1e7 0%, #faf8f3 100%);
+  padding:28px 16px 44px;
+}
+.wrap{width:min(760px,100%);margin:0 auto;}
+.card{
+  background:rgba(255,253,248,.92);
+  border:1px solid rgba(23,20,16,.08);
+  border-radius:30px;
+  box-shadow:0 18px 44px rgba(43,30,12,.08);
+  padding:28px;
+}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 14px;border-radius:999px;background:#fff2d5;
+  color:var(--accent-deep);font-size:12px;font-weight:900;
+}
+h1{font-size:clamp(32px,6vw,52px);line-height:1.08;letter-spacing:-.05em;margin-top:18px;}
+.lead{margin-top:14px;color:var(--muted);font-size:16px;line-height:1.8;}
+.meta{
+  margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;
+}
+.meta span{
+  font-size:12px;font-weight:700;color:var(--muted);
+  border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px;
+}
+form{margin-top:26px;display:grid;gap:16px;}
+.field{
+  border:1px solid var(--line);background:#fff;border-radius:22px;padding:18px;
+}
+.field h2{font-size:18px;margin-bottom:6px;}
+.field p{font-size:13px;color:var(--muted);margin-bottom:12px;}
+textarea{
+  width:100%;min-height:132px;resize:vertical;
+  border:1px solid var(--line);border-radius:16px;padding:14px;
+  font:inherit;line-height:1.7;color:var(--ink);background:#fffdf9;
+}
+textarea:focus{outline:none;border-color:var(--accent);}
+.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+button,.back-link{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border-radius:999px;padding:13px 20px;font-size:14px;font-weight:800;
+}
+button{
+  border:none;cursor:pointer;
+  background:linear-gradient(135deg,#f4b53f,#dc8f00);
+  color:#241b0c;
+  box-shadow:0 10px 22px rgba(220,143,0,.24);
+}
+button:disabled{opacity:.65;cursor:wait;}
+.back-link{border:1px solid var(--line);background:#fff;color:var(--ink);}
+.status{font-size:13px;font-weight:700;min-height:20px;}
+.status.ok{color:var(--ok);}
+.status.error{color:var(--error);}
+.thanks{
+  margin-top:18px;padding:18px;border-radius:22px;border:1px solid #dfeada;
+  background:#f6fcf8;display:none;
+}
+.thanks.show{display:block;}
+.thanks h2{font-size:20px;margin-bottom:8px;}
+.thanks p{font-size:14px;color:var(--muted);}
+@media(max-width:720px){
+  .card{padding:22px;border-radius:24px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <div class="eyebrow">LifeRhythm tester feedback</div>
+    <h1>4問だけ、<br>率直に教えてください。</h1>
+    <p class="lead">短くても大丈夫です。良かった点も、違和感も、次の改善にそのまま使います。途中で迷ったことがあれば、それ自体が大事な情報です。</p>
+    <div class="meta">
+      <span id="source-chip">導線: 不明</span>
+      <span id="session-chip">session: --</span>
+    </div>
+
+    <form id="feedback-form">
+      <div class="field">
+        <h2>1. わかりにくかった点</h2>
+        <p>ボタン名、説明文、流れ、最初の入力など、少しでも止まった場所があれば書いてください。</p>
+        <textarea id="confusing" placeholder="例: 最初に何をすればいいか少し迷いました。"></textarea>
+      </div>
+
+      <div class="field">
+        <h2>2. バグや違和感</h2>
+        <p>表示崩れ、動かなかった、意味が伝わらなかった、などを自由にどうぞ。</p>
+        <textarea id="bugs" placeholder="例: ボタンを押したあとに反応が分かりづらかったです。"></textarea>
+      </div>
+
+      <div class="field">
+        <h2>3. 使いたくなった / ならなかった理由</h2>
+        <p>続けたいと思えたポイント、逆に続かなそうと思った理由を知りたいです。</p>
+        <textarea id="reason" placeholder="例: タスク完了から解除までの流れは気持ちよかったです。"></textarea>
+      </div>
+
+      <div class="field">
+        <h2>4. 欲しい機能</h2>
+        <p>今はなくても、「これがあれば使う」があれば教えてください。</p>
+        <textarea id="wishlist" placeholder="例: 友達と一緒に使えるモードがあると楽しそうです。"></textarea>
+      </div>
+
+      <div class="actions">
+        <button id="submit-btn" type="submit">フィードバックを送信</button>
+        <a class="back-link" id="back-link" href="./">アプリに戻る</a>
+      </div>
+      <div class="status" id="status"></div>
+    </form>
+
+    <div class="thanks" id="thanks">
+      <h2>送信ありがとうございます。</h2>
+      <p>次の改善に直接反映します。タブを閉じるか、アプリに戻って作業を続けてください。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const firebaseConfig={
+  apiKey:"AIzaSyAch5QXGqpzu2ZzR4LGVuxiGmV8Y_BBt-I",
+  authDomain:"liferhythm-cb0e2.firebaseapp.com",
+  projectId:"liferhythm-cb0e2",
+  storageBucket:"liferhythm-cb0e2.firebasestorage.app",
+  messagingSenderId:"549059630729",
+  appId:"1:549059630729:web:36fb8d5440644caab01858"
+};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
+const params=new URLSearchParams(window.location.search);
+const source=params.get("source")||"unknown";
+const sessionId=params.get("session")||"none";
+const guestId=params.get("guest")||"";
+document.getElementById("source-chip").textContent="導線: "+source;
+document.getElementById("session-chip").textContent="session: "+sessionId;
+document.getElementById("back-link").href=source==="lp" ? "./lp.html" : "./";
+
+function setStatus(message,type){
+  const el=document.getElementById("status");
+  el.textContent=message;
+  el.className="status"+(type ? " "+type : "");
+}
+
+document.getElementById("feedback-form").addEventListener("submit",async event=>{
+  event.preventDefault();
+  const payload={
+    source,
+    sessionId,
+    guestId:guestId||null,
+    confusing:document.getElementById("confusing").value.trim(),
+    bugs:document.getElementById("bugs").value.trim(),
+    reason:document.getElementById("reason").value.trim(),
+    wishlist:document.getElementById("wishlist").value.trim(),
+    createdAt:Date.now(),
+    userAgent:navigator.userAgent,
+    referrer:document.referrer || ""
+  };
+
+  if(!payload.confusing && !payload.bugs && !payload.reason && !payload.wishlist){
+    setStatus("どれか1つだけでも書いてもらえると助かります。","error");
+    return;
+  }
+
+  const button=document.getElementById("submit-btn");
+  button.disabled=true;
+  setStatus("送信中です...", "");
+
+  try{
+    await db.collection("feedback").add(payload);
+    try{
+      await db.collection("testerEvents").add({
+        type:"feedback_submit",
+        source,
+        sessionId,
+        guestId:guestId||null,
+        createdAt:Date.now()
+      });
+    }catch(e){}
+    setStatus("送信が完了しました。ありがとうございます。","ok");
+    document.getElementById("thanks").classList.add("show");
+    event.target.reset();
+  }catch(error){
+    setStatus("送信に失敗しました。少し時間をおいてもう一度試してください。","error");
+  }finally{
+    button.disabled=false;
+  }
+});
+</script>
+</body>
+</html>

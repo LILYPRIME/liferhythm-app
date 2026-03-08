@@ -206,6 +206,27 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
 .tut-start-btn{width:100%;padding:14px;border-radius:14px;font-size:15px;font-weight:700;background:#18181b;color:#fff;box-shadow:0 4px 18px #00000020;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;}
 .tut-start-btn:hover{opacity:.9;}
 :root.dark .tut-start-btn{background:#3f3f46;}
+.auth-helper{margin-top:16px;font-size:12px;color:var(--muted);line-height:1.7;text-align:center;}
+.feedback-fab{position:fixed;right:16px;bottom:82px;z-index:180;display:none;align-items:center;gap:8px;padding:11px 16px;border-radius:999px;background:#18181b;color:#fff;font-size:13px;font-weight:800;box-shadow:0 14px 28px #00000022;}
+.feedback-fab.show{display:inline-flex;}
+.feedback-fab:hover{opacity:.92;}
+.mission-card{margin-bottom:14px;background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid #f59e0b44;border-radius:18px;padding:16px;}
+.mission-kicker{font-size:11px;font-weight:800;letter-spacing:.08em;color:#a16207;text-transform:uppercase;}
+.mission-title{font-size:17px;font-weight:800;margin-top:6px;}
+.mission-sub{font-size:13px;color:var(--muted);margin-top:6px;line-height:1.7;}
+.mission-list{display:grid;gap:9px;margin-top:14px;}
+.mission-item{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--border);border-radius:14px;background:var(--card);padding:11px 12px;}
+.mission-item.done{border-color:#10b98155;background:#10b98110;}
+.mission-dot{width:24px;height:24px;border-radius:999px;background:var(--card2);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;}
+.mission-item.done .mission-dot{background:#10b981;color:#fff;}
+.mission-label{font-size:13px;font-weight:800;}
+.mission-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-top:2px;}
+.mission-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+.mission-link{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:9px 14px;font-size:12px;font-weight:800;}
+.mission-link.primary{background:#18181b;color:#fff;}
+.mission-link.secondary{border:1px solid var(--border);background:transparent;color:var(--text);}
+@media(max-width:640px){.feedback-fab{right:12px;bottom:76px;}}
+
 </style>
 </head>
 <body>
@@ -214,9 +235,10 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
   <div class="auth-box">
     <div class="auth-logo"><svg viewBox="0 0 24 24" width="18" height="18" style="vertical-align:-3px;" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> LifeRhythm</div>
     <div class="auth-tagline">SNSは「ご褒美」。タスクをこなしてコインを稼ぎ、好きな時間にSNSを楽しもう</div>
-    <div class="auth-field"><label>&#24180;&#40802;</label><input class="auth-input" id="guest-age" type="number" placeholder="20" min="10" max="100"/></div>
-    <div class="auth-field"><label>&#32887;&#26989;</label>
+    <div class="auth-field"><label>&#24180;&#40802;&#65288;&#20219;&#24847;&#65289;</label><input class="auth-input" id="guest-age" type="number" placeholder="?: 20" min="10" max="100"/></div>
+    <div class="auth-field"><label>&#32887;&#26989;&#65288;&#20219;&#24847;&#65289;</label>
       <select class="guest-select" id="guest-job">
+        <option value="">&#36984;&#25246;&#12375;&#12394;&#12356;</option>
         <option value="&#39640;&#26657;&#29983;">&#39640;&#26657;&#29983;</option>
         <option value="&#22823;&#23398;&#29983;">&#22823;&#23398;&#29983;</option>
         <option value="&#31038;&#20250;&#20154;">&#31038;&#20250;&#20154;</option>
@@ -226,8 +248,8 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
     <div class="auth-consent show" style="margin-top:10px;">
       <label><input type="checkbox" id="guest-consent-check"><span><a href="privacy.html" target="_blank">&#12503;&#12521;&#12452;&#12496;&#12471;&#12540;&#12509;&#12522;&#12471;&#12540;</a>&#12434;&#35501;&#12415;&#12289;&#21516;&#24847;&#12375;&#12414;&#12377;</span></label>
     </div>
-    <button class="auth-submit" style="margin-top:12px;" id="guest-start-btn">&#20170;&#12377;&#12368;&#22987;&#12417;&#12427; &#8594;</button>
-    <div style="text-align:center;margin-top:16px;"><a onclick="toggleAdminLogin()" style="font-size:11px;color:var(--muted);cursor:pointer;text-decoration:underline;">&#31649;&#29702;&#32773;&#12525;&#12464;&#12452;&#12531;</a></div>
+    <button class="auth-submit" style="margin-top:12px;" id="guest-start-btn">&#12466;&#12473;&#12488;&#12391;3&#20998;&#20307;&#39443;&#12377;&#12427; &#8594;</button>
+    <div class="auth-helper">&#12414;&#12378;&#12399;&#12466;&#12473;&#12488;&#12391;&#20307;&#39443;&#12375;&#12390;&#12367;&#12384;&#12373;&#12356;&#12290;&#24180;&#40802;&#12392;&#32887;&#26989;&#12399;&#20219;&#24847;&#12391;&#12377;&#12290;</div>
     <div id="admin-login-panel" style="display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:12px;">
       <div class="auth-field"><label>&#12513;&#12540;&#12523;&#12450;&#12489;&#12524;&#12473;</label><input class="auth-input" id="auth-email" type="email" placeholder="you@example.com"/></div>
       <div class="auth-field"><label>&#12497;&#12473;&#12527;&#12540;&#12489;</label><input class="auth-input" id="auth-pass" type="password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"/></div>
@@ -257,6 +279,7 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
     <button class="nav-btn" onclick="goto('rank')" id="nav-rank"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg></span>&#12521;&#12531;&#12463;</button>
     <button class="nav-btn" onclick="goto('profile')" id="nav-profile"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>&#12503;&#12525;&#12501;&#12451;&#12540;&#12523;</button>
   </nav>
+  <a id="feedback-fab" class="feedback-fab" href="feedback.html" target="_blank" rel="noopener">&#128172; &#12501;&#12451;&#12540;&#12489;&#12496;&#12483;&#12463;</a>
 </div>
 <div class="modal-overlay" id="milestone-modal">
   <div class="modal-box">
@@ -301,6 +324,31 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
 const firebaseConfig={apiKey:"AIzaSyAch5QXGqpzu2ZzR4LGVuxiGmV8Y_BBt-I",authDomain:"liferhythm-cb0e2.firebaseapp.com",projectId:"liferhythm-cb0e2",storageBucket:"liferhythm-cb0e2.firebasestorage.app",messagingSenderId:"549059630729",appId:"1:549059630729:web:36fb8d5440644caab01858",measurementId:"G-F4K6WHLRF6"};
 firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth(),db=firebase.firestore();
+const FEEDBACK_PAGE="feedback.html";
+const ENTRY_PARAMS=new URLSearchParams(window.location.search);
+const TESTER_ENTRY_SOURCE=ENTRY_PARAMS.get("src")==="lp"?"lp":"direct";
+const TESTER_SESSION_KEY="liferhythm_tester_session_id";
+const TESTER_SESSION_ID=getTesterSessionId();
+function getTesterSessionId(){let value=localStorage.getItem(TESTER_SESSION_KEY);if(!value){value="ts_"+Date.now().toString(36)+Math.random().toString(36).slice(2,8);localStorage.setItem(TESTER_SESSION_KEY,value);}return value;}
+function emptyFunnel(){return{guestStartAt:null,tutorialCompleteAt:null,firstTodoAddedAt:null,firstTodoDoneAt:null,firstUnlockAt:null};}
+function ensureGuestMeta(){if(!state)return;if(!state.funnel)state.funnel=emptyFunnel();if(!state.entrySource)state.entrySource=TESTER_ENTRY_SOURCE;if(!state.sessionId)state.sessionId=TESTER_SESSION_ID;}
+function buildFeedbackHref(source){const params=new URLSearchParams();params.set("source",source||"app");params.set("session",TESTER_SESSION_ID);if(state&&state.guestFirestoreId)params.set("guest",state.guestFirestoreId);return FEEDBACK_PAGE+"?"+params.toString();}
+function updateFeedbackFab(){const link=document.getElementById("feedback-fab");if(link){link.href=buildFeedbackHref("app");link.classList.add("show");}}
+async function logTesterEvent(type,extra){try{await db.collection("testerEvents").add(Object.assign({type:type,source:TESTER_ENTRY_SOURCE,sessionId:TESTER_SESSION_ID,createdAt:Date.now()},extra||{}));}catch(e){}}
+async function markGuestFunnelStep(field,eventType){if(!state||!state.isGuest)return;ensureGuestMeta();if(state.funnel[field])return;const ts=Date.now();state.funnel[field]=ts;if(state.guestFirestoreId){try{await db.collection("guests").doc(state.guestFirestoreId).set({funnel:state.funnel,tutorialDone:!!state.tutorialDone,lastActive:ts,source:state.entrySource,sessionId:state.sessionId},{merge:true});}catch(e){}}logTesterEvent(eventType,{guestId:state.guestFirestoreId||null}).catch(()=>{});scheduleSave();}
+function buildTesterMission(){
+  if(!state||!state.isGuest)return"";
+  ensureGuestMeta();
+  const items=[
+    {done:!!state.funnel.firstTodoAddedAt,num:"1",label:"タスクを1件追加",desc:"ホームで短いタスクを1つ作ってみましょう。"},
+    {done:!!state.funnel.firstTodoDoneAt,num:"2",label:"1件完了する",desc:"追加したタスクを完了してコインを受け取ります。"},
+    {done:!!state.funnel.firstUnlockAt,num:"3",label:"SNSを1つ解除",desc:"ショップで好きな娯楽を1つ解除して体験完了です。"},
+    {done:false,num:"4",label:"フィードバック送信",desc:"4問だけで大丈夫です。率直な感想をお願いします。"}
+  ];
+  const rows=items.map(item=>`<div class="mission-item${item.done?" done":""}"><div class="mission-dot">${item.done?"✓":item.num}</div><div><div class="mission-label">${item.label}</div><div class="mission-desc">${item.desc}</div></div></div>`).join("");
+  return `<div class="mission-card"><div class="mission-kicker">tester mission</div><div class="mission-title">3分で「追加 → 完了 → 解除」を体験してください</div><div class="mission-sub">下の3ステップを終えたら、最後にフィードバックを送ってもらえるととても助かります。</div><div class="mission-list">${rows}</div><div class="mission-actions"><button class="mission-link primary" onclick="goto('shop')">ショップを見る</button><a class="mission-link secondary" href="${buildFeedbackHref("app")}" target="_blank" rel="noopener">フィードバック送信</a></div></div>`;
+}
+
 function defaultState(name){return{displayName:name||'ユーザー',coins:100,todayEarned:0,totalEarned:100,focusWeekActive:true,focusWeekMultiplier:2,focusWeekDaysLeft:3,streak:0,lastDate:today(),todos:[],history:[],settings:{weeklyBoost:true},nextId:1,access:{},theme:'light'};}
 let state=null,currentUser=null,saveTimer=null;
 function today(){const n=new Date();return n.getFullYear()+'-'+(n.getMonth()+1)+'-'+n.getDate();}
@@ -319,12 +367,51 @@ function doAuth(){const email=document.getElementById('auth-email').value.trim()
 function authErrMsg(c){const m={'auth/user-not-found':'メールアドレスが見つかりません','auth/wrong-password':'パスワードが間違っています','auth/email-already-in-use':'このメールはすでに使われています','auth/invalid-email':'メールアドレスの形式が正しくありません','auth/weak-password':'パスワードが短すぎます','auth/invalid-credential':'メールまたはパスワードが間違っています'};return m[c]||'エラー('+c+')';}
 function doLogout(){if(state&&state.isGuest){state=null;localStorage.removeItem('guestState');document.getElementById('main-app').style.display='none';document.getElementById('auth-screen').style.display='flex';}else{auth.signOut();}}
 function toggleAdminLogin(){const p=document.getElementById('admin-login-panel');p.style.display=p.style.display==='none'?'block':'none';}
-async function startGuest(){const age=parseInt(document.getElementById('guest-age').value)||0,job=document.getElementById('guest-job').value;if(!document.getElementById('guest-consent-check').checked){showToast('❌ プライバシーポリシーへの同意が必要です');return;}if(!age||age<10||age>100){showToast('❌ 年齢を入力してください');return;}state=defaultState('ゲスト');state.isGuest=true;state.guestAge=age;state.guestJob=job;state.tutorialDone=false;try{const ref=await db.collection('guests').add({age,job,startedAt:Date.now(),lastActive:Date.now(),coins:state.coins,totalEarned:state.totalEarned,streak:0,todosDone:0,todosTotal:0,entertainmentsUnlocked:[],tutorialDone:false});state.guestFirestoreId=ref.id;}catch(e){}localStorage.setItem('guestState',JSON.stringify(state));document.getElementById('auth-screen').style.display='none';document.getElementById('loading').style.display='none';document.getElementById('main-app').style.display='flex';document.getElementById('user-name-disp').textContent='ゲスト';initApp();}
-const TUTORIAL_STEPS=[{e:'⚡',t:'LifeRhythmへようこそ！',d:'SNSは「ご褒美」。タスクをこなしてコインを稼ぎ、好きな時間にSNSを楽しもう！'},{e:'✅',t:'タスクを追加しよう',d:'「今日やること」を入力するだけ。AIが自動でコインを設定してくれる！'},{e:'🪙',t:'タスク完了でコインゲット！',d:'タスクを完了するたびにコインを獲得！集中強化ウィーク中はコインが2倍になるよ！'},{e:'🎮',t:'SNSを解除しよう！',d:'集めたコインでYouTube・TikTok・Instagramなどを時間制限付きで解除できる！'},{e:'🎨',t:'画面のテーマを選ぼう',d:'お好みの画面スタイルを選んでください。あとからプロフィール画面でいつでも変更できます！'}];
+async function startGuest(){
+  const ageValue=parseInt(document.getElementById("guest-age").value,10);
+  const job=document.getElementById("guest-job").value||"未入力";
+  if(!document.getElementById("guest-consent-check").checked){showToast("利用規約とプライバシーポリシーへの同意が必要です");return;}
+  const age=Number.isFinite(ageValue)&&ageValue>=10&&ageValue<=100?ageValue:null;
+  const startedAt=Date.now();
+  state=defaultState("ゲスト");
+  state.isGuest=true;
+  state.guestAge=age;
+  state.guestJob=job;
+  state.tutorialDone=false;
+  state.entrySource=TESTER_ENTRY_SOURCE;
+  state.sessionId=TESTER_SESSION_ID;
+  state.funnel=emptyFunnel();
+  state.funnel.guestStartAt=startedAt;
+  try{
+    const ref=await db.collection("guests").add({age:age,job:job,source:TESTER_ENTRY_SOURCE,sessionId:TESTER_SESSION_ID,startedAt:startedAt,lastActive:startedAt,coins:state.coins,totalEarned:state.totalEarned,streak:0,todosDone:0,todosTotal:0,entertainmentsUnlocked:[],tutorialDone:false,funnel:state.funnel});
+    state.guestFirestoreId=ref.id;
+    await logTesterEvent("guest_start",{guestId:ref.id});
+  }catch(e){}
+  localStorage.setItem("guestState",JSON.stringify(state));
+  document.getElementById("auth-screen").style.display="none";
+  document.getElementById("loading").style.display="none";
+  document.getElementById("main-app").style.display="flex";
+  document.getElementById("user-name-disp").textContent="ゲスト";
+  initApp();
+}
+const TUTORIAL_STEPS=[
+  {e:"📝",t:"1. まずタスクを1件追加",d:"ホームで5〜15分くらいの短いタスクを1つ追加してみてください。AI提案のままでも大丈夫です。"},
+  {e:"✅",t:"2. 追加したタスクを完了",d:"タスクを1件完了して、コインが増える流れを体験してみましょう。"},
+  {e:"🔓",t:"3. SNSや娯楽を1つ解除",d:"ショップで好きな娯楽を1つ解除して、体験の最後まで進んでください。"}
+];
 let tutStep=0;
 function showTutorial(){tutStep=0;renderTutStep();document.getElementById('tutorial-overlay').classList.add('show');}
-function renderTutStep(){const s=TUTORIAL_STEPS[tutStep];const isThemeStep=tutStep===TUTORIAL_STEPS.length-1;document.getElementById('tut-emoji').textContent=s.e;document.getElementById('tut-title').textContent=s.t;document.getElementById('tut-desc').textContent=s.d;document.getElementById('tut-theme-choice').style.display=isThemeStep?'block':'none';document.getElementById('tut-btn').style.display=isThemeStep?'none':'block';document.getElementById('tut-btn').textContent=tutStep<TUTORIAL_STEPS.length-2?'次へ →':'始める！⚡';document.getElementById('tut-dots').innerHTML=TUTORIAL_STEPS.map((_,i)=>'<div class="tutorial-dot'+(i===tutStep?' active':'')+'"></div>').join('');}
-function finishTutorial(){document.getElementById('tutorial-overlay').classList.remove('show');state.tutorialDone=true;scheduleSave();startInteractiveTutorial();}
+function renderTutStep(){
+  const s=TUTORIAL_STEPS[tutStep];
+  document.getElementById("tut-emoji").textContent=s.e;
+  document.getElementById("tut-title").textContent=s.t;
+  document.getElementById("tut-desc").textContent=s.d;
+  document.getElementById("tut-theme-choice").style.display="none";
+  document.getElementById("tut-btn").style.display="block";
+  document.getElementById("tut-btn").textContent=tutStep<TUTORIAL_STEPS.length-1?"??":"????";
+  document.getElementById("tut-dots").innerHTML=TUTORIAL_STEPS.map((_,i)=>'<div class="tutorial-dot'+(i===tutStep?' active':'')+'"></div>').join("");
+}
+function finishTutorial(){document.getElementById("tutorial-overlay").classList.remove("show");state.tutorialDone=true;markGuestFunnelStep("tutorialCompleteAt","tutorial_complete");scheduleSave();startInteractiveTutorial();}
 function tutNext(){tutStep++;if(tutStep>=TUTORIAL_STEPS.length){finishTutorial();return;}renderTutStep();}
 const ITUT=[{step:'STEP 1 / 3',title:'まずタスクを記入しよう！',hint:'やることを入力して「追加」ボタンを押してね。AIが自動でコインを設定！<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>ボタンでタスクをさらに細かく分解もできるよ。',ex:'→ タップで入力: 「英語の単語を１２個覚える」',exT:'英語の単語を１２個覚える'},{step:'STEP 2 / 3',title:'実際にタスクをやってみよう！',hint:'追加したタスクの⭕ボタンを押して完了しよう。コインがもらえるよ！',ex:null},{step:'STEP 3 / 3',title:'コイン獲得！SNSを解除しよう！',hint:'ショップ画面に移動したよ。好きなSNSの「解除する」ボタンを押してみよう！',ex:null}];
 function startInteractiveTutorial(){state.itutStep=1;scheduleSave();goto('home');renderITutBar();}
@@ -348,9 +435,9 @@ document.addEventListener('click',e=>{
 document.addEventListener('click',e=>{if(e.target.id==='guest-toggle-btn')toggleGuestForm();if(e.target.id==='guest-start-btn')startGuest();if(e.target.id==='tut-btn')tutNext();if(e.target.id==='tut-choose-light'){state.theme='light';applyTheme();finishTutorial();}if(e.target.id==='tut-choose-dark'){state.theme='dark';applyTheme();finishTutorial();}});
 async function loadUserData(user){const ref=db.collection('users').doc(user.uid),snap=await ref.get(),name=user.displayName||'ユーザー';if(snap.exists){state=snap.data();if(!state.access)state.access={};if(!state.todos)state.todos=[];if(!state.theme)state.theme='light';if(state.lastDate!==today()){state.todayEarned=0;state.lastDate=today();state.todos.forEach(t=>t.done=false);await saveNow();}}else{state=defaultState(name);state.job=pendingSignupJob;await saveNow();}document.getElementById('user-name-disp').textContent=state.displayName;}
 function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(saveNow,1000);}
-async function saveNow(){if(!state)return;if(state.isGuest){localStorage.setItem('guestState',JSON.stringify(state));if(state.guestFirestoreId){const todos=state.todos||[];try{await db.collection('guests').doc(state.guestFirestoreId).update({lastActive:Date.now(),coins:state.coins||0,totalEarned:state.totalEarned||0,streak:state.streak||0,todosDone:todos.filter(t=>t.done).length,todosTotal:todos.length,entertainmentsUnlocked:Object.keys(state.access||{}).filter(k=>state.access[k]&&state.access[k]>0),tutorialDone:state.tutorialDone||false});}catch(e){}}return;}if(!currentUser)return;await db.collection('users').doc(currentUser.uid).set(state);}
-function initApp(){applyTheme();updateClock();startAccessTimer();showNotifBanner();goto('home');setTimeout(()=>{renderITutBar();if(!state.tutorialDone)showTutorial();},400);}
-auth.onAuthStateChanged(async user=>{document.getElementById('loading').style.display='none';if(user){currentUser=user;await loadUserData(user);document.getElementById('auth-screen').style.display='none';document.getElementById('main-app').style.display='flex';initApp();}else{currentUser=null;state=null;document.getElementById('main-app').style.display='none';document.getElementById('auth-screen').style.display='flex';const gs=localStorage.getItem('guestState');if(gs){try{state=JSON.parse(gs);document.getElementById('auth-screen').style.display='none';document.getElementById('main-app').style.display='flex';document.getElementById('user-name-disp').textContent='ゲスト';initApp();}catch(e){localStorage.removeItem('guestState');}}}});
+async function saveNow(){if(!state)return;if(state.isGuest){ensureGuestMeta();localStorage.setItem("guestState",JSON.stringify(state));if(state.guestFirestoreId){const todos=state.todos||[];try{await db.collection("guests").doc(state.guestFirestoreId).set({lastActive:Date.now(),coins:state.coins||0,totalEarned:state.totalEarned||0,streak:state.streak||0,todosDone:todos.filter(t=>t.done).length,todosTotal:todos.length,entertainmentsUnlocked:Object.keys(state.access||{}).filter(k=>state.access[k]&&state.access[k]>0),tutorialDone:state.tutorialDone||false,source:state.entrySource||TESTER_ENTRY_SOURCE,sessionId:state.sessionId||TESTER_SESSION_ID,age:state.guestAge||null,job:state.guestJob||"未入力",funnel:state.funnel||emptyFunnel()},{merge:true});}catch(e){}}return;}if(!currentUser)return;await db.collection("users").doc(currentUser.uid).set(state);}
+function initApp(){applyTheme();updateClock();startAccessTimer();showNotifBanner();updateFeedbackFab();goto("home");setTimeout(()=>{renderITutBar();if(!state.tutorialDone)showTutorial();},400);}
+auth.onAuthStateChanged(async user=>{document.getElementById('loading').style.display='none';if(user){currentUser=user;await loadUserData(user);document.getElementById('auth-screen').style.display='none';document.getElementById('main-app').style.display='flex';initApp();}else{currentUser=null;state=null;document.getElementById('main-app').style.display='none';document.getElementById('auth-screen').style.display='flex';const gs=localStorage.getItem('guestState');if(gs){try{state=JSON.parse(gs);ensureGuestMeta();document.getElementById('auth-screen').style.display='none';document.getElementById('main-app').style.display='flex';document.getElementById('user-name-disp').textContent='ゲスト';initApp();}catch(e){localStorage.removeItem('guestState');}}}});
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('auth-screen').style.display!=='none'){const panel=document.getElementById('admin-login-panel');if(panel&&panel.style.display!=='none')doAuth();}});
 function getMode(h){if(h>=6&&h<12)return'focus';if(h>=12&&h<14)return'free';if(h>=14&&h<18)return'focus';if(h>=18&&h<22)return'free';return'focus';}
 function getMultiplier(mode){return mode==='focus'?5:0.5;}
@@ -369,7 +456,8 @@ function pageHome(){
   if(nearest){const needed=nearest.price-(state.coins||0);if(needed<=0){goalBanner='<div class="goal-banner can-unlock" id="goal-banner-unlock"><div><div class="goal-banner-label"><svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg> 解除可能！</div><div class="goal-banner-val">'+nearest.icon+' '+nearest.name+' が今すぐ解除できます</div></div><button class="goal-banner-btn">ショップへ →</button></div>';}else{goalBanner='<div class="goal-banner"><div><div class="goal-banner-label">次の解放まで</div><div class="goal-banner-val">'+nearest.icon+' '+nearest.name+' あと <span style="color:var(--gold)">'+needed+' LC</span></div></div><div style="font-size:11px;color:var(--muted);text-align:right;">必要: '+nearest.price+' LC<br>残高: '+(state.coins||0)+' LC</div></div>';}}
   const TEMPLATES=[{e:'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',t:'メール返信'},{e:'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>',t:'デスク整理'},{e:'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>',t:'ストレッチ'},{e:'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',t:'読書：10分'},{e:'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>',t:'メモ整理'},{e:'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg>',t:'タスク確認'}];
   const templateChips=TEMPLATES.map(t=>'<button class="template-chip" data-tmpl="'+t.t+'">'+t.e+' '+t.t+'</button>').join('');
-  return '<div class="container">'
+  const testerMission=buildTesterMission();
+  return '<div class="container">'+testerMission
     +goalBanner
     +'<button class="tut-start-btn" id="tut-again-btn"><svg viewBox="0 0 24 24" width="14" height="14" style="vertical-align:-1px;margin-right:5px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>チュートリアルを始める</button>'
     +'<div class="coin-strip"><div class="coin-orb"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9H10a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H9.5"/><path d="M12 7v10"/></svg></div><div><div class="coin-val">'+(state.coins||0).toLocaleString()+'</div><div class="coin-label">LifeCoins 残高</div><div class="coin-today">今日 +'+(state.todayEarned||0)+' コイン獲得済み</div></div></div>'
@@ -383,15 +471,43 @@ function pageHome(){
 }
 function bindHome(){document.querySelectorAll('.todo-check-btn').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();const todo=state.todos.find(t=>t.id===parseInt(btn.dataset.id));if(todo&&!todo.done)completeTodo(todo);});});document.querySelectorAll('.todo-del').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();state.todos=state.todos.filter(t=>t.id!==parseInt(btn.dataset.id));showToast('🗑️ タスクを削除しました');scheduleSave();renderPage();});});document.querySelectorAll('.todo-ai-btn').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();generateMilestones(parseInt(btn.dataset.id));});});const inp=document.getElementById('quick-todo-text');if(inp)inp.addEventListener('keydown',e=>{if(e.key==='Enter')quickAddTodo();});const gb=document.getElementById('goal-banner-unlock');if(gb)gb.addEventListener('click',()=>goto('shop'));document.querySelectorAll('.template-chip').forEach(b=>b.addEventListener('click',()=>useTemplate(b.dataset.tmpl)));const tab=document.getElementById('tut-again-btn');if(tab)tab.addEventListener('click',startInteractiveTutorial);}
 function useTemplate(text){const el=document.getElementById('quick-todo-text');if(el){el.value=text;el.focus();quickAddTodo();}}
-function completeTodo(todo){todo.done=true;let earned=todo.reward;if(state.focusWeekActive)earned*=state.focusWeekMultiplier;const oldCoins=state.coins||0;state.coins=oldCoins+earned;state.todayEarned=(state.todayEarned||0)+earned;state.totalEarned=(state.totalEarned||0)+earned;addHistory('plus',earned,todo.text+'—達成');showToast('✅ +'+earned+'🪙 獲得！');const m=currentMode(),ml=getMultiplier(m);const newlyUnlockable=ENTERTAINMENTS.find(e=>!isAccessActive(e.id)&&oldCoins<Math.round(e.basePrice*ml)&&state.coins>=Math.round(e.basePrice*ml));if(newlyUnlockable)setTimeout(()=>showToast('🎉 '+newlyUnlockable.name+'が解除できます！ショップへ →'),1200);if(state.todos.every(t=>t.done)&&state.todos.length>0){setTimeout(()=>{state.coins+=50;state.todayEarned+=50;state.totalEarned+=50;addHistory('plus',50,'全タスク完了ボーナス');showToast('🎉 全タスク完了ボーナス +50🪙！');scheduleSave();renderPage();},600);}scheduleSave();renderPage();checkITutProgress();}
-async function quickAddTodo(){const tEl=document.getElementById('quick-todo-text'),rEl=document.getElementById('quick-todo-reward'),addBtn=document.getElementById('quick-add-btn');if(!tEl)return;const text=tEl.value.trim();if(!text){showToast('❌ タスク名を入力してください');return;}let reward=parseInt(rEl.value);if(!reward||isNaN(reward)){if(addBtn){addBtn.textContent='⏳ AI設定中...';addBtn.disabled=true;}const result=await callGemini('以下のタスクに適切な報酬コインを提案してください。\nタスク名: "'+text+'"\n所要時間を推定してコインを決定。目安: 1～5分=10, 5～15分=20, 15～30分=50, 30～60分=100, 60分以上=150\nJSON形式のみで回答: {"coins": 数値(10～200), "minutes": 推定分数}');if(addBtn){addBtn.textContent='追加';addBtn.disabled=false;}reward=result?.coins||20;if(result)showToast('🤖 AI提案: '+reward+'🪙'+(result.minutes?' (推定'+result.minutes+'分)':''));}state.todos.push({id:state.nextId++,text,reward,done:false});tEl.value='';rEl.value='';scheduleSave();renderPage();checkITutProgress();setTimeout(()=>{const el=document.getElementById('quick-todo-text');if(el)el.focus();},50);}
+function completeTodo(todo){
+  todo.done=true;
+  let earned=todo.reward;
+  if(state.focusWeekActive)earned*=state.focusWeekMultiplier;
+  const oldCoins=state.coins||0;
+  state.coins=oldCoins+earned;
+  state.todayEarned=(state.todayEarned||0)+earned;
+  state.totalEarned=(state.totalEarned||0)+earned;
+  addHistory("plus",earned,todo.text+"完了");
+  showToast("✅ +"+earned+"LC 獲得！");
+  const m=currentMode(),ml=getMultiplier(m);
+  const newlyUnlockable=ENTERTAINMENTS.find(e=>!isAccessActive(e.id)&&oldCoins<Math.round(e.basePrice*ml)&&state.coins>=Math.round(e.basePrice*ml));
+  if(newlyUnlockable)setTimeout(()=>showToast("✨ "+newlyUnlockable.name+" が解除できるようになりました！"),1200);
+  if(state.todos.every(t=>t.done)&&state.todos.length>0){
+    setTimeout(()=>{
+      state.coins+=50;
+      state.todayEarned+=50;
+      state.totalEarned+=50;
+      addHistory("plus",50,"全タスク完了ボーナス");
+      showToast("🎉 全タスク完了ボーナス +50LC");
+      scheduleSave();
+      renderPage();
+    },600);
+  }
+  markGuestFunnelStep("firstTodoDoneAt","first_todo_done");
+  scheduleSave();
+  renderPage();
+  checkITutProgress();
+}
+async function quickAddTodo(){const tEl=document.getElementById('quick-todo-text'),rEl=document.getElementById('quick-todo-reward'),addBtn=document.getElementById('quick-add-btn');if(!tEl)return;const text=tEl.value.trim();if(!text){showToast('❌ タスク名を入力してください');return;}let reward=parseInt(rEl.value);if(!reward||isNaN(reward)){if(addBtn){addBtn.textContent='⏳ AI設定中...';addBtn.disabled=true;}const result=await callGemini('以下のタスクに適切な報酬コインを提案してください。\nタスク名: "'+text+'"\n所要時間を推定してコインを決定。目安: 1～5分=10, 5～15分=20, 15～30分=50, 30～60分=100, 60分以上=150\nJSON形式のみで回答: {"coins": 数値(10～200), "minutes": 推定分数}');if(addBtn){addBtn.textContent='追加';addBtn.disabled=false;}reward=result?.coins||20;if(result)showToast('🤖 AI提案: '+reward+'🪙'+(result.minutes?' (推定'+result.minutes+'分)':''));}state.todos.push({id:state.nextId++,text,reward,done:false});tEl.value='';rEl.value='';markGuestFunnelStep("firstTodoAddedAt","first_todo_added");scheduleSave();renderPage();checkITutProgress();setTimeout(()=>{const el=document.getElementById('quick-todo-text');if(el)el.focus();},50);}
 const ENTERTAINMENTS=[{id:'yt',icon:'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#ff4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="#ff4444" stroke="none"/></svg>',name:'YouTube',bg:'#ff000022',br:'#ff000044',basePrice:30,desc:'動画視聴',duration:30,url:'https://youtube.com'},{id:'tt',icon:'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',name:'TikTok',bg:'#ffffff11',br:'#ffffff22',basePrice:20,desc:'ショート動画',duration:15,url:'https://tiktok.com'},{id:'tw',icon:'<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" stroke="none"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.256 5.627L18.244 2.25Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/></svg>',name:'X',bg:'#1d9bf022',br:'#1d9bf044',basePrice:15,desc:'タイムライン',duration:15,url:'https://x.com'},{id:'ig',icon:'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#e1306c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/></svg>',name:'Instagram',bg:'#e1306c22',br:'#e1306c44',basePrice:15,desc:'フィード',duration:15,url:'https://instagram.com'},{id:'nt',icon:'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#e50914" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="2.18" ry="2.18"/><line x1="7" x2="7" y1="2" y2="22"/><line x1="17" x2="17" y1="2" y2="22"/><line x1="2" x2="22" y1="12" y2="12"/><line x1="2" x2="7" y1="7" y2="7"/><line x1="17" x2="22" y1="7" y2="7"/><line x1="17" x2="22" y1="17" y2="17"/><line x1="2" x2="7" y1="17" y2="17"/></svg>',name:'Netflix',bg:'#e5000022',br:'#e5000044',basePrice:50,desc:'動画視聴',duration:60,url:'https://netflix.com'},{id:'gm',icon:'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="17" y1="13" y2="13"/><rect width="20" height="12" x="2" y="6" rx="2"/></svg>',name:'ゲーム',bg:'#18181b22',br:'#18181b44',basePrice:40,desc:'ゲームプレイ',duration:30,url:''}];
 function isAccessActive(id){const u=state.access&&state.access[id];return u&&u>Date.now();}
 function remainingSec(id){const u=state.access&&state.access[id];if(!u)return 0;return Math.max(0,Math.ceil((u-Date.now())/1000));}
 function fmtTime(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
 function nextModeChangeMin(){const now=new Date(),h=now.getHours(),m=now.getMinutes();const bs=[6,12,14,18,22];const next=bs.find(b=>b>h)||(bs[0]+24);return(next-h)*60-m;}
 function pageShop(){const mode=currentMode(),mult=getMultiplier(mode),isSurge=mode==='focus';const minLeft=nextModeChangeMin(),tlH=Math.floor(minLeft/60),tlM=minLeft%60;const timeLeft=(tlH>0?tlH+'時間':'')+tlM+'分';const nextModeLabel=isSurge?'集中タイム → 自由タイム':'自由タイム → 集中タイム';const rows=ENTERTAINMENTS.map(e=>{const price=Math.round(e.basePrice*mult),active=isAccessActive(e.id),sec=remainingSec(e.id);if(active)return'<div class="ent-item"><div class="ent-icon" style="background:'+e.bg+';border:2px solid var(--green);">'+e.icon+'</div><div style="flex:1"><div class="ent-name">'+e.name+'</div><div class="ent-desc" style="color:var(--green);">✅ アクセス中</div></div><div class="ent-price-area" style="text-align:center;"><div class="access-timer" id="timer-'+e.id+'">'+fmtTime(sec)+'</div><div class="access-timer-label">残り時間</div>'+(e.url?'<button class="open-btn" data-url="'+e.url+'">▶ 開く</button>':'<div style="font-size:11px;color:var(--muted);margin-top:6px;">デバイスで開く</div>')+'</div></div>';const ul=e.url?e.url.replace('https://',''):'';return'<div class="ent-item"><div class="ent-icon" style="background:'+e.bg+';border:1px solid '+e.br+';filter:grayscale(60%);"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div style="flex:1"><div class="ent-name" style="color:var(--muted);">'+e.name+'</div><div class="ent-desc">'+e.desc+'('+e.duration+'分)</div>'+(ul?'<div class="locked-url-btn" data-id="'+e.id+'"><svg viewBox="0 0 24 24" width="11" height="11" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> '+ul+'</div>':'')+'</div><div class="ent-price-area"><div class="ent-price '+(isSurge?'price-surge':'price-sale')+'">'+price+' LC</div><div class="ent-price-orig">通常 '+e.basePrice+' LC</div><div class="price-tag '+(isSurge?'tag-surge':'tag-sale')+'">'+(isSurge?'<span style="color:#ef4444;">▲ 高騰中</span>':'<span style="color:var(--green);">▼ セール</span>')+'</div><br><button class="buy-btn-locked '+(isSurge?'surge':'sale')+'" data-id="'+e.id+'" data-price="'+price+'" data-name="'+e.name+'" data-duration="'+e.duration+'">解除する</button></div></div>';}).join('');return'<div class="container"><div class="card"><div class="card-title"><svg viewBox="0 0 24 24" width="14" height="14" style="vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="17" y1="13" y2="13"/><rect width="20" height="12" x="2" y="6" rx="2"/></svg>娯楽アクセス権 <span style="margin-left:auto;font-size:11px;color:var(--muted);">残高: <b style="color:var(--gold)">'+state.coins+' LC</b></span></div>'+rows+'</div><div class="card" style="margin-top:14px;"><div class="card-title"><svg viewBox="0 0 24 24" width="14" height="14" style="vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>価格変動のしくみ</div><div style="font-size:12px;color:var(--muted);line-height:1.8;">・ <b style="color:var(--muted)">集中タイム</b>(午前・午後) &rarr; &times;5<br>・ <b style="color:var(--green)">自由タイム</b>(昼・夜) &rarr; &times;0.5</div>'+'<div class="price-next">⏱ 次の価格変更まで <b>'+timeLeft+'</b> ('+nextModeLabel+')</div></div></div>';}
-function bindShop(){document.querySelectorAll('.locked-url-btn').forEach(b=>{b.addEventListener('click',()=>{const name=ENTERTAINMENTS.find(e=>e.id===b.dataset.id)?.name||'';showToast('🔒 '+name+' はロック中！コインで解除してください');});});document.querySelectorAll('.buy-btn-locked').forEach(b=>{b.addEventListener('click',()=>{const id=b.dataset.id,price=parseInt(b.dataset.price),name=b.dataset.name,dur=parseInt(b.dataset.duration);if((state.coins||0)>=price){state.coins-=price;if(!state.access)state.access={};state.access[id]=Date.now()+dur*60*1000;notified5min.delete(id);addHistory('minus',price,name+'解除('+dur+'分)');showToast('🔓 '+name+' 解除！'+dur+'分アクセス可能');scheduleSave();renderPage();checkITutProgress();}else showToast('❌ コイン不足(必要: '+price+'🪙)');});});document.querySelectorAll('.open-btn').forEach(b=>{b.addEventListener('click',()=>{window.open(b.dataset.url,'_blank');});});}
+function bindShop(){document.querySelectorAll('.locked-url-btn').forEach(b=>{b.addEventListener('click',()=>{const name=ENTERTAINMENTS.find(e=>e.id===b.dataset.id)?.name||'';showToast('🔒 '+name+' はロック中！コインで解除してください');});});document.querySelectorAll('.buy-btn-locked').forEach(b=>{b.addEventListener('click',()=>{const id=b.dataset.id,price=parseInt(b.dataset.price),name=b.dataset.name,dur=parseInt(b.dataset.duration);if((state.coins||0)>=price){state.coins-=price;if(!state.access)state.access={};state.access[id]=Date.now()+dur*60*1000;notified5min.delete(id);addHistory('minus',price,name+'解除('+dur+'分)');showToast('🔓 '+name+' 解除！'+dur+'分アクセス可能');markGuestFunnelStep("firstUnlockAt","first_unlock");scheduleSave();renderPage();checkITutProgress();}else showToast('❌ コイン不足(必要: '+price+'🪙)');});});document.querySelectorAll('.open-btn').forEach(b=>{b.addEventListener('click',()=>{window.open(b.dataset.url,'_blank');});});}
 // v0.5: 残り5分通知システム
 let accessTimerInterval=null;
 function startAccessTimer(){if(accessTimerInterval)clearInterval(accessTimerInterval);accessTimerInterval=setInterval(()=>{if(!state||!state.access)return;const now=Date.now();let expired=false;Object.keys(state.access).forEach(id=>{const until=state.access[id];if(!until)return;const sec=Math.max(0,Math.ceil((until-now)/1000));const ent=ENTERTAINMENTS.find(e=>e.id===id),name=ent?.name||id;if(until<=now){state.access[id]=null;notified5min.delete(id);expired=true;showToast('⏰ '+name+' の時間が終了しました');sendNotif('⏰ LifeRhythm',name+' のアクセス時間が終了しました');}else{const el=document.getElementById('timer-'+id);if(el)el.textContent=fmtTime(sec);if(sec<=300&&!notified5min.has(id)){notified5min.add(id);showToast('⚠️ '+name+' 残り5分！キリのいいところで終わりにしよう');sendNotif('⚠️ '+name+' 残り5分！','もうすぐ時間が終了します。キリのいいところで終わりに！');}}});if(expired){scheduleSave();if(state.currentPage==='shop')renderPage();}},1000);}
