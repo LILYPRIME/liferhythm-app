@@ -1,7 +1,8 @@
-const { initializeApp } = require('firebase-admin/app');
+﻿const { initializeApp } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
 const { setGlobalOptions } = require('firebase-functions/v2');
 const { onSchedule } = require('firebase-functions/v2/scheduler');
+const { defineSecret } = require('firebase-functions/params');
 const logger = require('firebase-functions/logger');
 const webpush = require('web-push');
 
@@ -9,13 +10,14 @@ initializeApp();
 const db = getFirestore();
 setGlobalOptions({ region: 'asia-northeast1', maxInstances: 1 });
 
+const vapidPrivateKeySecret = defineSecret('VAPID_PRIVATE_KEY');
 const VAPID_PUBLIC_KEY = 'BC7x5ZbVgGVjHp3ShAUa0VqxELCWtrKicpwEb6e48DJWQBVsKJNVUNtdWq6NEOrGn4fOYoZejWKTjYimj_3eWO0';
-const VAPID_SUBJECT = process.env.VAPID_SUBJECT || 'mailto:daqiaoling0@gmail.com';
+const VAPID_SUBJECT = 'mailto:daqiaoling0@gmail.com';
 const COLLECTIONS = ['users', 'guests'];
 const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 function configureWebPush() {
-  const privateKey = process.env.VAPID_PRIVATE_KEY;
+  const privateKey = vapidPrivateKeySecret.value();
   if (!privateKey) {
     throw new Error('VAPID_PRIVATE_KEY is not configured');
   }
@@ -67,8 +69,8 @@ function buildPayload(type, session) {
 
   if (type === 'warning_5m') {
     return {
-      title: '⚠️ 残り5分',
-      body: `${session.entertainmentName || '娯楽'} は残り5分です。キリのよいところで戻りましょう。`,
+      title: '\u26a0\ufe0f \u6b8b\u308a5\u5206',
+      body: `${session.entertainmentName || '\u5a2f\u697d'} \u306f\u6b8b\u308a5\u5206\u3067\u3059\u3002\u30ad\u30ea\u306e\u3088\u3044\u3068\u3053\u308d\u3067\u623b\u308a\u307e\u3057\u3087\u3046\u3002`,
       type,
       sessionId: session.sessionId,
       entertainmentId: session.entertainmentId,
@@ -79,8 +81,8 @@ function buildPayload(type, session) {
   }
 
   return {
-    title: '⏰ 時間が来ました',
-    body: `${session.entertainmentName || '娯楽'} の利用時間が終了しました。`,
+    title: '\u23f0 \u6642\u9593\u304c\u6765\u307e\u3057\u305f',
+    body: `${session.entertainmentName || '\u5a2f\u697d'} \u306e\u5229\u7528\u6642\u9593\u304c\u7d42\u4e86\u3057\u307e\u3057\u305f\u3002`,
     type,
     sessionId: session.sessionId,
     entertainmentId: session.entertainmentId,
@@ -204,6 +206,7 @@ exports.dispatchAccessNotifications = onSchedule(
     schedule: 'every 1 minutes',
     timeZone: 'Asia/Tokyo',
     memory: '256MiB',
+    secrets: [vapidPrivateKeySecret],
   },
   async () => {
     configureWebPush();
