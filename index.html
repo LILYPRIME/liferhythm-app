@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8"/>
@@ -265,6 +265,25 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
 @media(max-width:640px){.mini-stats{grid-template-columns:1fr 1fr 1fr;}.action-grid{grid-template-columns:1fr 1fr;}}
 @media(max-width:640px){.feedback-fab{right:12px;bottom:76px;}.auth-input,.guest-select,.add-todo-input,.modal-input,.num-input{font-size:16px;}}
 
+#main-app{height:100dvh;overflow:hidden;}
+#view{overflow-y:auto;-webkit-overflow-scrolling:touch;}
+#view.home-fixed{overflow:hidden;}
+.mission-card{margin-bottom:0;padding:14px 16px;}
+.mission-title{font-size:16px;}
+.mission-sub{line-height:1.6;}
+.mission-actions{margin-top:10px;}
+.home-screen{display:flex;flex-direction:column;gap:10px;}
+.home-status-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+.home-status-chip{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px 12px;}
+.home-status-chip strong{display:block;font-size:14px;line-height:1.3;}
+.home-status-chip span{display:block;font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4;}
+.home-inline-links{display:flex;gap:8px;margin-top:10px;}
+.home-inline-link{flex:1;border:1px solid var(--border);border-radius:12px;background:transparent;color:var(--text);padding:10px 12px;font-size:12px;font-weight:700;}
+.action-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+.action-btn{padding:14px 10px;text-align:center;align-items:center;min-height:auto;}
+.action-btn strong{font-size:13px;line-height:1.4;}
+.action-btn span{display:none;}
+@media(max-width:640px){.coin-strip{padding:12px 14px;gap:12px;}.coin-orb{width:46px;height:46px;}.coin-val{font-size:30px;}.home-status-row{grid-template-columns:1fr 1fr 1fr;}.action-grid{grid-template-columns:1fr 1fr 1fr;}}
 </style>
 </head>
 <body>
@@ -321,7 +340,7 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
   <div id="view"></div>
   <nav>
     <button class="nav-btn active" onclick="goto('home')" id="nav-home"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>&#12507;&#12540;&#12512;</button>
-    <button class="nav-btn" onclick="goto(\'shop\')" id="nav-shop"><span class="nav-icon"><svg viewBox="0 0 24 24"><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="17" y1="13" y2="13"/><rect width="20" height="12" x="2" y="6" rx="2"/></svg></span>&#23087;&#27005;</button>
+    <button class="nav-btn" onclick="goto('shop')" id="nav-shop"><span class="nav-icon"><svg viewBox="0 0 24 24"><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="17" y1="13" y2="13"/><rect width="20" height="12" x="2" y="6" rx="2"/></svg></span>&#23087;&#27005;</button>
     <button class="nav-btn" onclick="goto('rank')" id="nav-rank"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg></span>&#12521;&#12531;&#12463;</button>
     <button class="nav-btn" onclick="goto('profile')" id="nav-profile"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>&#12503;&#12525;&#12501;&#12451;&#12540;&#12523;</button>
   </nav>
@@ -394,11 +413,11 @@ async function markGuestFunnelStep(field,eventType){if(!state||!state.isGuest)re
 function buildTesterMission(){
   if(!state||!state.isGuest)return"";
   ensureGuestMeta();
-  const steps=["やることを書く","完了してコインを受け取る","SNSや動画を開く"];
+  const steps=["やることを書く","完了してコインを受け取る","SNSや娯楽を開ける"];
   const guideIndex=currentGuideIndex();
   const finished=!!(state.funnel&&state.funnel.firstUnlockAt);
   const currentLabel=finished?"最初の流れは一周できています":`現在: ${steps[guideIndex]}`;
-  return `<div class="mission-card"><div class="mission-kicker">最初の3分</div><div class="mission-title">今見るのは「書く → 完了 → 解除」です</div><div class="mission-sub">${currentLabel}。詳しい見どころはボタンを押して開けるようにしています。</div><div class="mission-actions"><button class="mission-link primary" onclick="setSheetView('guide')">3ステップを見る</button><a class="mission-link secondary" href="${buildFeedbackHref("app")}" target="_blank" rel="noopener">感想を送る</a></div></div>`;
+  return `<div class="mission-card"><div class="mission-kicker">最初の3分</div><div class="mission-title">書く → 完了 → 解除</div><div class="mission-sub">${currentLabel}</div><div class="mission-actions"><button class="mission-link primary" onclick="setSheetView('guide')">3ステップを見る</button><a class="mission-link secondary" href="${buildFeedbackHref("app")}" target="_blank" rel="noopener">感想を送る</a></div></div>`;
 }
 function defaultState(name){return{displayName:name||'ユーザー',coins:100,todayEarned:0,totalEarned:100,focusWeekActive:true,focusWeekMultiplier:2,focusWeekDaysLeft:3,streak:0,lastDate:today(),todos:[],history:[],settings:{weeklyBoost:true},nextId:1,access:{},theme:'light'};}
 let state=null,currentUser=null,saveTimer=null;
@@ -549,7 +568,7 @@ function getMultiplier(mode){return mode==='focus'?5:0.5;}
 function currentMode(){return getMode(new Date().getHours());}
 function updateClock(){const now=new Date(),h=String(now.getHours()).padStart(2,'0'),mi=String(now.getMinutes()).padStart(2,'0');document.getElementById('clock').textContent=h+':'+mi;const days=['日','月','火','水','木','金','土'];document.getElementById('clock-date').textContent=(now.getMonth()+1)+'/'+now.getDate()+'('+days[now.getDay()]+')';const mode=currentMode(),banner=document.getElementById('mode-banner');if(mode==='focus'){banner.className='mode-focus';banner.innerHTML='<svg viewBox="0 0 24 24" width="10" height="10" style="vertical-align:-1px;" fill="#ef4444"><circle cx="12" cy="12" r="10"/></svg> 集中タイム — 娯楽の価格が高騰中（5倍）';}else{banner.className='mode-free';banner.innerHTML='<svg viewBox="0 0 24 24" width="10" height="10" style="vertical-align:-1px;" fill="#22c55e"><circle cx="12" cy="12" r="10"/></svg> 自由タイム — 娯楽がセール価格！';}if(state&&document.getElementById('main-app').style.display!=='none')renderPage();}
 function goto(page){state.currentPage=page;document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));const nb=document.getElementById('nav-'+page);if(nb)nb.classList.add('active');renderPage();}
-function renderPage(){if(!state)return;const v=document.getElementById('view'),page=state.currentPage||'home';switch(page){case'home':v.innerHTML=pageHome();bindHome();break;case'shop':v.innerHTML=pageShop();bindShop();break;case'rank':v.innerHTML=pageRank();break;case'profile':v.innerHTML=pageProfile();bindProfile();break;}}
+function renderPage(){if(!state)return;const v=document.getElementById('view'),page=state.currentPage||'home';v.classList.toggle('home-fixed',page==='home');switch(page){case'home':v.innerHTML=pageHome();bindHome();break;case'shop':v.innerHTML=pageShop();bindShop();break;case'rank':v.innerHTML=pageRank();break;case'profile':v.innerHTML=pageProfile();bindProfile();break;}}
 const QUICK_TEMPLATES=[
   {e:'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',t:'メールを1通返す'},
   {e:'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>',t:'机を5分片づける'},
@@ -632,19 +651,11 @@ function pageHome(){
   const done=todos.filter(t=>t.done).length;
   const nearest=getNearestLockedEntertainment();
   const testerMission=buildTesterMission();
-  let goalBanner='';
-  if(nearest){
-    const needed=nearest.price-(state.coins||0);
-    if(needed<=0){
-      goalBanner=`<div class="goal-banner can-unlock" id="goal-banner-unlock" onclick="goto('shop')"><div><div class="goal-banner-label"><svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg> いまは使ってOK</div><div class="goal-banner-val">${nearest.icon} ${nearest.name} を今すぐ開けます</div></div><button class="goal-banner-btn" type="button">娯楽を見る</button></div>`;
-    }else{
-      goalBanner=`<div class="goal-banner"><div><div class="goal-banner-label">いまはコインを貯めるタイミング</div><div class="goal-banner-val">${nearest.icon} ${nearest.name} あと <span style="color:var(--gold)">${needed} LC</span></div></div><div style="font-size:11px;color:var(--muted);text-align:right;">必要: ${nearest.price} LC<br>残高: ${state.coins||0} LC</div></div>`;
-    }
-  }
-  const progressText=todos.length?`${done}/${todos.length} 完了`:'まだ 0 件';
-  const nextUnlockText=nearest?nearest.name:'すべて解放中';
-  const nextUnlockSub=nearest?(nearest.price<=(state.coins||0)?'今すぐ開けます':`あと ${Math.max(0,nearest.price-(state.coins||0))} LC`):'ロック中の娯楽はありません';
-  return `<div class="container home-screen">${testerMission}${goalBanner}<div class="coin-strip"><div class="coin-orb"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9H10a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H9.5"/><path d="M12 7v10"/></svg></div><div><div class="coin-val">${(state.coins||0).toLocaleString()}</div><div class="coin-label">LifeCoins 残高</div><div class="coin-today">今日 +${state.todayEarned||0} コイン獲得済み</div></div></div><div class="card"><div class="card-title"><svg viewBox="0 0 24 24" width="15" height="15" style="vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg>今日のひとつを追加</div><div class="add-todo-row"><input class="add-todo-input" id="quick-todo-text" type="text" placeholder="やることを1つ書く" maxlength="50"/><div class="add-todo-reward-wrap"><input class="num-input" id="quick-todo-reward" type="number" value="" placeholder="" min="5" max="500" step="5" style="width:72px;"/><span style="font-size:11px;color:var(--muted);"><svg viewBox="0 0 24 24" width="12" height="12" style="vertical-align:-1px;" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9H10a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H9.5"/><path d="M12 7v10"/></svg></span></div><button class="add-todo-btn" id="quick-add-btn" onclick="quickAddTodo()">追加</button></div><div class="compact-note">5〜15分で終わる小さなやることがおすすめです。詳しい一覧や例は下のボタンから開けます。</div><div class="mission-actions" style="margin-top:12px;"><button class="mission-link secondary" type="button" onclick="setSheetView('todos')">やること一覧</button><button class="mission-link secondary" type="button" onclick="setSheetView('templates')">やること例</button></div></div><div class="mini-stats"><div class="mini-stat"><div class="mini-stat-label">進み具合</div><div class="mini-stat-value">${progressText}</div><div class="mini-stat-sub">今日のやること</div></div><div class="mini-stat"><div class="mini-stat-label">連続日数</div><div class="mini-stat-value">${state.streak||0}日</div><div class="mini-stat-sub">積み上げ中</div></div><div class="mini-stat"><div class="mini-stat-label">次に開ける娯楽</div><div class="mini-stat-value" style="font-size:15px;">${nextUnlockText}</div><div class="mini-stat-sub">${nextUnlockSub}</div></div></div><div class="action-grid"><button class="action-btn" type="button" onclick="setSheetView('guide')"><span class="action-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span><strong>3ステップを見る</strong><span>詳しいチュートリアルはここから開きます。</span></button><button class="action-btn" type="button" onclick="setSheetView('todos')"><span class="action-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg></span><strong>やること一覧</strong><span>追加した内容の確認や完了はここで行います。</span></button><button class="action-btn" type="button" onclick="goto('shop')"><span class="action-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="17" y1="13" y2="13"/><rect width="20" height="12" x="2" y="6" rx="2"/></svg></span><strong>娯楽を見る</strong><span>コインが足りているか、何が開けるかを確認できます。</span></button><button class="action-btn" type="button" onclick="setSheetView('history')"><span class="action-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg></span><strong>最近の記録</strong><span>直近のコインの増減だけをまとめて開けます。</span></button></div></div>`;
+  const progressText=todos.length?`${done}/${todos.length} 完了`:"まだ 0 件";
+  const streakText=`${state.streak||0}日`;
+  const unlockText=nearest?(nearest.price<=(state.coins||0)?"今すぐOK":`あと ${Math.max(0,nearest.price-(state.coins||0))} LC`):"準備中";
+  const unlockLabel=nearest?nearest.name:"娯楽を選ぶ";
+  return `<div class="container home-screen">${testerMission}<div class="coin-strip"><div class="coin-orb"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9H10a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H9.5"/><path d="M12 7v10"/></svg></div><div><div class="coin-val">${(state.coins||0).toLocaleString()}</div><div class="coin-label">LifeCoins 残高</div><div class="coin-today">今日 +${state.todayEarned||0} コイン獲得済み</div></div></div><div class="home-status-row"><div class="home-status-chip"><strong>${progressText}</strong><span>今日のやること</span></div><div class="home-status-chip"><strong>${streakText}</strong><span>連続日数</span></div><div class="home-status-chip"><strong>${unlockText}</strong><span>${unlockLabel}</span></div></div><div class="card"><div class="card-title"><svg viewBox="0 0 24 24" width="15" height="15" style="vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg>今日のひとつを追加</div><div class="add-todo-row"><input class="add-todo-input" id="quick-todo-text" type="text" placeholder="やることを1つ書く" maxlength="50"/><div class="add-todo-reward-wrap"><input class="num-input" id="quick-todo-reward" type="number" value="" placeholder="" min="5" max="500" step="5" style="width:72px;"/><span style="font-size:11px;color:var(--muted);"><svg viewBox="0 0 24 24" width="12" height="12" style="vertical-align:-1px;" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9H10a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H9.5"/><path d="M12 7v10"/></svg></span></div><button class="add-todo-btn" id="quick-add-btn" onclick="quickAddTodo()">追加</button></div><div class="compact-note">ホームでは追加だけをして、詳しい内容は下のボタンから開く形にしています。</div><div class="home-inline-links"><button class="home-inline-link" type="button" onclick="setSheetView('todos')">やること一覧</button><button class="home-inline-link" type="button" onclick="setSheetView('history')">最近の記録</button></div></div><div class="action-grid"><button class="action-btn" type="button" onclick="setSheetView('guide')"><span class="action-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span><strong>3ステップ</strong><span>3ステップを見る</span></button><button class="action-btn" type="button" onclick="setSheetView('todos')"><span class="action-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg></span><strong>やること</strong><span>やること一覧</span></button><button class="action-btn" type="button" onclick="setSheetView('templates')"><span class="action-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span><strong>やること例</strong><span>やること例</span></button></div></div>`;
 }
 function bindHome(){const inp=document.getElementById('quick-todo-text');if(inp)inp.addEventListener('keydown',e=>{if(e.key==='Enter')quickAddTodo();});bindSheetInteractions();}
 function useTemplate(text){const el=document.getElementById('quick-todo-text');if(el){el.value=text;closeModal('sheet-modal');setTimeout(()=>el.focus(),50);}}
@@ -715,3 +726,5 @@ setInterval(updateClock,30000);
 </script>
 </body>
 </html>
+
+
