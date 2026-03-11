@@ -1,4 +1,4 @@
-﻿const ADMIN_EMAIL = 'daqiaoling0@gmail.com';
+const ADMIN_EMAIL = 'daqiaoling0@gmail.com';
 const firebaseConfig = {
   apiKey: 'AIzaSyAch5QXGqpzu2ZzR4LGVuxiGmV8Y_BBt-I',
   authDomain: 'liferhythm-cb0e2.firebaseapp.com',
@@ -69,7 +69,7 @@ function shortDate(ts) {
   }
 }
 function fmtSource(source) {
-  const map = { lp: 'LP', app: 'App', root: 'Root', direct: 'Direct', unknown: '不明' };
+  const map = { lp: '案内ページ', app: '体験画面', root: 'トップ', direct: '直接', unknown: '不明' };
   return map[source] || source || '不明';
 }
 function uniqueCount(items, getKey) {
@@ -155,7 +155,7 @@ function buildMetrics() {
 function renderStats() {
   const metrics = buildMetrics();
   const cards = [
-    { label: 'LP CTA', val: metrics.lpCta.toLocaleString(), sub: 'LP の CTA 押下数' },
+    { label: '案内ページ CTA', val: metrics.lpCta.toLocaleString(), sub: '案内ページの開始ボタン押下数' },
     { label: 'ゲスト開始', val: metrics.guestStart.toLocaleString(), sub: 'guest_start と guests 件数の大きい方' },
     { label: 'チュートリアル完了率', val: metrics.tutorialRate + '%', sub: `${metrics.tutorialComplete}/${metrics.guestStart || 0} 人が完了` },
     { label: '初回解除率', val: metrics.unlockRate + '%', sub: `${metrics.firstUnlock}/${metrics.guestStart || 0} 人が到達` },
@@ -191,7 +191,7 @@ function renderBarChart(title, rows, colorClass) {
 function renderCharts() {
   const metrics = buildMetrics();
   const funnelRows = [
-    { label: 'LP CTA', value: metrics.lpCta },
+    { label: '案内ページ CTA', value: metrics.lpCta },
     { label: '開始', value: metrics.guestStart },
     { label: 'チュートリアル', value: metrics.tutorialComplete },
     { label: '追加', value: metrics.firstTodoAdded },

@@ -39,6 +39,15 @@ input{font-family:inherit;}
 .auth-name-field.show{display:block;}
 .auth-job-field{display:none;}
 .auth-job-field.show{display:block;}
+.auth-helper{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6;text-align:center;}
+.auth-mini-list{display:grid;gap:8px;margin:18px 0 14px;}
+.auth-mini-item{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:10px 12px;font-size:12px;color:var(--text);font-weight:600;}
+.guest-optional{margin-top:10px;border:1px dashed var(--border);border-radius:12px;padding:10px 12px;background:rgba(0,0,0,.02);}
+.guest-optional summary{cursor:pointer;font-size:12px;font-weight:700;color:var(--muted);list-style:none;}
+.guest-optional summary::-webkit-details-marker{display:none;}
+.guest-optional[open] summary{margin-bottom:10px;}
+.home-helper{font-size:12px;color:var(--muted);line-height:1.6;margin-top:12px;}
+
 #loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:16px;}
 .spin{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
@@ -225,7 +234,7 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
 .mission-link{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:9px 14px;font-size:12px;font-weight:800;}
 .mission-link.primary{background:#18181b;color:#fff;}
 .mission-link.secondary{border:1px solid var(--border);background:transparent;color:var(--text);}
-@media(max-width:640px){.feedback-fab{right:12px;bottom:76px;}}
+@media(max-width:640px){.feedback-fab{right:12px;bottom:76px;}.auth-input,.guest-select,.add-todo-input,.modal-input,.num-input{font-size:16px;}}
 
 </style>
 </head>
@@ -234,22 +243,30 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
 <div id="auth-screen" style="display:none;">
   <div class="auth-box">
     <div class="auth-logo"><svg viewBox="0 0 24 24" width="18" height="18" style="vertical-align:-3px;" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> LifeRhythm</div>
-    <div class="auth-tagline">SNSは「ご褒美」。タスクをこなしてコインを稼ぎ、好きな時間にSNSを楽しもう</div>
-    <div class="auth-field"><label>&#24180;&#40802;&#65288;&#20219;&#24847;&#65289;</label><input class="auth-input" id="guest-age" type="number" placeholder="20" min="10" max="100"/></div>
-    <div class="auth-field"><label>&#32887;&#26989;&#65288;&#20219;&#24847;&#65289;</label>
-      <select class="guest-select" id="guest-job">
-        <option value="">&#36984;&#25246;&#12375;&#12394;&#12356;</option>
-        <option value="&#39640;&#26657;&#29983;">&#39640;&#26657;&#29983;</option>
-        <option value="&#22823;&#23398;&#29983;">&#22823;&#23398;&#29983;</option>
-        <option value="&#31038;&#20250;&#20154;">&#31038;&#20250;&#20154;</option>
-        <option value="&#12381;&#12398;&#20182;">&#12381;&#12398;&#20182;</option>
-      </select>
+    <div class="auth-tagline">やることを終えたら、SNSや動画を開けるアプリです。</div>
+    <div class="auth-mini-list">
+      <div class="auth-mini-item">1. やることを1つ書く</div>
+      <div class="auth-mini-item">2. 完了してコインをもらう</div>
+      <div class="auth-mini-item">3. SNSを1つ開いてみる</div>
     </div>
+    <details class="guest-optional">
+      <summary>年齢・職業はあとで答える（任意）</summary>
+      <div class="auth-field"><label>年齢（任意）</label><input class="auth-input" id="guest-age" type="number" placeholder="20" min="10" max="100"/></div>
+      <div class="auth-field"><label>職業（任意）</label>
+        <select class="guest-select" id="guest-job">
+          <option value="">選択しない</option>
+          <option value="高校生">高校生</option>
+          <option value="大学生">大学生</option>
+          <option value="社会人">社会人</option>
+          <option value="その他">その他</option>
+        </select>
+      </div>
+    </details>
     <div class="auth-consent show" style="margin-top:10px;">
-      <label><input type="checkbox" id="guest-consent-check"><span><a href="privacy.html" target="_blank">&#12503;&#12521;&#12452;&#12496;&#12471;&#12540;&#12509;&#12522;&#12471;&#12540;</a>&#12434;&#35501;&#12415;&#12289;&#21516;&#24847;&#12375;&#12414;&#12377;</span></label>
+      <label><input type="checkbox" id="guest-consent-check"><span><a href="privacy.html" target="_blank">プライバシーポリシー</a>を読み、同意します</span></label>
     </div>
-    <button class="auth-submit" style="margin-top:12px;" id="guest-start-btn">&#12466;&#12473;&#12488;&#12391;3&#20998;&#20307;&#39443;&#12377;&#12427; &#8594;</button>
-    <div class="auth-helper">&#12414;&#12378;&#12399;&#12466;&#12473;&#12488;&#12391;&#20307;&#39443;&#12375;&#12390;&#12367;&#12384;&#12373;&#12356;&#12290;&#24180;&#40802;&#12392;&#32887;&#26989;&#12399;&#20219;&#24847;&#12391;&#12377;&#12290;</div>
+    <button class="auth-submit" style="margin-top:12px;" id="guest-start-btn">ゲストで今すぐ試す →</button>
+    <div class="auth-helper">年齢と職業は任意です。まずは「書く → 完了 → 解除」だけ試してください。</div>
     <div id="admin-login-panel" style="display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:12px;">
       <div class="auth-field"><label>&#12513;&#12540;&#12523;&#12450;&#12489;&#12524;&#12473;</label><input class="auth-input" id="auth-email" type="email" placeholder="you@example.com"/></div>
       <div class="auth-field"><label>&#12497;&#12473;&#12527;&#12540;&#12489;</label><input class="auth-input" id="auth-pass" type="password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"/></div>
@@ -260,7 +277,7 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
 </div>
 <div id="main-app">
   <header class="page-header">
-    <div><div class="logo"><svg viewBox="0 0 24 24" width="18" height="18" style="vertical-align:-3px;" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> LifeRhythm</div><div class="logo-sub">タスクをこなして好きなSNSを楽しもう</div></div>
+    <div><div class="logo"><svg viewBox="0 0 24 24" width="18" height="18" style="vertical-align:-3px;" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> LifeRhythm</div><div class="logo-sub">やることを終えたらSNSを開ける</div></div>
     <div class="header-right">
       <div class="clock-box"><div class="clock-time" id="clock">--:--</div><div class="clock-date" id="clock-date">---</div></div>
       <div><div class="user-chip"><svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg><span id="user-name-disp">---</span></div><button class="logout-btn" style="margin-top:4px;width:100%;" onclick="doLogout()">&#12525;&#12464;&#12450;&#12454;&#12488;</button></div>
@@ -283,7 +300,7 @@ nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px
 </div>
 <div class="modal-overlay" id="milestone-modal">
   <div class="modal-box">
-    <div class="modal-title"><svg viewBox="0 0 24 24" width="15" height="15" style="vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>AIがタスクを細分化</div>
+    <div class="modal-title"><svg viewBox="0 0 24 24" width="15" height="15" style="vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>AIがやることを細かく分ける</div>
     <div id="milestone-parent-name" style="font-size:12px;color:var(--muted);margin-bottom:12px;padding:8px 10px;background:var(--card2);border-radius:8px;"></div>
     <div id="milestone-list"></div>
     <div class="modal-actions">
@@ -342,13 +359,13 @@ function buildTesterMission(){
   if(!state||!state.isGuest)return"";
   ensureGuestMeta();
   const items=[
-    {done:!!state.funnel.firstTodoAddedAt,num:"1",label:"タスクを1件追加",desc:"ホームで短いタスクを1つ作ってみましょう。"},
-    {done:!!state.funnel.firstTodoDoneAt,num:"2",label:"1件完了する",desc:"追加したタスクを完了してコインを受け取ります。"},
-    {done:!!state.funnel.firstUnlockAt,num:"3",label:"SNSを1つ解除",desc:"ショップで好きな娯楽を1つ解除して体験完了です。"},
-    {done:false,num:"4",label:"フィードバック送信",desc:"4問だけで大丈夫です。率直な感想をお願いします。"}
+    {done:!!state.funnel.firstTodoAddedAt,num:"1",label:"やることを1件書く",desc:"5〜15分で終わる小さなことを1つ書いてみましょう。"},
+    {done:!!state.funnel.firstTodoDoneAt,num:"2",label:"書いたことを完了する",desc:"完了するとコインが増えます。流れが自然か見てください。"},
+    {done:!!state.funnel.firstUnlockAt,num:"3",label:"SNSを1つ開く",desc:"ショップで好きな娯楽を1つ開いて、最後まで体験してみましょう。"},
+    {done:false,num:"4",label:"感想をひとこと送る",desc:"短くて大丈夫です。止まった場所や使いづらかった点を教えてください。"}
   ];
   const rows=items.map(item=>`<div class="mission-item${item.done?" done":""}"><div class="mission-dot">${item.done?"✓":item.num}</div><div><div class="mission-label">${item.label}</div><div class="mission-desc">${item.desc}</div></div></div>`).join("");
-  return `<div class="mission-card"><div class="mission-kicker">tester mission</div><div class="mission-title">3分で「追加 → 完了 → 解除」を体験してください</div><div class="mission-sub">下の3ステップを終えたら、最後にフィードバックを送ってもらえるととても助かります。</div><div class="mission-list">${rows}</div><div class="mission-actions"><button class="mission-link primary" onclick="goto('shop')">ショップを見る</button><a class="mission-link secondary" href="${buildFeedbackHref("app")}" target="_blank" rel="noopener">フィードバック送信</a></div></div>`;
+  return `<div class="mission-card"><div class="mission-kicker">最初の3分</div><div class="mission-title">まずは「書く → 完了 → 解除」を試してください</div><div class="mission-sub">途中で止まっても大丈夫です。引っかかった場所だけでも感想を送ってください。</div><div class="mission-list">${rows}</div><div class="mission-actions"><button class="mission-link primary" onclick="goto('shop')">ショップを見る</button><a class="mission-link secondary" href="${buildFeedbackHref("app")}" target="_blank" rel="noopener">感想を送る</a></div></div>`;
 }
 
 function defaultState(name){return{displayName:name||'ユーザー',coins:100,todayEarned:0,totalEarned:100,focusWeekActive:true,focusWeekMultiplier:2,focusWeekDaysLeft:3,streak:0,lastDate:today(),todos:[],history:[],settings:{weeklyBoost:true},nextId:1,access:{},theme:'light'};}
@@ -358,7 +375,57 @@ function today(){const n=new Date();return n.getFullYear()+'-'+(n.getMonth()+1)+
 const notified5min=new Set();
 // v0.6: Gemini AI統合
 let pendingMilestoneTodoId=null;
-async function callGemini(prompt){try{const res=await fetch('https://liferhythm-gemini.daqiaoling0.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});if(!res.ok){const err=await res.json().catch(()=>({}));const st=res.status;if(st===429||String(err.error||'').includes('exhausted')){showToast('AI機能が混雑中です。コインはデフォルト値で設定されます。');}else{showToast('AIエラー('+st+'): しばらくしてから再試行してください');}return null;}return await res.json();}catch(e){return null;}}
+function estimateMinutesFromText(text){
+  const raw=String(text||'').trim();
+  const minMatch=raw.match(/(\d{1,3})\s*分/);
+  if(minMatch){
+    const parsed=parseInt(minMatch[1],10);
+    if(Number.isFinite(parsed))return Math.max(1,Math.min(180,parsed));
+  }
+  if(/メール|返信|確認|連絡|チェック/.test(raw))return 5;
+  if(/片づけ|掃除|ストレッチ|準備|メモ|予定/.test(raw))return 10;
+  if(/読書|単語|勉強|課題|資料|レポート|作業/.test(raw))return 20;
+  if(/筋トレ|ランニング|制作|動画|発表|面接/.test(raw))return 30;
+  return raw.length>18?20:10;
+}
+function rewardFromMinutes(minutes){
+  if(minutes<=5)return 10;
+  if(minutes<=15)return 20;
+  if(minutes<=30)return 50;
+  if(minutes<=60)return 100;
+  return 150;
+}
+function getFallbackRewardSuggestion(text){
+  const minutes=estimateMinutesFromText(text);
+  return {coins:rewardFromMinutes(minutes),minutes};
+}
+function buildFallbackMilestones(todo){
+  const raw=String(todo&&todo.text||'やること').trim()||'やること';
+  const short=raw.length>18?raw.slice(0,18)+'…':raw;
+  return [
+    {text:short+'の準備をする',coins:1},
+    {text:short+'を10分だけ進める',coins:2},
+    {text:short+'を終わりまで進める',coins:2}
+  ];
+}
+async function callGemini(prompt){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),8000);
+  try{
+    const res=await fetch('https://liferhythm-gemini.daqiaoling0.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt}),signal:controller.signal});
+    if(!res.ok){
+      const err=await res.json().catch(()=>({}));
+      const st=res.status;
+      if(st===429||String(err.error||'').includes('exhausted'))return{ok:false,reason:'busy'};
+      return{ok:false,reason:'error',status:st};
+    }
+    return{ok:true,data:await res.json()};
+  }catch(e){
+    return{ok:false,reason:e&&e.name==='AbortError'?'timeout':'network'};
+  }finally{
+    clearTimeout(timer);
+  }
+}
 function applyTheme(){const isDark=(state&&state.theme==='dark');document.documentElement.classList.toggle('dark',isDark);}
 function showNotifBanner(){if(typeof Notification!=='undefined'&&Notification.permission==='default')document.getElementById('notif-banner').classList.add('show');}
 function requestNotifPermission(){if(typeof Notification==='undefined'){showToast('この環境では通知は利用できません');return;}Notification.requestPermission().then(p=>{document.getElementById('notif-banner').classList.remove('show');showToast(p==='granted'?'🔔 通知が許可されました！':'通知が拒否されました');if(state&&state.currentPage==='profile')renderPage();});}
@@ -397,9 +464,9 @@ async function startGuest(){
   initApp();
 }
 const TUTORIAL_STEPS=[
-  {e:"📝",t:"1. まずタスクを1件追加",d:"ホームで5〜15分くらいの短いタスクを1つ追加してみてください。AI提案のままでも大丈夫です。"},
-  {e:"✅",t:"2. 追加したタスクを完了",d:"タスクを1件完了して、コインが増える流れを体験してみましょう。"},
-  {e:"🔓",t:"3. SNSや娯楽を1つ解除",d:"ショップで好きな娯楽を1つ解除して、体験の最後まで進んでください。"}
+  {e:"📝",t:"1. まずやることを1件書く",d:"ホームで5〜15分くらいの小さなことを1つ書いてみてください。AI提案のままでも大丈夫です。"},
+  {e:"✅",t:"2. 書いたことを完了",d:"やることを1件完了して、コインが増える流れを体験してみましょう。"},
+  {e:"🔓",t:"3. SNSや娯楽を1つ開く",d:"ショップで好きな娯楽を1つ開いて、体験の最後まで進んでください。"}
 ];
 let tutStep=0;
 function showTutorial(){tutStep=0;renderTutStep();document.getElementById('tutorial-overlay').classList.add('show');}
@@ -415,7 +482,7 @@ function renderTutStep(){
 }
 function finishTutorial(){document.getElementById("tutorial-overlay").classList.remove("show");state.tutorialDone=true;markGuestFunnelStep("tutorialCompleteAt","tutorial_complete");scheduleSave();startInteractiveTutorial();}
 function tutNext(){tutStep++;if(tutStep>=TUTORIAL_STEPS.length){finishTutorial();return;}renderTutStep();}
-const ITUT=[{step:'STEP 1 / 3',title:'まずタスクを記入しよう！',hint:'やることを入力して「追加」ボタンを押してね。AIが自動でコインを設定！<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>ボタンでタスクをさらに細かく分解もできるよ。',ex:'→ タップで入力: 「英語の単語を１２個覚える」',exT:'英語の単語を１２個覚える'},{step:'STEP 2 / 3',title:'実際にタスクをやってみよう！',hint:'追加したタスクの⭕ボタンを押して完了しよう。コインがもらえるよ！',ex:null},{step:'STEP 3 / 3',title:'コイン獲得！SNSを解除しよう！',hint:'ショップ画面に移動したよ。好きなSNSの「解除する」ボタンを押してみよう！',ex:null}];
+const ITUT=[{step:'STEP 1 / 3',title:'まずやることを書こう！',hint:'やることを入力して「追加」ボタンを押してね。空欄ならコインは自動で提案されます。<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>ボタンで必要ならさらに細かく分けることもできます。',ex:'→ タップで入力: 「英語の単語を１２個覚える」',exT:'英語の単語を１２個覚える'},{step:'STEP 2 / 3',title:'書いたことをやってみよう！',hint:'追加したやることの⭕ボタンを押して完了しよう。コインがもらえるよ！',ex:null},{step:'STEP 3 / 3',title:'SNSを1つ開こう！',hint:'ショップ画面に移動したよ。好きなSNSの「解除する」ボタンを押してみよう！',ex:null}];
 function startInteractiveTutorial(){state.itutStep=1;scheduleSave();goto('home');renderITutBar();}
 function renderITutBar(){const bar=document.getElementById('itut-bar');if(!bar)return;if(!state||!state.itutStep||state.itutStep<1||state.itutStep>3){bar.style.display='none';return;}const s=ITUT[state.itutStep-1];document.getElementById('itut-step').textContent=s.step;document.getElementById('itut-title2').textContent=s.title;document.getElementById('itut-hint').innerHTML=s.hint;const ex=document.getElementById('itut-ex');if(s.ex){ex.style.display='block';ex.innerHTML=s.ex;ex.onclick=s.exT?()=>{const el=document.getElementById('quick-todo-text');if(el){el.value=s.exT;el.focus();}}:null;}else{ex.style.display='none';}itutCollapsed=false;bar.classList.remove('itut-collapsed');const cb=document.getElementById('itut-collapse-btn');if(cb)cb.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';bar.style.display='block';if(state.itutStep===3)setTimeout(()=>goto('shop'),600);}
 function checkITutProgress(){if(!state||!state.itutStep)return;if(state.itutStep===1&&state.todos&&state.todos.length>0){state.itutStep=2;renderITutBar();scheduleSave();}else if(state.itutStep===2&&state.todos&&state.todos.some(t=>t.done&&!t.parentId)){state.itutStep=3;renderITutBar();scheduleSave();}else if(state.itutStep===3&&state.access&&Object.values(state.access).some(v=>v&&v>Date.now())){state.itutStep=0;document.getElementById('itut-bar').style.display='none';showToast('🎉 チュートリアル完了！LifeRhythmを楽しんでね！');scheduleSave();setTimeout(()=>goto('home'),800);}}
@@ -449,29 +516,30 @@ function goto(page){state.currentPage=page;document.querySelectorAll('.nav-btn')
 function renderPage(){if(!state)return;const v=document.getElementById('view'),page=state.currentPage||'home';switch(page){case'home':v.innerHTML=pageHome();bindHome();break;case'shop':v.innerHTML=pageShop();bindShop();break;case'rank':v.innerHTML=pageRank();break;case'profile':v.innerHTML=pageProfile();bindProfile();break;}}
 function pageHome(){
   const todos=state.todos||[],done=todos.filter(t=>t.done).length,total=todos.length,pct=total?Math.round(done/total*100):0;
-  const todoRows=todos.length===0?'<div class="todo-empty">タスクがありません<br><span style="font-size:12px;">下の入力欄から追加してください</span></div>':todos.map(t=>'<div class="todo-item'+(t.done?' done':'')+'" data-id="'+t.id+'"><div class="todo-check todo-check-btn" data-id="'+t.id+'">'+(t.done?'✓':'')+'</div><div class="todo-text">'+escHtml(t.text)+'</div><div class="todo-reward">+'+t.reward+(state.focusWeekActive?'<span style="color:#f59e0b;">&times;'+state.focusWeekMultiplier+'</span>':'')+' <svg viewBox="0 0 24 24" width="11" height="11" style="vertical-align:-1px;" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9H10a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H9.5"/><path d="M12 7v10"/></svg></div>'+(t.done?'':'<button class="todo-ai-btn" data-id="'+t.id+'"><svg viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></button>')+'<button class="todo-del" data-id="'+t.id+'">&times;</button></div>').join('');
+  const todoRows=todos.length===0?'<div class="todo-empty">やることはまだありません<br><span style="font-size:12px;">5〜15分で終わる小さなことから始めてみましょう</span></div>':todos.map(t=>'<div class="todo-item'+(t.done?' done':'')+'" data-id="'+t.id+'"><div class="todo-check todo-check-btn" data-id="'+t.id+'">'+(t.done?'✓':'')+'</div><div class="todo-text">'+escHtml(t.text)+'</div><div class="todo-reward">+'+t.reward+(state.focusWeekActive?'<span style="color:#f59e0b;">&times;'+state.focusWeekMultiplier+'</span>':'')+' <svg viewBox="0 0 24 24" width="11" height="11" style="vertical-align:-1px;" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9H10a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H9.5"/><path d="M12 7v10"/></svg></div>'+(t.done?'':'<button class="todo-ai-btn" data-id="'+t.id+'"><svg viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></button>')+'<button class="todo-del" data-id="'+t.id+'">&times;</button></div>').join('');
   const hist=(state.history||[]).slice(-5).reverse().map(h=>'<div class="history-item"><div class="history-sign '+h.type+'">'+(h.type==='plus'?'+':'-')+h.amount+'</div><div class="history-desc">'+h.desc+'</div><div class="history-time">'+h.time+'</div></div>').join('')||'<div style="font-size:13px;color:var(--muted);">まだ履歴がありません</div>';
   const mode=currentMode(),mult=getMultiplier(mode);
   const locked=ENTERTAINMENTS.filter(e=>!isAccessActive(e.id)).map(e=>({...e,price:Math.round(e.basePrice*mult)})).sort((a,b)=>a.price-b.price);
   const nearest=locked[0];
   let goalBanner='';
-  if(nearest){const needed=nearest.price-(state.coins||0);if(needed<=0){goalBanner='<div class="goal-banner can-unlock" id="goal-banner-unlock"><div><div class="goal-banner-label"><svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg> 解除可能！</div><div class="goal-banner-val">'+nearest.icon+' '+nearest.name+' が今すぐ解除できます</div></div><button class="goal-banner-btn">ショップへ →</button></div>';}else{goalBanner='<div class="goal-banner"><div><div class="goal-banner-label">次の解放まで</div><div class="goal-banner-val">'+nearest.icon+' '+nearest.name+' あと <span style="color:var(--gold)">'+needed+' LC</span></div></div><div style="font-size:11px;color:var(--muted);text-align:right;">必要: '+nearest.price+' LC<br>残高: '+(state.coins||0)+' LC</div></div>';}}
-  const TEMPLATES=[{e:'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',t:'メール返信'},{e:'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>',t:'デスク整理'},{e:'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>',t:'ストレッチ'},{e:'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',t:'読書：10分'},{e:'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>',t:'メモ整理'},{e:'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg>',t:'タスク確認'}];
+  if(nearest){const needed=nearest.price-(state.coins||0);if(needed<=0){goalBanner='<div class="goal-banner can-unlock" id="goal-banner-unlock"><div><div class="goal-banner-label"><svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg> いまは使ってOK</div><div class="goal-banner-val">'+nearest.icon+' '+nearest.name+' を今すぐ開けます</div></div><button class="goal-banner-btn">ショップを見る</button></div>';}else{goalBanner='<div class="goal-banner"><div><div class="goal-banner-label">いまはコインを貯めるタイミング</div><div class="goal-banner-val">'+nearest.icon+' '+nearest.name+' あと <span style="color:var(--gold)">'+needed+' LC</span></div></div><div style="font-size:11px;color:var(--muted);text-align:right;">必要: '+nearest.price+' LC<br>残高: '+(state.coins||0)+' LC</div></div>';}}
+  const TEMPLATES=[{e:'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',t:'メールを1通返す'},{e:'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>',t:'机を5分片づける'},{e:'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>',t:'3分ストレッチ'},{e:'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',t:'読書を10分進める'},{e:'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>',t:'メモを整理する'},{e:'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg>',t:'今日の予定を確認する'}];
   const templateChips=TEMPLATES.map(t=>'<button class="template-chip" data-tmpl="'+t.t+'">'+t.e+' '+t.t+'</button>').join('');
   const testerMission=buildTesterMission();
   return '<div class="container">'+testerMission
     +goalBanner
     +'<button class="tut-start-btn" id="tut-again-btn"><svg viewBox="0 0 24 24" width="14" height="14" style="vertical-align:-1px;margin-right:5px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>チュートリアルを始める</button>'
     +'<div class="coin-strip"><div class="coin-orb"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9H10a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H9.5"/><path d="M12 7v10"/></svg></div><div><div class="coin-val">'+(state.coins||0).toLocaleString()+'</div><div class="coin-label">LifeCoins 残高</div><div class="coin-today">今日 +'+(state.todayEarned||0)+' コイン獲得済み</div></div></div>'
-    +'<div class="card"><div class="card-title"><svg viewBox="0 0 24 24" width="15" height="15" style="vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg>今日のタスク</div>'
+    +'<div class="card"><div class="card-title"><svg viewBox="0 0 24 24" width="15" height="15" style="vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg>今日のやること</div>'
     +todoRows
-    +'<div class="add-todo-row"><input class="add-todo-input" id="quick-todo-text" type="text" placeholder="タスクを入力..." maxlength="50"/><div class="add-todo-reward-wrap"><input class="num-input" id="quick-todo-reward" type="number" value="" placeholder="5~500" min="5" max="500" step="5" style="width:72px;"/><span style="font-size:11px;color:var(--muted);"><svg viewBox="0 0 24 24" width="12" height="12" style="vertical-align:-1px;" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9H10a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H9.5"/><path d="M12 7v10"/></svg></span></div><button class="add-todo-btn" id="quick-add-btn" onclick="quickAddTodo()">追加</button></div>'
+    +'<div class="add-todo-row"><input class="add-todo-input" id="quick-todo-text" type="text" placeholder="やることを1つ書く" maxlength="50"/><div class="add-todo-reward-wrap"><input class="num-input" id="quick-todo-reward" type="number" value="" placeholder="" min="5" max="500" step="5" style="width:72px;"/><span style="font-size:11px;color:var(--muted);"><svg viewBox="0 0 24 24" width="12" height="12" style="vertical-align:-1px;" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9H10a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H9.5"/><path d="M12 7v10"/></svg></span></div><button class="add-todo-btn" id="quick-add-btn" onclick="quickAddTodo()">追加</button></div>'
+    +'<div style="font-size:11px;color:var(--muted);margin-top:8px;">5〜15分で終わる小さなことからで大丈夫です。コイン欄は空でもOKです。</div>'
     +'<div class="template-row">'+templateChips+'</div>'
-    +(total>0?'<div style="margin-top:12px;"><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;"><span>進捗</span><span>'+done+'/'+total+' 完了</span></div><div class="progress-wrap"><div class="progress-bar" style="width:'+pct+'%"></div></div>'+(done===total&&total>0?'<div style="font-size:11px;color:var(--gold);margin-top:5px;font-weight:700;"><svg viewBox="0 0 24 24" width="12" height="12" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg> 全タスク完了！</div>':'<div style="font-size:11px;color:var(--muted);margin-top:5px;">全タスク完了でボーナス +50 LC</div>')+'</div>':'')+'</div>'
+    +(total>0?'<div style="margin-top:12px;"><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;"><span>進捗</span><span>'+done+'/'+total+' 完了</span></div><div class="progress-wrap"><div class="progress-bar" style="width:'+pct+'%"></div></div>'+(done===total&&total>0?'<div style="font-size:11px;color:var(--gold);margin-top:5px;font-weight:700;"><svg viewBox="0 0 24 24" width="12" height="12" style="vertical-align:-1px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg> 今日は全部完了！</div>':'<div style="font-size:11px;color:var(--muted);margin-top:5px;">今日のやることを全部終えるとボーナス +50 LC</div>')+'</div>':'')+'</div>'
     +(state.focusWeekActive?'<div class="week-card" style="margin-top:14px;"><div class="week-active-tag"><svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-1px;" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/></svg> 集中強化ウィーク 開催中！</div><div style="font-size:13px;">獲得コインが <b style="color:var(--gold)">&times;'+state.focusWeekMultiplier+' 倍</b>！</div><div style="font-size:26px;font-weight:800;color:var(--gold);margin:6px 0;">残り '+state.focusWeekDaysLeft+' 日</div></div>':'')
     +'<div class="card" style="margin-top:14px;"><div class="card-title"><svg viewBox="0 0 24 24" width="14" height="14" style="vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>コイン履歴</div>'+hist+'</div></div>';
 }
-function bindHome(){document.querySelectorAll('.todo-check-btn').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();const todo=state.todos.find(t=>t.id===parseInt(btn.dataset.id));if(todo&&!todo.done)completeTodo(todo);});});document.querySelectorAll('.todo-del').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();state.todos=state.todos.filter(t=>t.id!==parseInt(btn.dataset.id));showToast('🗑️ タスクを削除しました');scheduleSave();renderPage();});});document.querySelectorAll('.todo-ai-btn').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();generateMilestones(parseInt(btn.dataset.id));});});const inp=document.getElementById('quick-todo-text');if(inp)inp.addEventListener('keydown',e=>{if(e.key==='Enter')quickAddTodo();});const gb=document.getElementById('goal-banner-unlock');if(gb)gb.addEventListener('click',()=>goto('shop'));document.querySelectorAll('.template-chip').forEach(b=>b.addEventListener('click',()=>useTemplate(b.dataset.tmpl)));const tab=document.getElementById('tut-again-btn');if(tab)tab.addEventListener('click',startInteractiveTutorial);}
+function bindHome(){document.querySelectorAll('.todo-check-btn').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();const todo=state.todos.find(t=>t.id===parseInt(btn.dataset.id));if(todo&&!todo.done)completeTodo(todo);});});document.querySelectorAll('.todo-del').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();state.todos=state.todos.filter(t=>t.id!==parseInt(btn.dataset.id));showToast('🗑️ やることを削除しました');scheduleSave();renderPage();});});document.querySelectorAll('.todo-ai-btn').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();generateMilestones(parseInt(btn.dataset.id));});});const inp=document.getElementById('quick-todo-text');if(inp)inp.addEventListener('keydown',e=>{if(e.key==='Enter')quickAddTodo();});const gb=document.getElementById('goal-banner-unlock');if(gb)gb.addEventListener('click',()=>goto('shop'));document.querySelectorAll('.template-chip').forEach(b=>b.addEventListener('click',()=>useTemplate(b.dataset.tmpl)));const tab=document.getElementById('tut-again-btn');if(tab)tab.addEventListener('click',startInteractiveTutorial);}
 function useTemplate(text){const el=document.getElementById('quick-todo-text');if(el){el.value=text;el.focus();quickAddTodo();}}
 function completeTodo(todo){
   todo.done=true;
@@ -491,8 +559,8 @@ function completeTodo(todo){
       state.coins+=50;
       state.todayEarned+=50;
       state.totalEarned+=50;
-      addHistory("plus",50,"全タスク完了ボーナス");
-      showToast("🎉 全タスク完了ボーナス +50LC");
+      addHistory("plus",50,"今日のやること完了ボーナス");
+      showToast("🎉 今日のやること完了ボーナス +50LC");
       scheduleSave();
       renderPage();
     },600);
@@ -502,7 +570,7 @@ function completeTodo(todo){
   renderPage();
   checkITutProgress();
 }
-async function quickAddTodo(){const tEl=document.getElementById('quick-todo-text'),rEl=document.getElementById('quick-todo-reward'),addBtn=document.getElementById('quick-add-btn');if(!tEl)return;const text=tEl.value.trim();if(!text){showToast('❌ タスク名を入力してください');return;}let reward=parseInt(rEl.value);if(!reward||isNaN(reward)){if(addBtn){addBtn.textContent='⏳ AI設定中...';addBtn.disabled=true;}const result=await callGemini('以下のタスクに適切な報酬コインを提案してください。\nタスク名: "'+text+'"\n所要時間を推定してコインを決定。目安: 1～5分=10, 5～15分=20, 15～30分=50, 30～60分=100, 60分以上=150\nJSON形式のみで回答: {"coins": 数値(10～200), "minutes": 推定分数}');if(addBtn){addBtn.textContent='追加';addBtn.disabled=false;}reward=result?.coins||20;if(result)showToast('AI提案: '+reward+'LC'+(result.minutes?' (推定'+result.minutes+'分)':''));}state.todos.push({id:state.nextId++,text,reward,done:false});tEl.value='';rEl.value='';markGuestFunnelStep("firstTodoAddedAt","first_todo_added");scheduleSave();renderPage();checkITutProgress();setTimeout(()=>{const el=document.getElementById('quick-todo-text');if(el)el.focus();},50);}
+async function quickAddTodo(){const tEl=document.getElementById('quick-todo-text'),rEl=document.getElementById('quick-todo-reward'),addBtn=document.getElementById('quick-add-btn');if(!tEl)return;const text=tEl.value.trim();if(!text){showToast('❌ やることを入力してください');return;}let reward=parseInt(rEl.value);if(!reward||isNaN(reward)){if(addBtn){addBtn.textContent='⏳ AI設定中...';addBtn.disabled=true;}const aiResult=await callGemini('以下のやることに、気軽に始めやすい報酬コインを提案してください。\nやること: "'+text+'"\n所要時間を推定してコインを決定。目安: 1～5分=10, 5～15分=20, 15～30分=50, 30～60分=100, 60分以上=150\nJSON形式のみで回答: {"coins": 数値(10～200), "minutes": 推定分数}');if(addBtn){addBtn.textContent='追加';addBtn.disabled=false;}if(aiResult.ok){const result=aiResult.data||{};reward=result.coins||20;if(result.coins){showToast('AI提案: '+reward+'LC'+(result.minutes?' (推定'+result.minutes+'分)':''));}else{const fallback=getFallbackRewardSuggestion(text);reward=fallback.coins;showToast('AI提案が不安定だったため、仮で'+reward+'LCにしました。');}}else{const fallback=getFallbackRewardSuggestion(text);reward=fallback.coins;const reasonLabel=aiResult.reason==='busy'?'AIが混雑中です':'AIに接続できませんでした';showToast(reasonLabel+'。仮で'+reward+'LCにしました'+(fallback.minutes?' (目安'+fallback.minutes+'分)':'')+'。');}}state.todos.push({id:state.nextId++,text,reward,done:false});tEl.value='';rEl.value='';markGuestFunnelStep("firstTodoAddedAt","first_todo_added");scheduleSave();renderPage();checkITutProgress();setTimeout(()=>{const el=document.getElementById('quick-todo-text');if(el)el.focus();},50);}
 const ENTERTAINMENTS=[{id:'yt',icon:'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#ff4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="#ff4444" stroke="none"/></svg>',name:'YouTube',bg:'#ff000022',br:'#ff000044',basePrice:30,desc:'動画視聴',duration:30,url:'https://youtube.com'},{id:'tt',icon:'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',name:'TikTok',bg:'#ffffff11',br:'#ffffff22',basePrice:20,desc:'ショート動画',duration:15,url:'https://tiktok.com'},{id:'tw',icon:'<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" stroke="none"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.256 5.627L18.244 2.25Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/></svg>',name:'X',bg:'#1d9bf022',br:'#1d9bf044',basePrice:15,desc:'タイムライン',duration:15,url:'https://x.com'},{id:'ig',icon:'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#e1306c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/></svg>',name:'Instagram',bg:'#e1306c22',br:'#e1306c44',basePrice:15,desc:'フィード',duration:15,url:'https://instagram.com'},{id:'nt',icon:'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#e50914" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="2.18" ry="2.18"/><line x1="7" x2="7" y1="2" y2="22"/><line x1="17" x2="17" y1="2" y2="22"/><line x1="2" x2="22" y1="12" y2="12"/><line x1="2" x2="7" y1="7" y2="7"/><line x1="17" x2="22" y1="7" y2="7"/><line x1="17" x2="22" y1="17" y2="17"/><line x1="2" x2="7" y1="17" y2="17"/></svg>',name:'Netflix',bg:'#e5000022',br:'#e5000044',basePrice:50,desc:'動画視聴',duration:60,url:'https://netflix.com'},{id:'gm',icon:'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="17" y1="13" y2="13"/><rect width="20" height="12" x="2" y="6" rx="2"/></svg>',name:'ゲーム',bg:'#18181b22',br:'#18181b44',basePrice:40,desc:'ゲームプレイ',duration:30,url:''}];
 function isAccessActive(id){const u=state.access&&state.access[id];return u&&u>Date.now();}
 function remainingSec(id){const u=state.access&&state.access[id];if(!u)return 0;return Math.max(0,Math.ceil((u-Date.now())/1000));}
@@ -519,11 +587,10 @@ function pageProfile(){const rank=RANKS.find(r=>(state.totalEarned||0)>=r.min&&(
 function bindProfile(){const tw=document.getElementById('toggle-week');if(tw)tw.addEventListener('change',()=>{state.focusWeekActive=tw.checked;showToast(tw.checked?'🔥 集中強化ウィーク参加！':'集中強化ウィーク 離脱');scheduleSave();});const tt=document.getElementById('toggle-theme');if(tt)tt.addEventListener('change',()=>{state.theme=tt.checked?'dark':'light';applyTheme();showToast(tt.checked?'🌙 ダークモードに変更':'☀️ ライトモードに変更');scheduleSave();});}
 function changeName(){const n=prompt('新しいニックネーム:',state.displayName||'');if(n&&n.trim()){state.displayName=n.trim();document.getElementById('user-name-disp').textContent=state.displayName;showToast('✅ 「'+state.displayName+'」に変更');scheduleSave();renderPage();}}
 
-async function generateMilestones(todoId){const todo=state.todos.find(t=>t.id===todoId);if(!todo)return;const btn=document.querySelector('.todo-ai-btn[data-id="'+todoId+'"]');if(btn){btn.textContent='⏳';btn.disabled=true;}const result=await callGemini('以下のタスクを3～5個の具体的なサブタスクに細分化してください。\nタスク: "'+todo.text+'"\n元のコイン報酬は合計'+todo.reward+'コインです。各サブタスクの難易度に応じて相対的な重みを数値で表してください(合計は自由)。\nJSON形式のみで回答: {"subtasks": [{"text": "サブタスク名", "coins": 数値}, ...]}');if(btn){btn.innerHTML='<svg viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>';btn.disabled=false;}if(!result||!result.subtasks||!result.subtasks.length){showToast('❌ AIの応答が取得できませんでした');return;}
-// 元のコインを比率に応じてサブタスクに分配（合計が必ず元のrewardと同じになる）
-const budget=todo.reward;const rawWeights=result.subtasks.map(s=>Math.max(1,parseInt(s.coins)||1));const rawTotal=rawWeights.reduce((a,b)=>a+b,0);let dist=rawWeights.map(w=>Math.max(1,Math.floor(w/rawTotal*budget)));const diff=budget-dist.reduce((a,b)=>a+b,0);dist[0]+=diff;// 端数を先頭に加算
-pendingMilestoneTodoId=todoId;document.getElementById('milestone-parent-name').textContent='「'+todo.text+'」 → 合計 '+budget+'🪙 を分配';document.getElementById('milestone-list').innerHTML=result.subtasks.map((s,i)=>'<div class="milestone-item"><input type="checkbox" id="ms'+i+'" data-text="'+escHtml(s.text)+'" data-coins="'+dist[i]+'" checked/><label for="ms'+i+'" style="flex:1;font-size:13px;cursor:pointer;">'+escHtml(s.text)+'</label><span class="milestone-coins">+'+dist[i]+'🪙</span></div>').join('');openModal('milestone-modal');}
-function applyMilestones(){const selected=[...document.querySelectorAll('#milestone-list input:checked')];if(!selected.length){showToast('❌ サブタスクを1つ以上選択してください');return;}state.todos=state.todos.filter(t=>t.id!==pendingMilestoneTodoId);selected.forEach(cb=>{state.todos.push({id:state.nextId++,text:cb.dataset.text,reward:parseInt(cb.dataset.coins)||20,done:false});});closeModal('milestone-modal');showToast('✅ '+selected.length+'個のサブタスクに細分化しました！');scheduleSave();renderPage();}
+async function generateMilestones(todoId){const todo=state.todos.find(t=>t.id===todoId);if(!todo)return;const btn=document.querySelector('.todo-ai-btn[data-id="'+todoId+'"]');if(btn){btn.textContent='⏳';btn.disabled=true;}const aiResult=await callGemini('以下のやることを3～5個の小さなやることに分けてください。\nやること: "'+todo.text+'"\n元の報酬コインは合計'+todo.reward+'コインです。各小さなやることの難易度に応じて相対的な重みを数値で表してください(合計は自由)。\nJSON形式のみで回答: {"subtasks": [{"text": "やること名", "coins": 数値}, ...]}');if(btn){btn.innerHTML='<svg viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>';btn.disabled=false;}const subtasks=aiResult.ok&&aiResult.data&&aiResult.data.subtasks&&aiResult.data.subtasks.length?aiResult.data.subtasks:buildFallbackMilestones(todo);if(!aiResult.ok||!subtasks.length){const reasonLabel=aiResult.reason==='busy'?'AIが混雑中のため':'AIに接続できないため';showToast(reasonLabel+'、3分割のたたき台を作りました。');}
+// 元のコインを比率に応じて小さなやることへ分配（合計は元のrewardと同じ）
+const budget=todo.reward;const rawWeights=subtasks.map(s=>Math.max(1,parseInt(s.coins)||1));const rawTotal=rawWeights.reduce((a,b)=>a+b,0);let dist=rawWeights.map(w=>Math.max(1,Math.floor(w/rawTotal*budget)));const diff=budget-dist.reduce((a,b)=>a+b,0);dist[0]+=diff;pendingMilestoneTodoId=todoId;document.getElementById('milestone-parent-name').textContent='「'+todo.text+'」 → 合計 '+budget+'🪙 を分配';document.getElementById('milestone-list').innerHTML=subtasks.map((s,i)=>'<div class="milestone-item"><input type="checkbox" id="ms'+i+'" data-text="'+escHtml(s.text)+'" data-coins="'+dist[i]+'" checked/><label for="ms'+i+'" style="flex:1;font-size:13px;cursor:pointer;">'+escHtml(s.text)+'</label><span class="milestone-coins">+'+dist[i]+'🪙</span></div>').join('');openModal('milestone-modal');}
+function applyMilestones(){const selected=[...document.querySelectorAll('#milestone-list input:checked')];if(!selected.length){showToast('❌ 小さく分けたやることを1つ以上選択してください');return;}state.todos=state.todos.filter(t=>t.id!==pendingMilestoneTodoId);selected.forEach(cb=>{state.todos.push({id:state.nextId++,text:cb.dataset.text,reward:parseInt(cb.dataset.coins)||20,done:false});});closeModal('milestone-modal');showToast('✅ '+selected.length+'個のやることに分けました！');scheduleSave();renderPage();}
 function addHistory(type,amount,desc){if(!state.history)state.history=[];const now=new Date(),t=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');state.history.push({type,amount,desc,time:t});if(state.history.length>100)state.history=state.history.slice(-100);}
 function openModal(id){document.getElementById(id).classList.add('open');const bar=document.getElementById('itut-bar');if(bar)bar.style.display='none';}
 function closeModal(id){document.getElementById(id).classList.remove('open');renderITutBar();}
@@ -534,6 +601,7 @@ function dismissToastNow(){const t=document.getElementById('toast');if(t){clearT
 function _dismissToast(){if(Date.now()-toastShownAt>300)dismissToastNow();}
 document.addEventListener('touchstart',_dismissToast,{capture:true,passive:true});
 document.addEventListener('click',_dismissToast,true);
+document.addEventListener('focusin',e=>{const target=e.target;if(target&&target.matches&&target.matches('input, textarea, select')){setTimeout(()=>{try{target.scrollIntoView({block:'center',behavior:'smooth'});}catch(err){}},250);}});
 function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 setInterval(updateClock,30000);
 </script>

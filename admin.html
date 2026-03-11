@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8"/>
@@ -40,7 +40,7 @@ a{color:inherit;text-decoration:none;}button,input{font:inherit;}
   <div class="top-bar">
     <div class="top-copy">
       <h1>LifeRhythm Admin</h1>
-      <p>LP → ゲスト開始 → 初回タスク → 初回解除 → フィードバックの流れを、同じ画面で追えるようにしています。</p>
+      <p>案内ページ → ゲスト開始 → 最初のやること → 初回解除 → フィードバックの流れを、同じ画面で追えるようにしています。</p>
     </div>
     <div class="top-actions">
       <span class="admin-email" id="admin-email-disp"></span>
@@ -54,14 +54,14 @@ a{color:inherit;text-decoration:none;}button,input{font:inherit;}
   <div class="section-title">登録ユーザー一覧 <span class="section-meta" id="user-count-label"></span></div>
   <div class="table-wrap">
     <table id="user-table">
-      <thead><tr><th data-sort="displayName" onclick="sortUsers('displayName')">名前</th><th data-sort="job" onclick="sortUsers('job')">職業</th><th data-sort="rankOrder" onclick="sortUsers('rankOrder')">ランク</th><th data-sort="totalEarned" onclick="sortUsers('totalEarned')">累計コイン</th><th data-sort="coins" onclick="sortUsers('coins')">残高</th><th data-sort="streak" onclick="sortUsers('streak')">連続日数</th><th data-sort="todoDone" onclick="sortUsers('todoDone')">タスク完了</th><th>解除中の娯楽</th><th>詳細</th></tr></thead>
+      <thead><tr><th data-sort="displayName" onclick="sortUsers('displayName')">名前</th><th data-sort="job" onclick="sortUsers('job')">職業</th><th data-sort="rankOrder" onclick="sortUsers('rankOrder')">ランク</th><th data-sort="totalEarned" onclick="sortUsers('totalEarned')">累計コイン</th><th data-sort="coins" onclick="sortUsers('coins')">残高</th><th data-sort="streak" onclick="sortUsers('streak')">連続日数</th><th data-sort="todoDone" onclick="sortUsers('todoDone')">やること完了</th><th>解除中の娯楽</th><th>詳細</th></tr></thead>
       <tbody id="user-tbody"></tbody>
     </table>
   </div>
   <div class="section-title">ゲスト一覧 <span class="section-meta" id="guest-count-label"></span></div>
   <div class="table-wrap">
     <table id="guest-table">
-      <thead><tr><th data-sort="job" onclick="sortGuests('job')">職業</th><th data-sort="age" onclick="sortGuests('age')">年齢</th><th data-sort="source" onclick="sortGuests('source')">導線</th><th data-sort="totalEarned" onclick="sortGuests('totalEarned')">累計コイン</th><th data-sort="todosDone" onclick="sortGuests('todosDone')">タスク完了</th><th data-sort="streak" onclick="sortGuests('streak')">連続日数</th><th>解除した娯楽</th><th data-sort="progress" onclick="sortGuests('progress')">進捗</th><th data-sort="lastActive" onclick="sortGuests('lastActive')">最終アクティブ</th></tr></thead>
+      <thead><tr><th data-sort="job" onclick="sortGuests('job')">職業</th><th data-sort="age" onclick="sortGuests('age')">年齢</th><th data-sort="source" onclick="sortGuests('source')">導線</th><th data-sort="totalEarned" onclick="sortGuests('totalEarned')">累計コイン</th><th data-sort="todosDone" onclick="sortGuests('todosDone')">やること完了</th><th data-sort="streak" onclick="sortGuests('streak')">連続日数</th><th>解除した娯楽</th><th data-sort="progress" onclick="sortGuests('progress')">進捗</th><th data-sort="lastActive" onclick="sortGuests('lastActive')">最終アクティブ</th></tr></thead>
       <tbody id="guest-tbody"></tbody>
     </table>
   </div>
